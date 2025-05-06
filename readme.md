@@ -4,7 +4,6 @@ QuickCart is a full-featured e-commerce web application built with Django. It su
 --------------------------
 
 ## 📸 Project Preview
-
 ![Home Page](https://your-image-url.com/homepage.png)
 ![Product Page](https://your-image-url.com/productpage.png)
 ![Cart Page](https://your-image-url.com/cartpage.png)
