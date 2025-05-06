@@ -8,33 +8,33 @@ QuickCart is a full-featured e-commerce web application built with Django. It su
 ![Product Page](https://your-image-url.com/productpage.png)
 ![Cart Page](https://your-image-url.com/cartpage.png)
 
-### 1. Install required softwares
+## 1. Install required softwares
 > 🐍 Python version
 - 3.12.3
 
 > 📂 PostgreSQL version
 - psql (PostgreSQL) 16.6 (Ubuntu 16.6-0ubuntu0.24.04.1)
   
-### 2. Clone the Repository
+## 2. Clone the Repository
 
 => git clone https://github.com/your-username/QuickCart.git
 => cd QuickCart
 
-### 3.⚙️ Setup Instructions
+## 3.⚙️ Setup Instructions
 
 - create a virtual environment :
 
 => python -m venv venv
 
-### 4. Activate scripts :
+## 4. Activate scripts :
 
 => venv/scripts/activate
 
-### 5. Install Requirements :
+## 5. Install Requirements :
 
 => pip install -r requirements.txt
 
-### 6. Make migrations:
+## 6. Make migrations:
 
 => python manage.py makemigrations QuickCart
 
@@ -50,6 +50,6 @@ QuickCart is a full-featured e-commerce web application built with Django. It su
 
         => python manage.py migrate
 
-### 7. open runserver:
+## 7. open runserver:
 
 => python manage.py runserver
