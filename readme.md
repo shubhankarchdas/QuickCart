@@ -31,7 +31,7 @@ QuickCart is a full-featured e-commerce web application built with Django. It su
 => venv/scripts/activate
 
 ## 5. Install Requirements :
-
+```bash
 => pip install -r requirements.txt
 
 ## 6. Make migrations:
