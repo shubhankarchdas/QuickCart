@@ -13,7 +13,6 @@ media
 env_config.py
 
 
-
 # Ignore the following files if you are using Django's built-in staticfiles app.
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
 # in your Git repository. Update and uncomment the following line accordingly.
