@@ -51,5 +51,6 @@ QuickCart is a full-featured e-commerce web application built with Django. It su
         => python manage.py migrate
 
 ## 7. open runserver:
-
+```bash
 => python manage.py runserver
+```
