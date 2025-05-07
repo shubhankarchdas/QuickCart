@@ -51,5 +51,5 @@ python manage.py migrate
 
 ## 7. open runserver:
 ```bash
-=> python manage.py runserver
+python manage.py runserver
 ```
