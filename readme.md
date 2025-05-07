@@ -35,20 +35,19 @@ venv/scripts/activate
 pip install -r requirements.txt
 ```
 ## 6. Make migrations:
+```bash
+python manage.py makemigrations 
+python manage.py migrate
+```
 
-=> python manage.py makemigrations QuickCart
+(if having some error of psycopg2 then )
 
-    => python manage.py migrate
+    pip install psycopg2 binary
 
-    (if having some error of psycopg2 then )
-
-        =>pip install psycopg2 binary
-
-    # redo :  
-
-    => python manage.py makemigrations QuickCart
-
-        => python manage.py migrate
+# redo :  
+    
+    python manage.py makemigrations 
+    python manage.py migrate
 
 ## 7. open runserver:
 ```bash
