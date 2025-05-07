@@ -17,22 +17,22 @@ QuickCart is a full-featured e-commerce web application built with Django. It su
   
 ## 2. Clone the Repository
 ```bash
-=> git clone https://github.com/your-username/QuickCart.git
-=> cd QuickCart
+git clone https://github.com/your-username/QuickCart.git
+cd QuickCart
 ```
 ## 3.⚙️ Setup Instructions
 
 - create a virtual environment :
 ```bash
-=> python -m venv venv
+python -m venv venv
 ```
 ## 4. Activate scripts :
 ```bash
-=> venv/scripts/activate
+venv/scripts/activate
 ```
 ## 5. Install Requirements :
 ```bash
-=> pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 ## 6. Make migrations:
 
