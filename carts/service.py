@@ -16,7 +16,7 @@ def get_cart_data(request):
 
     try:
         cart = Cart.objects.get(cart_id=_cart_id(request))
-        cart_items = CartItem.objects.filter(cart=cart, is_active=True)
+        cart_items = CartItem.objects.filter(cart=cart, is_active=True).order_by('id')
         for item in cart_items:
             total += item.product.price * item.quantity
             quantity += item.quantity
