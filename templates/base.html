@@ -40,6 +40,28 @@ $(document).ready(function() {
 // jquery end
 </script>
 
+
+  <!-- Toaster Message Implemention Css & Js -->
+  <script>
+    window.djangoMessages = [
+      {% for message in messages %}
+        {
+          "tags": "{{ message.tags }}",
+          "message": "{{ message|escapejs }}"
+        }{% if not forloop.last %},{% endif %}
+      {% endfor %}
+    ];
+    console.log("djangoMessages:", window.djangoMessages);  // Debug output
+  </script>
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+  <!-- Include external toast script -->
+  <script src="{% static 'js/toast_message.js' %}"></script>
+
+  <!-- End Toast-->
+
 </head>
 <body>
 

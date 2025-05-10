@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.shortcuts import redirect, render
+from QCart.constants.success_message import SuccessMessage
 from accounts.models import Account
 from .forms import RegistrationForm
 
@@ -26,7 +27,7 @@ def register(request):
             )
             user.phone_number = phone_number
             user.save()
-            messages.success(request, 'Registration successful.')
+            messages.success(request, SuccessMessage.S00001.value)
             return redirect('register')
         else:
             print(form.errors) 
