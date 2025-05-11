@@ -180,3 +180,26 @@ SESSION_COOKIE_NAME = 'sessionid'
 SESSION_COOKIE_SECURE = False  # Set to True if using HTTPS, otherwise False for local development
 SESSION_COOKIE_AGE = 1209600  # 2 weeks, or adjust as needed
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Keeps session open after browser close if False
+
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+        'accounts': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    },
+}
