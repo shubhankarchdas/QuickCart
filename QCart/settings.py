@@ -22,10 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-x%82m=5v+39m44u26h#bo(*i!4)oy$@$*h58q1@-vi#%7)8#t%'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
+
+
 
 ALLOWED_HOSTS = []
 
@@ -151,9 +153,30 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # }
 
 
+import environ
+import os
+
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+
 #SMTP Config
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'shubhankarchdas@gmail.com'
-EMAIL_HOST_PASSWORD = 'xxdx ouzo wdqh umsl'
 EMAIL_USE_TLS = True
+SITE_URL = env("SITE_URL", default="http://localhost:8000")
+DEFAULT_FROM_EMAIL = 'shubhankarchdas@gmail.com'
+EMAIL_HOST_USER = env("EMAIL_ID")
+EMAIL_HOST_PASSWORD = env("EMAIL_PASSWORD")
+EMAIL_USE_TLS = True
+
+
+print("EMAIL HOST USER:", EMAIL_HOST_USER)
+print("EMAIL HOST PASSWORD:", EMAIL_HOST_PASSWORD)
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Stores session data in the database
+SESSION_COOKIE_NAME = 'sessionid'
+SESSION_COOKIE_SECURE = False  # Set to True if using HTTPS, otherwise False for local development
+SESSION_COOKIE_AGE = 1209600  # 2 weeks, or adjust as needed
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Keeps session open after browser close if False
