@@ -60,7 +60,7 @@ def send_activation_email(user, request):
             return False, msg
         
         # Check attempt limit
-        if user.activation_attempts >= 2:
+        if user.activation_attempts >= 3:
             user.activation_locked_until = timezone.now() + timedelta(minutes=5)
             user.save()
             return False, "Maximum attempts reached. Please wait 5 minutes."
@@ -83,7 +83,7 @@ def send_activation_email(user, request):
         user.activation_attempts += 1
         user.save()
         
-        attempts_left = 2 - user.activation_attempts
+        attempts_left = 3 - user.activation_attempts
         if attempts_left > 0:
             return True, f"Activation email sent! You have {attempts_left} attempt{'s' if attempts_left > 1 else ''} left."
         return True, "Activation email sent!"

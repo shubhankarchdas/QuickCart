@@ -27,3 +27,7 @@ class Command(BaseCommand):
         )
         
         self.stdout.write(f"Deleted {deleted_count} unverified accounts and reset {reset_count} locks")
+
+
+
+# 0 0 * * * python manage.py cleanup_unverified_users

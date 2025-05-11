@@ -107,7 +107,7 @@ class Account(AbstractUser):
             return False, f"Please wait {remaining_time} minutes before trying again"
         
         # Check attempt limit
-        if self.activation_attempts >= 2:
+        if self.activation_attempts >= 3:
             self.activation_locked_until = timezone.now() + timedelta(minutes=5)
             self.save()
             return False, "Maximum attempts reached. Please wait 5 minutes."
