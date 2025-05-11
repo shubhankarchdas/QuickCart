@@ -11,15 +11,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from django.db import IntegrityError
-from django.core.exceptions import ValidationError
-
-
 def handle_registration(form_data):
-    """
-    Handles the complete registration flow with robust error handling
-    Returns: (user, is_new_user, message, error)
-    """
+    """Handle registration with attempt tracking"""
     try:
         email = form_data['email']
         
@@ -48,31 +41,30 @@ def handle_registration(form_data):
                 user.set_password(form_data['password'])
                 user.save()
             
-            message = "Registration successful! Please check your email." if created else \
-                     "We've sent you another activation link."
-            return user, created, message, None
+            return user, created, None, None
             
-        except IntegrityError as e:
-            logger.error(f"Integrity error during registration: {str(e)}")
-            return None, False, "Database error occurred. Please try again.", str(e)
+        except Exception as e:
+            logger.error(f"Registration error: {str(e)}")
+            return None, False, "Registration error occurred.", str(e)
             
     except Exception as e:
-        logger.error(f"Unexpected error in handle_registration: {str(e)}", exc_info=True)
-        return None, False, "Registration failed due to system error.", str(e)
+        logger.error(f"Unexpected error: {str(e)}")
+        return None, False, "Registration failed.", str(e)
 
 def send_activation_email(user, request):
-    """Send activation email with comprehensive error handling"""
+    """Send activation email with attempt limiting"""
     try:
-        # Ensure required attributes exist
-        if not hasattr(user, 'email'):
-            raise ValueError("Invalid user object provided")
-            
-        # Rate limiting check
-        if hasattr(user, 'last_activation_sent'):
-            if user.last_activation_sent and (timezone.now() - user.last_activation_sent).total_seconds() < 300:
-                logger.warning(f"Activation email rate limit reached for {user.email}")
-                return False, "Please wait before requesting another activation email"
-
+        # Check if user can send activation
+        can_send, msg = user.can_send_activation()
+        if not can_send:
+            return False, msg
+        
+        # Check attempt limit
+        if user.activation_attempts >= 2:
+            user.activation_locked_until = timezone.now() + timedelta(minutes=5)
+            user.save()
+            return False, "Maximum attempts reached. Please wait 5 minutes."
+        
         # Prepare and send email
         current_site = get_current_site(request)
         mail_subject = 'Activate your account'
@@ -87,29 +79,31 @@ def send_activation_email(user, request):
         email.send(fail_silently=False)
         
         # Update tracking
-        if hasattr(user, 'last_activation_sent'):
-            user.last_activation_sent = timezone.now()
-        if hasattr(user, 'activation_attempts'):
-            user.activation_attempts += 1
+        user.last_activation_sent = timezone.now()
+        user.activation_attempts += 1
         user.save()
         
-        return True, None
+        attempts_left = 2 - user.activation_attempts
+        if attempts_left > 0:
+            return True, f"Activation email sent! You have {attempts_left} attempt{'s' if attempts_left > 1 else ''} left."
+        return True, "Activation email sent!"
         
     except Exception as e:
-        logger.error(f"Failed to send activation email: {str(e)}", exc_info=True)
-        return False, str(e)
+        logger.error(f"Email error: {str(e)}")
+        return False, "Failed to send activation email."
 
 def activate_user(uidb64, token):
-    """Activate user account using uid and token"""
+    """Activate user account"""
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = Account.objects.get(pk=uid)
         
         if account_activation_token.check_token(user, token):
             user.is_active = True
+            user.reset_activation_attempts()  # Reset on successful activation
             user.save()
             return True, None
-        return False, "Invalid activation token"
-    except (TypeError, ValueError, OverflowError, Account.DoesNotExist) as e:
+        return False, "Invalid token"
+    except Exception as e:
         logger.error(f"Activation error: {str(e)}")
-        return False, "Invalid activation link"
+        return False, "Invalid activation link" 

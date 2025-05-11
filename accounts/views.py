@@ -7,6 +7,7 @@ from .service import handle_registration, send_activation_email, activate_user
 from QCart.constants.error_message import ErrorMessage
 from QCart.constants.success_message import SuccessMessage
 import logging
+
 logger = logging.getLogger(__name__)
 
 def register(request):
@@ -15,36 +16,39 @@ def register(request):
         if form.is_valid():
             try:
                 # Handle registration
-                user, created, msg, error = handle_registration(form.cleaned_data)
+                user, created, error_msg, error = handle_registration(form.cleaned_data)
                 
-                if error:
-                    messages.error(request, msg)
+                if error_msg:
+                    messages.error(request, error_msg)
                     return redirect('register')
                 
                 # Send activation email
                 if user:
-                    email_sent, email_error = send_activation_email(user, request)
-                    if not email_sent:
-                        messages.error(request, f"Failed to send activation email: {email_error or 'Unknown error'}")
+                    success, msg = send_activation_email(user, request)
+                    if not success:
+                        messages.error(request, msg)
                         if created:
-                            user.delete()  # Clean up new user if email fails
+                            user.delete()
                         return redirect('register')
                     
                     messages.success(request, msg)
                     return redirect(f'/accounts/login/?command=verification&email={user.email}')
                 
-                messages.error(request, msg)
+                messages.error(request, "Registration failed")
                 return redirect('register')
                 
             except Exception as e:
-                logger.error(f"Registration process failed: {str(e)}", exc_info=True)
-                messages.error(request, "Registration failed due to system error. Please try again.")
+                logger.error(f"Registration error: {str(e)}")
+                messages.error(request, "Registration failed. Please try again.")
                 return redirect('register')
         
         # Form errors
         for field, errors in form.errors.items():
             for error in errors:
-                messages.error(request, f"{field.title()}: {error}")
+                if field == '__all__':
+                    messages.error(request, f"{field}: {error}")
+                else:
+                    messages.error(request, f"{error}")
     
     else:
         form = RegistrationForm()
@@ -78,5 +82,5 @@ def activate(request, uidb64, token):
         messages.success(request, SuccessMessage.S00004.value)
         return redirect('login')
     else:
-        messages.error(request, ErrorMessage.E00002.value)
+        messages.error(request, error or ErrorMessage.E00002.value)
         return redirect('register')

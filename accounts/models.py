@@ -41,7 +41,7 @@ class MyAccountManager(BaseUserManager):
             logger.error(f"Error fetching unverified user: {str(e)}")
             return None
         
-        
+
     def create_superuser(self, email, username, first_name, last_name, password=None):
         user = self.create_user(
             email=email,
@@ -68,6 +68,7 @@ class Account(AbstractUser):
 
     last_activation_sent = models.DateTimeField(null=True, blank=True)
     activation_attempts = models.PositiveIntegerField(default=0)
+    activation_locked_until = models.DateTimeField(null=True, blank=True)
 
     # Standard fields
     date_joined = models.DateTimeField(auto_now_add=True)
@@ -97,9 +98,24 @@ class Account(AbstractUser):
     def has_module_perms(self, app_label):
         return True
 
-    def can_resend_activation(self):
-        """Check if activation email can be resent (rate limiting)"""
-        if not self.last_activation_email_sent:
-            return True
-        # Allow resend after 5 minutes (adjust as needed)
-        return timezone.now() > self.last_activation_email_sent + timedelta(minutes=5)
+
+    def can_send_activation(self):
+        """Check if activation email can be sent"""
+        # Check if account is locked
+        if self.activation_locked_until and self.activation_locked_until > timezone.now():
+            remaining_time = (self.activation_locked_until - timezone.now()).seconds // 60
+            return False, f"Please wait {remaining_time} minutes before trying again"
+        
+        # Check attempt limit
+        if self.activation_attempts >= 2:
+            self.activation_locked_until = timezone.now() + timedelta(minutes=5)
+            self.save()
+            return False, "Maximum attempts reached. Please wait 5 minutes."
+        
+        return True, None
+
+    def reset_activation_attempts(self):
+        """Reset activation attempts and lock"""
+        self.activation_attempts = 0
+        self.activation_locked_until = None
+        self.save()
