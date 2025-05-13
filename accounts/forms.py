@@ -3,6 +3,7 @@ from django import forms
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from QCart.constants.error_message import ErrorMessage  # Import your custom messages
+from django.contrib.auth.password_validation import validate_password
 
 class RegistrationForm(forms.Form):
     first_name = forms.CharField(max_length=50)
@@ -12,6 +13,13 @@ class RegistrationForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
     confirm_password = forms.CharField(widget=forms.PasswordInput)
 
+
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        validate_password(password)
+        return password
+
+    
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if email:
