@@ -12,6 +12,8 @@ def _cart_id(request):
 def get_cart_data(request):
     total = 0
     quantity = 0
+    tax = 0
+    grand_total = 0
     cart_items = []
 
     try:
