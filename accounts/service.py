@@ -102,8 +102,55 @@ def activate_user(uidb64, token):
             user.is_active = True
             user.reset_activation_attempts()  # Reset on successful activation
             user.save()
-            return True, None
-        return False, "Invalid token"
+            return True, None, uid
+        return False, "Invalid token", None
     except Exception as e:
         logger.error(f"Activation error: {str(e)}")
-        return False, "Invalid activation link" 
+        return False, "Invalid activation link", None
+
+def get_user_by_email(email):
+    """Fetch user by exact email."""
+    return Account.objects.filter(email=email).first()
+
+def send_password_reset_email(request, user):
+    """Send reset password email to the given user."""
+    current_site = get_current_site(request)
+    mail_subject = 'Reset your password'
+    message = render_to_string('accounts/reser_password_email.html', {
+        'user': user,
+        'domain': current_site.domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': account_activation_token.make_token(user),
+    })
+
+    email = EmailMessage(mail_subject, message, to=[user.email])
+    email.send(fail_silently=False)
+
+
+def get_user_from_uid(uidb64):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = Account.objects.get(pk=uid)
+        return user
+    except (TypeError, ValueError, OverflowError, Account.DoesNotExist):
+        return None
+
+
+def is_token_valid(user, token):
+    return account_activation_token.check_token(user, token)
+
+
+def reset_user_password(uid, token, new_password):
+    try:
+        user = Account.objects.get(pk=uid)
+        if not is_token_valid(user, token):
+            return False, "Reset link has expired or is invalid."
+
+        user.set_password(new_password)
+        user.save()
+        return True, None
+    except Account.DoesNotExist:
+        return False, "User does not exist."
+
+
+

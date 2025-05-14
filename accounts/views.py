@@ -1,9 +1,10 @@
 from django.contrib import messages
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib import auth
 from django.contrib.auth import authenticate
 from .forms import RegistrationForm
-from .service import handle_registration, send_activation_email, activate_user
+from .service import get_user_by_email, get_user_from_uid, handle_registration, is_token_valid, reset_user_password, send_activation_email, activate_user, send_password_reset_email
 from QCart.constants.error_message import ErrorMessage
 from QCart.constants.success_message import SuccessMessage
 from .decorators import login_required_custom
@@ -95,4 +96,55 @@ def dashboard(request):
 
 
 def forgotPassword(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        user = get_user_by_email(email)
+
+        if user:
+            send_password_reset_email(request, user)
+            messages.success(request, SuccessMessage.S00005.value)
+            return redirect('login')
+        else:
+            messages.error(request, ErrorMessage.E00005.value)
+            return redirect('forgotPassword')
+
     return render(request, 'accounts/forgot_password.html')
+
+
+def resetpassword_validate(request, uidb64, token):
+    user = get_user_from_uid(uidb64)
+
+    if user and is_token_valid(user, token):
+        request.session['uid'] = user.pk
+        request.session['reset_token'] = token
+        messages.success(request, SuccessMessage.S00006.value)
+        return redirect('resetPassword')
+    else:
+        messages.error(request, ErrorMessage.E00006.value)
+        return redirect('login')
+
+
+def resetPassword(request):
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if password != confirm_password:
+            messages.error(request, ErrorMessage.E00004.value)
+            return redirect('resetPassword')
+
+        uid = request.session.get('uid')
+        token = request.session.get('reset_token')
+
+        success, error = reset_user_password(uid, token, password)
+
+        if success:
+            request.session.pop('uid', None)
+            request.session.pop('reset_token', None)
+            messages.success(request, "Password reset successfully.")
+            return redirect('login')
+        else:
+            messages.error(request, error)
+            return redirect('resetPassword')
+
+    return render(request, 'accounts/reset_password.html')

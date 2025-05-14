@@ -7,7 +7,8 @@ class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
         return (
             str(user.pk) +
             str(timestamp) +
-            str(user.is_active)
+            str(user.is_active) +
+            str(user.password)
         )
 
     def make_token(self, user):

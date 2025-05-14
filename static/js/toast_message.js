@@ -26,7 +26,7 @@ console.log("Toast script loaded!");
               position: 'top-end',
               icon: icon,
               title: data.message,
-              timer: 3000,
+              timer: 6000,
               timerProgressBar: true,
               showConfirmButton: false
             });
@@ -67,7 +67,7 @@ console.log("Toast script loaded!");
               position: 'top-end',
               icon: icon,
               title: data.message,
-              timer: 3000,
+              timer: 6000,
               timerProgressBar: true,
               showConfirmButton: false
             });
@@ -104,7 +104,7 @@ console.log("Toast script loaded!");
               position: 'top-end',
               icon: icon,
               title: data.message,
-              timer: 3000,
+              timer: 6000,
               timerProgressBar: true,
               showConfirmButton: false
             });
@@ -130,7 +130,7 @@ console.log("Toast script loaded!");
         position: 'top-end',
         icon: toastData.icon,
         title: toastData.message,
-        timer: 3000,
+        timer: 6000,
         timerProgressBar: true,
         showConfirmButton: false
       });
@@ -152,7 +152,7 @@ console.log("Toast script loaded!");
           position: 'top-end',
           icon: icon,
           title: msg.message,
-          timer: 3000,
+          timer: 6000,
           timerProgressBar: true,
           showConfirmButton: false
         });
