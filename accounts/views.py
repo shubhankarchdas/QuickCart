@@ -6,6 +6,7 @@ from .forms import RegistrationForm
 from .service import handle_registration, send_activation_email, activate_user
 from QCart.constants.error_message import ErrorMessage
 from QCart.constants.success_message import SuccessMessage
+from .decorators import login_required_custom
 import logging
 
 logger = logging.getLogger(__name__)
@@ -71,6 +72,8 @@ def login(request):
             return redirect('login')
     return render(request, 'accounts/login.html')
 
+
+@login_required_custom
 def logout(request):
     auth.logout(request)
     messages.success(request, SuccessMessage.S00003.value)
@@ -84,3 +87,12 @@ def activate(request, uidb64, token):
     else:
         messages.error(request, error or ErrorMessage.E00002.value)
         return redirect('register')
+
+
+@login_required_custom
+def dashboard(request):   
+    return render(request, 'accounts/dashboard.html')
+
+
+def forgotPassword(request):
+    return render(request, 'accounts/forgot_password.html')
