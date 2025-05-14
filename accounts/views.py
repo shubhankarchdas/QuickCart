@@ -9,6 +9,7 @@ from .service import get_user_by_email, get_user_from_uid, handle_registration, 
 from QCart.constants.error_message import ErrorMessage
 from QCart.constants.success_message import SuccessMessage
 from .decorators import login_required_custom
+import requests
 import logging
 
 logger = logging.getLogger(__name__)
@@ -69,7 +70,15 @@ def login(request):
             associate_cart_items_with_user(request, user)
             auth.login(request, user)
             messages.success(request, SuccessMessage.S00002.value)
-            return redirect('home')
+            url = request.META.get('HttP_REFERER')
+            try:
+                query = requests.utils.urlparse(url).query
+                params = dict(x.split('=') for x in query.split('&'))
+                if 'next' in params:
+                    nextPage = params['next']
+                    return redirect(nextPage)
+            except:
+                return redirect('home')
         else:
             messages.error(request, ErrorMessage.E00001.value)
             return redirect('login')
