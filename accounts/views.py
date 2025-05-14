@@ -95,12 +95,21 @@ def dashboard(request):
     return render(request, 'accounts/dashboard.html')
 
 
+
 def forgotPassword(request):
+    if request.user.is_authenticated:
+        messages.info(request, "You are already logged in.")
+        return redirect('home')  # or some other page
+
     if request.method == 'POST':
         email = request.POST.get('email')
         user = get_user_by_email(email)
 
         if user:
+            if request.user.is_active == False:
+                messages.error(request, "Your account is not active yet. Please check your email for activation.")
+                return redirect('login')
+
             send_password_reset_email(request, user)
             messages.success(request, SuccessMessage.S00005.value)
             return redirect('login')
@@ -109,6 +118,7 @@ def forgotPassword(request):
             return redirect('forgotPassword')
 
     return render(request, 'accounts/forgot_password.html')
+
 
 
 def resetpassword_validate(request, uidb64, token):
@@ -125,6 +135,16 @@ def resetpassword_validate(request, uidb64, token):
 
 
 def resetPassword(request):
+        # Ensure the user has an active account
+    if not request.user.is_active:
+        messages.error(request, "Your account is not active yet. Please check your email for activation.")
+        return redirect('login')
+    """Reset user password view, for authenticated users."""
+    # Redirect logged-in users from reset password page (if unnecessary)
+    if request.user.is_authenticated:
+        messages.warning(request, "You are already logged in. No need to reset your password.")
+        return redirect('dashboard')  # Redirect to dashboard or home page
+
     if request.method == 'POST':
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
