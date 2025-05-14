@@ -2,6 +2,9 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from carts.service import get_cart_data,remove_cart_item_from_cart, remove_cart_list_item_from_cart
 from store.service import get_product_by_id, handle_add_to_cart
+# Ensure the correct path to the decorators module
+from accounts.decorators import login_required_custom
+
 
 def add_to_cart(request, product_id):
     product = get_product_by_id(request, product_id)
@@ -19,5 +22,10 @@ def remove_list_cart_item(request, product_id, cart_item_id):
 def cart(request):
     context = get_cart_data(request)
     return render(request, 'store/cart.html', context)
+
+@login_required_custom
+def checkout(request):
+    context = get_cart_data(request)
+    return render(request, 'store/checkout.html', context)
 
 

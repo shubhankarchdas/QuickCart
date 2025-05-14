@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib import auth
 from django.contrib.auth import authenticate
+from carts.service import associate_cart_items_with_user
 from .forms import RegistrationForm
 from .service import get_user_by_email, get_user_from_uid, handle_registration, is_token_valid, reset_user_password, send_activation_email, activate_user, send_password_reset_email
 from QCart.constants.error_message import ErrorMessage
@@ -65,6 +66,7 @@ def login(request):
 
         user = authenticate(email=email, password=password)
         if user is not None:
+            associate_cart_items_with_user(request, user)
             auth.login(request, user)
             messages.success(request, SuccessMessage.S00002.value)
             return redirect('home')

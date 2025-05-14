@@ -90,7 +90,7 @@ class Account(AbstractUser):
         verbose_name_plural = 'Accounts'
 
     def __str__(self):
-        return f"ID: {self.id}, Created at: {self.created_at}, Active: {self.is_active}"
+        return f"{self.email}, ID: {self.id}, Created at: {self.created_at}, Active: {self.is_active}"
 
     def has_perm(self, perm, obj=None):
         return self.is_admin
