@@ -7,6 +7,11 @@ from orders.forms import OrderForm
 from orders.models import Order
 
 # Create your views here.
+
+def payments(request):
+    return render(request, 'orders/payments.html')
+
+
 def place_order(request, total=0, quantity=0):
     current_user = request.user
 
@@ -56,7 +61,15 @@ def place_order(request, total=0, quantity=0):
             order_number = current_date + str(data.id)
             data.order_number = order_number
             data.save()
-            return redirect('checkout')
+            order = Order.objects.get(user=current_user, is_ordered=False, order_number=order_number)
+            context = {
+                'order': order,
+                'cart_items': cart_items,
+                'total': total,
+                'tax': tax,
+                'grand_total': grand_total
+            }
+            return render(request, 'orders/payments.html', context)
         else:
             print("Form Errors:", form.errors)
             return redirect('checkout')
