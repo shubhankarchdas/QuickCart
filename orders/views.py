@@ -1,15 +1,25 @@
 import datetime
-from django.http import HttpResponse
+import json
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import redirect, render
 
 from carts.models import CartItem
 from orders.forms import OrderForm
 from orders.models import Order
+from orders.service import process_payment_data
 
 # Create your views here.
 
 def payments(request):
-    return render(request, 'orders/payments.html')
+    if request.method != "POST":
+        return HttpResponseBadRequest("Invalid request method")
+
+    try:
+        body = json.loads(request.body)
+        order = process_payment_data(request.user, body)
+        return render(request, 'orders/payments.html', {'order': order})
+    except Exception as e:
+        return HttpResponseBadRequest(f"Error processing payment: {str(e)}")
 
 
 def place_order(request, total=0, quantity=0):

@@ -5,6 +5,7 @@
 <section class="section-content padding-y bg">
     <div class="container">
     <!-- ============================ COMPONENT 1 ================================= -->
+    <h4 class="text-center mb-10">Review Your Order and Make Payment</h4>
     <div class="row">
         <aside class="col-lg-8">
     <div class="card">
@@ -153,7 +154,9 @@
                 <p class="text-center mb-3">
                     <img src="{% static './images/misc/payments.png' %}" height="26">
                 </p>
-                <a href="{% url 'checkout' %}" class="btn btn-primary btn-block"> Make Payment </a>
+                 <div id="paypal-button-container">
+
+                </div>
             </div> <!-- card-body.// -->
             </div> <!-- card.// -->
     
@@ -167,7 +170,71 @@
     </section>
     <!-- ========================= SECTION CONTENT END// ========================= -->
     
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Check if this cookie string begins with the name we want
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+    let amount = "{{ grand_total }}"
+    let url = "{% url 'payments' %}";
+    const csrftoken = getCookie('csrftoken');
+    let orderID = "{{order.order_number}}"
+    let payment_method = 'paypal';
 
+paypal.Buttons({
+    style: {
+        shape: 'pill',
+        color: 'gold',
+        layout: 'vertical',
+        label: 'pay'
+    },
+    createOrder: function(data, actions) {
+        return actions.order.create({
+            purchase_units: [{
+                amount: {
+                    value: amount,  // your Django variable
+                }
+            }]
+        });
+    },
+    onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+            console.log(details);
+            sendData();
+            function sendData(data) {
+                fetch(url,{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        orderID: orderId,
+                        transID: details.id,
+                        payment_method: payment_method,
+                        status: details.status,
+                    }),
+                })
+                // .then(response => response.json())
+                // .then(data => console.log('Success:', data))
+            }
+
+        });
+    }
+}).render('#paypal-button-container');
+</script>
 
 
     <style>

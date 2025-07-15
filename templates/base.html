@@ -29,6 +29,9 @@
 <!-- custom javascript -->
 <script src="{% static 'js/script.js' %}" type="text/javascript"></script>
 
+
+
+
 <script type="text/javascript">
 /// some script
 
@@ -41,9 +44,9 @@ $(document).ready(function() {
 </script>
 
 
-  <!-- Toaster Message Implemention Css & Js -->
-  <script>
-    window.djangoMessages = [
+<!-- Toaster Message Implemention Css & Js -->
+<script>
+  window.djangoMessages = [
       {% for message in messages %}
         {
           "tags": "{{ message.tags }}",
@@ -59,8 +62,12 @@ $(document).ready(function() {
   
   <!-- Include external toast script -->
   <script src="{% static 'js/toast_message.js' %}"></script>
-
+  
   <!-- End Toast-->
+
+  <!-- paypal -->
+  <script src="https://www.paypal.com/sdk/js?client-id=AV9LpNGMRKCvx9pNPxXvSTMyYDCBiW5pEA_vS5Es2QiD0_zQcdeu-tGEp4bL90Fnh0C6whtjJoglWki3&currency=USD"></script>
+  <!-- End paypal -->
 
 </head>
 <body>
