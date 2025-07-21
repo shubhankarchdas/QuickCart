@@ -202,23 +202,46 @@
     <!-- ========================= SECTION CONTENT END// ========================= -->
 
 
+
 <script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    const amount = "{{ grand_total|floatformat:2 }}";  // Ex: 499.00
+    const paisaAmount = parseInt(amount * 100); // Convert to paisa
+    const url = "{% url 'payments' %}";
+    const csrftoken = getCookie('csrftoken');
+    const orderID = "{{ order.order_number }}";
+    const payment_method = "Razorpay";
+    const redirect_url = "{% url 'order_complete' %}";
+
     const options = {
-        "key": "rzp_test_SvFy8vO5TP8gNG", // Replace with your Razorpay key_id
-        "amount": "50000", // Amount in paisa (₹500)
+        "key": "rzp_test_SvFy8vO5TP8gNG", // Replace with your live key for production
+        "amount": paisaAmount, // Amount in paisa
         "currency": "INR",
         "name": "Quick Cart",
-        "description": "Product Description",
-        "image": "http://127.0.0.1:8000/static/images/logo1-Picsart-BackgroundRemover.png", // Optional
-        // "order_id": "order_9A33XWu170gUtm", // Required if using backend order API
+        "description": "Order #{{ order.order_number }}",
+        "image": "http://127.0.0.1:8000/static/images/logo1-Picsart-BackgroundRemover.png",
         "handler": function (response){
-            alert("Payment successful. Razorpay ID: " + response.razorpay_payment_id);
-            // You can send this payment ID to backend to verify
+            // Send data to backend
+            sendPaymentData(response);
         },
         "prefill": {
-            "name": "Shubhankar Das",
-            "email": "shubhankar@example.com",
-            "contact": "9999999999"
+            "name": "{{ request.user.first_name }} {{ request.user.last_name }}",
+            "email": "{{ request.user.email }}",
+            "contact": "{{ request.user.profile.phone }}" // adjust if needed
         },
         "theme": {
             "color": "#3399cc"
@@ -230,8 +253,29 @@
     document.getElementById('rzp-button').onclick = function(e){
         rzp1.open();
         e.preventDefault();
+    };
+
+    function sendPaymentData(response) {
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+                "X-CSRFToken": csrftoken,
+            },
+            body: JSON.stringify({
+                orderID: orderID,
+                transID: response.razorpay_payment_id,
+                payment_method: payment_method,
+                status: "COMPLETED",
+            }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            window.location.href = redirect_url + '?order_number=' + data.order_number + '&payment_id=' + data.transID;
+        });
     }
 </script>
+
 
 
 <style>
