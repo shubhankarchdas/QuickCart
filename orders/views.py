@@ -12,7 +12,7 @@ from orders.service import complete_order_processing, process_payment_data
 
 def payments(request):
     if request.method != "POST":
-        return HttpResponseBadRequest("Invalid request method")
+        return JsonResponse({"error": "Invalid method"}, status=405)
 
     try:
         body = json.loads(request.body)
@@ -32,9 +32,9 @@ def payments(request):
         }
         return JsonResponse(data)
     
-        return render(request, 'orders/payments.html', {'order': order})
+        # return render(request, 'orders/payments.html', {'order': order})
     except Exception as e:
-        return HttpResponseBadRequest(f"Error processing payment: {str(e)}")
+        return JsonResponse({"error": "Error processing payment"}, status=400)
 
 
 def place_order(request, total=0, quantity=0):

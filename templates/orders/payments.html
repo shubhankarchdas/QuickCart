@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
 {% load static %}
-<script src="https://www.paypal.com/sdk/js?client-id=Ab1qSQtHXpJ7s1q75daf1Wirsx_MG7LqyBZrcdp-F_qafh-iQXF27YTm9khvHN5-9Arg6PQZhK5sOShv&currency=USD"></script>
 
 <section class="section-content padding-y bg">
     <div class="container">
@@ -233,7 +232,7 @@
         "currency": "INR",
         "name": "Quick Cart",
         "description": "Order #{{ order.order_number }}",
-        "image": "http://127.0.0.1:8000/static/images/logo1-Picsart-BackgroundRemover.png",
+        "image": "{% static 'images/logo1-Picsart-BackgroundRemover.png' %}",
         "handler": function (response){
             // Send data to backend
             sendPaymentData(response);
@@ -271,7 +270,7 @@
         })
         .then((response) => response.json())
         .then((data) => {
-            window.location.href = redirect_url + '?order_number=' + data.order_number + '&payment_id=' + data.payment_id;
+            window.location.href = redirect_url + '?order_number=' + data.order_number + '&payment_id=' + data.transID;
         });
     }
 </script>
