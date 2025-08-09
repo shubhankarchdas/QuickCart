@@ -16,6 +16,8 @@ def payments(request):
 
     try:
         body = json.loads(request.body)
+
+        # process_payment_data now returns (order, payment)
         order, payment = process_payment_data(request.user, body) # Store Transaction details in Payment model
 
 

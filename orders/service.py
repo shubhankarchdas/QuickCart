@@ -27,7 +27,7 @@ def process_payment_data(user, payment_data):
         user=user,
         payment_id=payment_data['transID'],
         payment_method=payment_data['payment_method'],
-        amount_paid=order.total,
+        amount_paid=order.order_total,
         status=payment_data['status']
     )
 
@@ -35,7 +35,7 @@ def process_payment_data(user, payment_data):
     order.is_ordered = True
     order.save()
 
-    return order
+    return order,payment
 
 
 def complete_order_processing(user, order, payment):
