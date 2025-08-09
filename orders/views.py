@@ -1,12 +1,12 @@
 import datetime
 import json
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import redirect, render
 
 from carts.models import CartItem
 from orders.forms import OrderForm
 from orders.models import Order
-from orders.service import process_payment_data
+from orders.service import complete_order_processing, process_payment_data
 
 # Create your views here.
 
@@ -16,7 +16,22 @@ def payments(request):
 
     try:
         body = json.loads(request.body)
-        order = process_payment_data(request.user, body)
+        order, payment = process_payment_data(request.user, body) # Store Transaction details in Payment model
+
+
+        
+        # Delegate database-related work to service
+        complete_order_processing(request.user, order, payment)
+
+
+
+        # Send order number and transaction id back to sendData method via JsonResponse
+        data = {
+        'order_number': order.order_number,
+        'transID': payment.payment_id,
+        }
+        return JsonResponse(data)
+    
         return render(request, 'orders/payments.html', {'order': order})
     except Exception as e:
         return HttpResponseBadRequest(f"Error processing payment: {str(e)}")
@@ -83,3 +98,10 @@ def place_order(request, total=0, quantity=0):
         else:
             print("Form Errors:", form.errors)
             return redirect('checkout')
+        
+
+
+
+
+def order_complete(request):
+    return render(request, 'orders/order_complete.html')
