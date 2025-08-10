@@ -1,6 +1,7 @@
 from carts.models import Cart, CartItem
 from carts.service import _cart_id
-from store.models import Product, Variation  # if you're using a helper function for cart ID
+from store.forms import ReviewForm
+from store.models import Product, ReviewRating, Variation  # if you're using a helper function for cart ID
 
 def is_product_in_cart(request, product):
     return CartItem.objects.filter(
@@ -89,3 +90,36 @@ def handle_add_to_cart(request, product):
             if product_variation:
                 new_cart_item.variation.set(product_variation)
             new_cart_item.save()
+
+
+
+
+def get_existing_review(user_id, product_id):
+    try:
+        return ReviewRating.objects.get(user__id=user_id, product__id=product_id)
+    except ReviewRating.DoesNotExist:
+        return None
+
+
+def update_review(instance, form_data):
+    form = ReviewForm(form_data, instance=instance)
+    if form.is_valid():
+        form.save()
+        return True
+    return False
+
+
+def create_review(form_data, user_id, product_id, ip):
+    form = ReviewForm(form_data)
+    if form.is_valid():
+        data = ReviewRating(
+            subject=form.cleaned_data['subject'],
+            rating=form.cleaned_data['rating'],
+            review=form.cleaned_data['review'],
+            ip=ip,
+            user_id=user_id,
+            product_id=product_id
+        )
+        data.save()
+        return True
+    return False
