@@ -4,6 +4,7 @@ from django.shortcuts import redirect, render
 from django.contrib import auth
 from django.contrib.auth import authenticate
 from carts.service import associate_cart_items_with_user
+from orders.models import Order
 from .forms import RegistrationForm
 from .service import get_user_by_email, get_user_from_uid, handle_registration, is_token_valid, reset_user_password, send_activation_email, activate_user, send_password_reset_email
 from QCart.constants.error_message import ErrorMessage
@@ -102,8 +103,11 @@ def activate(request, uidb64, token):
 
 
 @login_required_custom
-def dashboard(request):   
-    return render(request, 'accounts/dashboard.html')
+def dashboard(request):
+    order = Order.objects.order_by('-created_at').filter(user_id=request.user.id, is_ordered=True) 
+    order_count = order.count() 
+    context = {'order_count': order_count, 'order': order} 
+    return render(request, 'accounts/dashboard.html', context)
 
 
 

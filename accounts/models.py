@@ -119,3 +119,9 @@ class Account(AbstractUser):
         self.activation_attempts = 0
         self.activation_locked_until = None
         self.save()
+
+
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
+    
