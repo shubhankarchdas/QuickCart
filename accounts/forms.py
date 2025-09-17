@@ -5,6 +5,8 @@ from django.core.exceptions import ValidationError
 from QCart.constants.error_message import ErrorMessage  # Import your custom messages
 from django.contrib.auth.password_validation import validate_password
 
+from accounts.models import Account, UserProfile
+
 class RegistrationForm(forms.Form):
     first_name = forms.CharField(max_length=50)
     last_name = forms.CharField(max_length=50)
@@ -50,3 +52,15 @@ class RegistrationForm(forms.Form):
         self.fields['confirm_password'].widget.attrs['placeholder'] = 'Confirm Your Password'
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
+
+
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ('first_name', 'last_name', 'phone_number')
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ('address_line_1', 'address_line_2', 'city', 'state', 'country', 'profile_picture')

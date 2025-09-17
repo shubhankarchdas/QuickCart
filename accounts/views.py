@@ -1,6 +1,8 @@
+from accounts.models import UserProfile
+from .forms import UserProfileForm, UserForm, RegistrationForm
 from django.contrib import messages
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import auth
 from django.contrib.auth import authenticate
 from carts.service import associate_cart_items_with_user
@@ -194,4 +196,25 @@ def my_orders(request):
 
 
 def edit_profile(request):
-    return render(request, 'accounts/edit_profile.html')
+    userprofile = get_object_or_404(UserProfile, user=request.user)
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, SuccessMessage.S00007.value)
+            return redirect('edit_profile')
+        else:
+            messages.error(request, ErrorMessage.E00007.value)
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form = UserProfileForm(instance=request.user.userprofile)
+
+    context = {
+        'user_form': user_form,
+        'profile_form': profile_form,
+    }    
+    return render(request, 'accounts/edit_profile.html', context)
+
