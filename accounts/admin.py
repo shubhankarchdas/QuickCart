@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Account
+from django.utils.html import format_html
+from .models import Account, UserProfile
 # Register your models here.
 
 
@@ -13,4 +14,14 @@ class AccountAdmin(UserAdmin):
     filter_horizontal = ()
     list_filter = ()
     fieldsets = ()
+
+class UserProfileAdmin(admin.ModelAdmin):
+    def thumbnail(self, object):
+        return format_html('<img src="{}" width="50" height="50" style="object-fit: cover; border-radius: 50%;">'.format(object.profile_picture.url))
+    thumbnail.short_description = 'Profile Picture'
+    list_display = ('thumbnail','user', 'address_line_1', 'city', 'state', 'country')
+    search_fields = ('user__email', 'user__username', 'address_line_1', 'city', 'state', 'country')
+    list_filter = ('city', 'state', 'country')
+
 admin.site.register(Account, AccountAdmin)
+admin.site.register(UserProfile, UserProfileAdmin)
