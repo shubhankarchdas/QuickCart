@@ -108,7 +108,7 @@ def activate(request, uidb64, token):
 def dashboard(request):
     order = Order.objects.order_by('-created_at').filter(user_id=request.user.id, is_ordered=True) 
     order_count = order.count() 
-    context = {'order_count': order_count, 'order': order} 
+    context = {'order_count': order_count, 'order': order, 'userprofile': request.user.userprofile} 
     return render(request, 'accounts/dashboard.html', context)
 
 
@@ -215,6 +215,7 @@ def edit_profile(request):
     context = {
         'user_form': user_form,
         'profile_form': profile_form,
+        'userprofile': userprofile
     }    
     return render(request, 'accounts/edit_profile.html', context)
 
