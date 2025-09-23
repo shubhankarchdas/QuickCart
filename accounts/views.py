@@ -1,4 +1,4 @@
-from accounts.models import UserProfile
+from accounts.models import Account, UserProfile
 from .forms import UserProfileForm, UserForm, RegistrationForm
 from django.contrib import messages
 from django.http import HttpResponse
@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import auth
 from django.contrib.auth import authenticate
 from carts.service import associate_cart_items_with_user
-from orders.models import Order
+from orders.models import Order, OrderProduct
 from .forms import RegistrationForm
 from .service import get_user_by_email, get_user_from_uid, handle_registration, is_token_valid, reset_user_password, send_activation_email, activate_user, send_password_reset_email
 from QCart.constants.error_message import ErrorMessage
@@ -188,13 +188,14 @@ def resetPassword(request):
 
 
 
-
+@login_required_custom
 def my_orders(request):
     orders = Order.objects.filter(user=request.user, is_ordered=True).order_by('-created_at')
     context = {'orders': orders}
     return render(request, 'accounts/my_orders.html', context)
 
 
+@login_required_custom
 def edit_profile(request):
     userprofile = get_object_or_404(UserProfile, user=request.user)
     if request.method == 'POST':
@@ -219,3 +220,47 @@ def edit_profile(request):
     }    
     return render(request, 'accounts/edit_profile.html', context)
 
+
+@login_required_custom
+def change_password(request):
+    if request.method == 'POST':
+        current_password = request.POST['current_password']
+        new_password = request.POST['new_password'] 
+        confirm_password = request.POST['confirm_password']
+
+        user = Account.objects.get(username__exact=request.user.username)
+
+        if new_password == confirm_password:
+            success = user.check_password(current_password)
+            if success:
+                user.set_password(new_password)
+                user.save()
+                # auth.logout(request)
+                messages.success(request, SuccessMessage.S00008.value)
+                return redirect('change_password')
+            
+            else:
+                messages.error(request, ErrorMessage.E00007.value)
+                return redirect('change_password') 
+
+        else:
+            messages.error(request, ErrorMessage.E00004.value)
+            return redirect('change_password')       
+
+    return render(request, 'accounts/change_password.html')
+
+
+
+@login_required_custom
+def order_detail(request, order_id):
+    order_detail = OrderProduct.objects.filter(order__order_number=order_id)
+    order = Order.objects.get(order_number=order_id)
+    subtotal = 0
+    for i in order_detail:
+        subtotal += i.product_price * i.quantity
+    context = {
+        'order_detail': order_detail,
+        'order': order,
+        'subtotal': subtotal,
+    }
+    return render(request, 'accounts/order_detail.html', context)

@@ -8,6 +8,7 @@ class ErrorMessage(Enum):
     E00004 = "⚠️Passwords does not match. Please try again."
     E00005 = "Account with this email does not exist! Please try again."
     E00006 = "This link has expired. Please request a new password reset link."
+    E00007 = "⚠️Please enter valid current password."
     
 
     

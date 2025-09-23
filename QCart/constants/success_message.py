@@ -9,5 +9,6 @@ class SuccessMessage(Enum):
     S00005 = "Password reset link🔗 has been sent to your email📧."
     S00006 = "Please Enter Your New Password."
     S00007 = "Your profile has been updated successfully✅."
+    S00008 = "Your password has been changed successfully🔐."
 
     
