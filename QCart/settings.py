@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 from env_config import env
+# from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
     'store',
     'carts',
     'orders',
+    'admin_honeypot',
 ]
 
 MIDDLEWARE = [
@@ -167,25 +169,24 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 
 #SMTP Config
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_BACKEND = env("EMAIL_BACKEND")
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_PORT = env("EMAIL_PORT", cast=int)
 SITE_URL = env("SITE_URL", default="http://localhost:8000")
-DEFAULT_FROM_EMAIL = 'shubhankarchdas@gmail.com'
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
 EMAIL_HOST_USER = env("EMAIL_ID")
 EMAIL_HOST_PASSWORD = env("EMAIL_PASSWORD")
-EMAIL_USE_TLS = True
+EMAIL_USE_TLS = env("EMAIL_USE_TLS", cast=bool)
 
 
 print("EMAIL HOST USER:", EMAIL_HOST_USER)
 print("EMAIL HOST PASSWORD:", EMAIL_HOST_PASSWORD)
 
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Stores session data in the database
-SESSION_COOKIE_NAME = 'sessionid'
-SESSION_COOKIE_SECURE = False  # Set to True if using HTTPS, otherwise False for local development
-SESSION_COOKIE_AGE = 1209600  # 2 weeks, or adjust as needed
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Keeps session open after browser close if False
+SESSION_ENGINE = env("SESSION_ENGINE")  # Stores session data in the database
+SESSION_COOKIE_NAME = env("SESSION_COOKIE_NAME")
+SESSION_COOKIE_SECURE = env("SESSION_COOKIE_SECURE", cast=bool)  # Set to True if using HTTPS, otherwise False for local development
+SESSION_COOKIE_AGE = env("SESSION_COOKIE_AGE", cast=int)  # 2 weeks, or adjust as needed
+SESSION_EXPIRE_AT_BROWSER_CLOSE = env("SESSION_EXPIRE_AT_BROWSER_CLOSE", cast=bool)  # Keeps session open after browser close if False
 
 
 

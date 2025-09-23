@@ -4,7 +4,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')), #recorded the ip address and number of attempts for unethical access by abc person.
+    path('sadlog/', admin.site.urls),
     path('', include('QuickCart.urls')),
     path('store/', include('store.urls')),
     path('cart/', include('carts.urls')),
