@@ -57,6 +57,21 @@
         </div>
     </div>
 </footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<script>
+    // jquery for multi image
+    $(document).ready(function(){
+        $('.thumb a').click(function (e) {
+            e.preventDefault();
+            $('.mainImage img').attr('src', $(this).attr("href"))
+        })
+    })
+</script>
+
+
+</body>
+</html>
 
 <style>
     .section-footer {

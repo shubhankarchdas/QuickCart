@@ -54,6 +54,9 @@ def product_detail(request, category_slug, product_slug):
     # Get the product gallery
     product_gallery = ProductGallery.objects.filter(product_id=single_product.id)
 
+    # Get the product gallery
+    product_gallery = ProductGallery.objects.filter(product_id=single_product.id)
+
     context = {
         'single_product': single_product,
         'category': single_product.category,
