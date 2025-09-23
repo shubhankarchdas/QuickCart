@@ -1,7 +1,41 @@
-# 🛒 QuickCart - E-commerce Website
+# 🛒 QuickCart - Django eCommerce Application
 
-QuickCart is a full-featured e-commerce web application built with Django. It supports product listings, user accounts, shopping cart, order management, and more.
---------------------------
+QuickCart is a full-featured eCommerce web application built with the **Django Framework (Python)**. This project showcases core eCommerce functionality, modern UI interactions, and backend best practices, making it an ideal starting point for building scalable online stores.
+
+## 🚀 Features
+
+### 👤 User Management
+- Custom user model with email authentication
+- Full "My Account" dashboard for customers
+- Profile editing with profile picture upload
+- Change password functionality
+
+### 🛍️ Product Management
+- Unlimited product image gallery per item
+- Product categories and subcategories
+- Inventory management (auto-decrease stock on purchase)
+
+### 🛒 Cart & Checkout
+- Add, remove, increment, and decrement cart items
+- Persistent cart system per user session
+- Real-time price calculation
+- Coupon and discount logic (optional to add)
+
+### 💸 Payments & Orders
+- Integrated **Razorpay** for secure online payments
+- Order summary and checkout process
+- Automatic stock deduction after order completion
+- Order confirmation email sent to customer
+- PDF Invoice generation for orders
+- Order success/thank you page
+
+### ⭐ Reviews & Ratings
+- Product review system
+- Interactive star rating (supports half-star ratings)
+
+### 🔐 Security
+- **Honeypot** protection for admin login
+- Django's built-in protections (CSRF, SQLi, XSS, etc.)
 
 ## 📸 Project Preview
 ![Home Page](static/images/avatars/home.jpg)
