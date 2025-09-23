@@ -50,6 +50,99 @@ QuickCart is a full-featured eCommerce web application built with the **Django F
 ![Product Page](static/images/avatars/cart.jpg)
 ![Cart Page](static/images/avatars/shop.jpg)
 
+## Project Structure
+    QuickCart/                       # 🛒 Root project folder
+    ├── accounts/                    # 👤 User accounts app
+    │   ├── admin.py
+    │   ├── apps.py
+    │   ├── decorators.py
+    │   ├── forms.py
+    │   ├── models.py
+    │   ├── service.py
+    │   ├── tests.py
+    │   ├── token.py
+    │   ├── urls.py
+    │   ├── views.py
+    │
+    ├── carts/                       # 🛒 Cart management app
+    │   ├── admin.py
+    │   ├── apps.py
+    │   ├── context_processors.py
+    │   ├── models.py
+    │   ├── service.py
+    │   ├── tests.py
+    │   ├── urls.py
+    │   ├── views.py
+    │
+    ├── category/                    # 📂 Product categories app
+    │   ├── admin.py
+    │   ├── apps.py
+    │   ├── context_processors.py
+    │   ├── models.py
+    │   ├── service.py
+    │   ├── tests.py
+    │   ├── views.py
+    │
+    ├── media/                       # 🖼️ Uploaded media files (images, etc.)
+    │   ├── category/
+    │   ├── store/
+    │   ├── userprofile/
+    │
+    ├── orders/                      # 📦 Order management app
+    │   ├── admin.py
+    │   ├── apps.py
+    │   ├── forms.py
+    │   ├── models.py
+    │   ├── service.py
+    │   ├── tests.py
+    │   ├── urls.py
+    │   ├── views.py
+    │
+    ├── QCart/                      # ⚙️ Main Django project configuration (settings, urls)
+    │   ├── asgi.py
+    │   ├── settings.py
+    │   ├── urls.py
+    │   ├── wsgi.py
+    │
+    ├── QuickCart/                  # 🎯 Core business logic app
+    │   ├── admin.py
+    │   ├── apps.py
+    │   ├── models.py
+    │   ├── service.py
+    │   ├── tests.py
+    │   ├── urls.py
+    │   ├── views.py
+    │
+    ├── store/                     # 🏬 Product store app
+    │   ├── admin.py
+    │   ├── apps.py
+    │   ├── forms.py
+    │   ├── models.py
+    │   ├── service.py
+    │   ├── tests.py
+    │   ├── urls.py
+    │   ├── views.py
+    │
+    ├── templates/                 # 📄 HTML templates for frontend UI
+    │   ├── base.html
+    │   ├── home.html
+    │   ├── accounts/
+    │   ├── includes/
+    │   ├── orders/
+    │   ├── store/
+    │
+    ├── venv/                       # 🐍 Python virtual environment (exclude from git)
+    ├── .env                        # 🔐 Environment variables (do NOT commit real secrets)
+    ├── .env_sample                 # 🔐 Sample env file template
+    ├── .gitignore                  # 🚫 Git ignore file
+    ├── django_errors.log           # 🐞 Django error logs
+    ├── env_config.py               # ⚙️ Env config loader (optional)
+    ├── manage.py                   # 🛠️ Django management script
+    ├── README.md                   # 📄 Project documentation
+    ├── requirements.txt            # 📦 Python dependencies
+
+
+
 
 
 ## 1. Install required softwares
