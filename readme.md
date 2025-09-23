@@ -37,10 +37,20 @@ QuickCart is a full-featured eCommerce web application built with the **Django F
 - **Honeypot** protection for admin login
 - Django's built-in protections (CSRF, SQLi, XSS, etc.)
 
+## 🧰 Tech Stack
+
+- **Backend**: Python, Django
+- **Frontend**: HTML5, CSS3, JavaScript
+- **Database**: PostgreSQL
+- **Payment Gateway**: Razorpay
+- **Security**: Django Honeypot, CSRF protection, strong user auth
+  
 ## 📸 Project Preview
 ![Home Page](static/images/avatars/home.jpg)
 ![Product Page](static/images/avatars/cart.jpg)
 ![Cart Page](static/images/avatars/shop.jpg)
+
+
 
 ## 1. Install required softwares
 > 🐍 Python version
@@ -68,6 +78,38 @@ venv/scripts/activate
 ```bash
 pip install -r requirements.txt
 ```
+## ⚠️ Sample Environment Variables for QuickCart Django Project
+    # DEBUG
+    DEBUG=True
+    
+    # SECRET KEY
+    SECRET_KEY=<YOUR SECRET KEY>
+    
+    # SMTP
+    EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+    EMAIL_HOST=smtp.gmail.com
+    EMAIL_PORT=587
+    DEFAULT_FROM_EMAIL=<youremail@gmail.com>
+    EMAIL_USE_TLS=True
+    
+    # SESSION 
+    SESSION_ENGINE=django.contrib.sessions.backends.db
+    SESSION_COOKIE_NAME=sessionid
+    SESSION_COOKIE_SECURE=False  # Set to True if using HTTPS, otherwise False for local development
+    SESSION_COOKIE_AGE=1209600  # 2 weeks, or adjust as needed
+    SESSION_EXPIRE_AT_BROWSER_CLOSE=False  # Keeps session open after browser close if False
+    
+    # EMAIL
+    EMAIL_ID=<youremail@gmail.com>
+    EMAIL_PASSWORD=<yourstrongpassword>
+    
+    # DB
+    DATABASE_NAME=<your database name>
+    DATABASE_USER=<your database username>
+    DATABASE_PASSWORD=<your database password>
+    DATABASE_HOST=localhost
+    DATABASE_PORT=5432 # change if needed
+
 ## 6. Make migrations:
 ```bash
 python manage.py makemigrations 
