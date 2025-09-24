@@ -222,3 +222,6 @@ python manage.py migrate
 ```bash
 python manage.py runserver
 ```
+
+## Access Admin: 
+    Login to admin panel - (http://127.0.0.1:8000/sadlog/)
