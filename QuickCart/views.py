@@ -15,7 +15,3 @@ def home(request):
     }
     return render(request, 'home.html', context)
 
-
-
-
-# 59 min 19 sec
