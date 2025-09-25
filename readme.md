@@ -171,6 +171,27 @@ venv/scripts/activate
 ```bash
 pip install -r requirements.txt
 ```
+
+## 6. Honeypot setup : 
+> In Django 4.x and later versions, ugettext_lazy has been removed. It was deprecated in Django 2.2 and subsequently removed in Django 3.0. If you are working       with Django 4 or a newer version, you should use gettext_lazy instead for lazy translation of strings.
+  - Replace imports: Change any instances of:
+                   ```from django.utils.translation import ugettext_lazy as _```
+                   to
+                   ```from django.utils.translation import gettext_lazy as _```
+``` Goto venv/
+         ├── Lib/
+             ├── site-packages/
+                 ├── admin_honeypot/
+                     ├── views    ---> ugettext_lazy Change it by gettext_lazy 
+                     ├── urls     ---> from django.urls import re_path
+                     ├── signals  ---> from django.dispatch import Signal 
+                     |                 honeypot = Signal()
+                     |
+                     ├── models   ---> ugettext_lazy Change it by gettext_lazy 
+                     ├── admin    ---> ugettext_lazy Change it by gettext_lazy
+```
+
+
 ## ⚠️ Sample Environment Variables for QuickCart Django Project
     # DEBUG
     DEBUG=True
