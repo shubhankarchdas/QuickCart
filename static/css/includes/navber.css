@@ -1,0 +1,23 @@
+/* Promo navber */
+  .navbar {
+    background: linear-gradient(90deg, #0f2027, #203a43, #2c5364); /* dark teal shades */
+    color: white;
+  }
+  .navbar .nav-link {
+    color: white !important;
+    font-weight: 500;
+  }
+  .navbar .title {
+    color: white;
+    font-weight: bold;
+    padding-right: 1rem;
+  }
+  .promo-text {
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    min-width: 200px;
+    display: inline-block;
+    padding: 5px 10px;
+  }

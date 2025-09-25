@@ -1,0 +1,28 @@
+    .section-footer {
+        background: linear-gradient(90deg, #0f2027, #203a43, #2c5364); /* dark teal shades */
+
+    }
+    .section-footer a {
+        transition: color 0.3s ease;
+    }
+    .section-footer a:hover {
+        color: #2563eb !important;
+        text-decoration: none;
+    }
+    .social-links a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: rgba(255,255,255,0.1);
+        transition: all 0.3s ease;
+    }
+    .social-links a:hover {
+        background-color: #303030;
+        transform: translateY(-3px);
+    }
+    .bg-gray-700 {
+        background-color: #334155;
+    }
