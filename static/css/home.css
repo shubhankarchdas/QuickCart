@@ -1,0 +1,58 @@
+    /* Hero Section */
+	#hero {
+		height: 92vh;
+		overflow: hidden;
+	}
+	
+	.hero-slide {
+		display: flex;
+		align-items: center;
+		text-align: center;
+		color: var(--white);
+		height: 100vh;
+		background-size: cover;
+		background-position: center;
+		padding: 0 1rem;
+	}
+	
+	.swiper-pagination {
+		bottom: 20px;
+	}
+	
+	.hero-content {
+		max-width: 800px;
+		margin: 0 auto;
+	}
+	
+	.hero-content h1 {
+		font-size: 3.5rem;
+		margin-bottom: 1rem;
+	}
+	.hero-content h1 span{
+		font-size: 40px;
+		background-color: aqua;
+		padding: 5px 28px 5px 28px;
+		border-radius: 12px;
+	}
+	
+	.hero-content p {
+		font-size: 1.25rem;
+		margin-bottom: 2rem;
+	}
+	
+	/* Buttons */
+	.cta-button, .submit-button {
+		background-color: #ffca20;
+		color: var(--white);
+		padding: 1rem 2rem;
+		border: none;
+		border-radius: 0.5rem;
+		font-size: 1.1rem;
+		font-weight: 600;
+		cursor: pointer;
+		transition: background-color 0.3s ease;
+	}
+	
+	.cta-button:hover, .submit-button:hover {
+		background-color: var(--secondary-color);
+	}
