@@ -1,75 +1,415 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<!-- Hero section -->
+<div id="hero" class="swiper">
+  <div class="swiper-wrapper">
+    <div
+      class="swiper-slide hero-slide"
+      style="
+        background-image: url(&quot;static/images/banners/caro111.png&quot;);
+      "
+    >
+
+</div>
+    <div
+      class="swiper-slide hero-slide"
+      style="
+        background-image: url(&quot;static/images/banners/caro222.png&quot;);
+      "
+    ></div>
+    <!-- <div class="swiper-slide hero-slide" style="background-image: url('static/images/banners/caro3.jpg');">
+			</div> -->
+    <div
+      class="swiper-slide hero-slide"
+      style="
+        background-image: url(&quot;static/images/banners/caro44444.png&quot;);
+      "
+    ></div>
+  </div>
+
+  <!-- 👇 ADD THIS BUTTON ONLY (DO NOT TOUCH ANYTHING ELSE) -->
+  <div class="hero-btn-container">
+      <a href="{% url 'store' %}" class="hero-shop-btn">Shop Now →</a>
+  </div>
+
+  <!-- Navigation Buttons -->
+  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-pagination"></div>
+</div>
 
 
-	<!-- Hero section -->
-	<div id="hero" class="swiper">
-		<div class="swiper-wrapper">
-			<div class="swiper-slide hero-slide" style="background-image: url('static/images/banners/caro1.jpeg');">
-			</div>
-			<div class="swiper-slide hero-slide" style="background-image: url('static/images/banners/caro2.jpeg');">
-			</div>
-			<div class="swiper-slide hero-slide" style="background-image: url('static/images/banners/caro3.jpg');">
-			</div>
-			<div class="swiper-slide hero-slide" style="background-image: url('static/images/banners/caro4.jpeg');">
-			</div>
-		</div>
-		
-		<!-- Navigation Buttons -->
-		<div class="swiper-button-next"></div>
-		<div class="swiper-button-prev"></div>
-		<div class="swiper-pagination"></div>
-	</div>
-	
-	
-	
+
+
+<!-- ===== FULL WIDTH CATEGORY SLIDER (WHITE + AUTO + MANUAL CONTROL) ===== -->
+<section class="qcsl-section">
+    <h2 class="qcsl-title">You Might Like</h2>
+
+    <div class="qcsl-wrapper">
+        <!-- Left Arrow -->
+        <button class="qcsl-arrow qcsl-prev" id="qcslPrev">
+            &#10094;
+        </button>
+
+        <!-- Slider -->
+        <div class="qcsl-slider" id="qcslSlider">
+            <div class="qcsl-track" id="qcslTrack">
+
+                <div class="qcsl-item">
+                    <div class="qcsl-circle">
+                        <img src="{% static 'images/categories/category_1.png' %}" alt="Women Tops">
+                    </div>
+                    <span>Women Tops</span>
+                </div>
+
+                <div class="qcsl-item">
+                    <div class="qcsl-circle">
+                        <img src="{% static 'images/categories/category_2.png' %}" alt="Women Pants">
+                    </div>
+                    <span>Women Pants</span>
+                </div>
+
+                <div class="qcsl-item">
+                    <div class="qcsl-circle">
+                        <img src="{% static 'images/categories/category_3.png' %}" alt="Women Clothes">
+                    </div>
+                    <span>Women Clothes</span>
+                </div>
+
+                <div class="qcsl-item">
+                    <div class="qcsl-circle">
+                        <img src="{% static 'images/categories/category_4.png' %}" alt="Men Jeans">
+                    </div>
+                    <span>Men Jeans</span>
+                </div>
+
+                <div class="qcsl-item">
+                    <div class="qcsl-circle">
+                        <img src="{% static 'images/categories/category_5.png' %}" alt="Men Shirts">
+                    </div>
+                    <span>Men Shirts</span>
+                </div>
+
+                <div class="qcsl-item">
+                    <div class="qcsl-circle">
+                        <img src="{% static 'images/categories/category_6.png' %}" alt="Men Shoes">
+                    </div>
+                    <span>Men Shoes</span>
+                </div>
+
+                <div class="qcsl-item">
+                    <div class="qcsl-circle">
+                        <img src="{% static 'images/categories/category_7.png' %}" alt="Women Dresses">
+                    </div>
+                    <span>Women Dresses</span>
+                </div>
+
+                <div class="qcsl-item">
+                    <div class="qcsl-circle">
+                        <img src="{% static 'images/categories/category_8.png' %}" alt="Kids Tops">
+                    </div>
+                    <span>Kids Tops</span>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Right Arrow -->
+        <button class="qcsl-arrow qcsl-next" id="qcslNext">
+            &#10095;
+        </button>
+    </div>
+</section>
+
+
+
 <!-- ========================= SECTION MAIN ========================= -->
 <section class="section-intro padding-y-sm">
-<div class="container">
-
-
-</div> <!-- container //  -->
+  <div class="container"></div>
+  <!-- container //  -->
 </section>
 <!-- ========================= SECTION MAIN END// ========================= -->
 
 <!-- ========================= SECTION  ========================= -->
 <section class="section-name padding-y-sm">
-<div class="container">
+  <div class="container">
+    <header class="section-heading">
+      <a href="{% url 'store' %}" class="btn btn-outline-primary float-right"
+        >See all</a
+      >
+      <h3 class="section-title">Popular products</h3>
+    </header>
+    <!-- sect-heading -->
 
-<header class="section-heading">
-	<a href="{% url 'store' %}" class="btn btn-outline-primary float-right">See all</a>
-	<h3 class="section-title">Popular products</h3>
-</header><!-- sect-heading -->
-
-	
-<div class="row">
-	{% for product in products %}
-	<div class="col-md-3">
-		<div class="card card-product-grid">
-			<a href="{{product.get_url}}" class="img-wrap"> <img src="{{product.image.url}}"> </a>
-			<figcaption class="info-wrap">
-				<a href="{{product.get_url}}" class="title">{{product.product_name}}</a>
-				<div class="price mt-1">$ {{product.price}}</div> <!-- price-wrap.// -->
-	<div class="rating-star">
-	<span>
-	<i class="fa fa-star{% if product.averageReview < 0.5 %}-o{% elif single_product.averageReview >= 0.5 and single_product.averageReview < 1 %}-half-o {% endif %}" aria-hidden="true"></i>
-	<i class="fa fa-star{% if product.averageReview < 1.5 %}-o{% elif single_product.averageReview >= 1.5 and single_product.averageReview < 2 %}-half-o {% endif %}" aria-hidden="true"></i>
-	<i class="fa fa-star{% if product.averageReview < 2.5 %}-o{% elif single_product.averageReview >= 2.5 and single_product.averageReview < 3 %}-half-o {% endif %}" aria-hidden="true"></i>
-	<i class="fa fa-star{% if product.averageReview < 3.5 %}-o{% elif single_product.averageReview >= 3.5 and single_product.averageReview < 4 %}-half-o {% endif %}" aria-hidden="true"></i>
-	<i class="fa fa-star{% if product.averageReview < 4.5 %}-o{% elif single_product.averageReview >= 4.5 and single_product.averageReview < 5 %}-half-o {% endif %}" aria-hidden="true"></i>
-	</span>
-	</div>
-			</figcaption>
-		</div>
-	</div> <!-- col.// -->
-	{% endfor %}
-</div> <!-- row.// -->
-
-</div><!-- container // -->
+    <div class="row">
+      {% for product in products %}
+      <div class="col-md-3">
+        <div class="card card-product-grid">
+          <a href="{{product.get_url}}" class="img-wrap">
+            <img src="{{product.image.url}}" />
+          </a>
+          <figcaption class="info-wrap">
+            <a href="{{product.get_url}}" class="title"
+              >{{product.product_name}}</a
+            >
+            <div class="price mt-1">$ {{product.price}}</div>
+            <!-- price-wrap.// -->
+            <div class="rating-star">
+              <span>
+                <i
+                  class="fa fa-star{% if product.averageReview < 0.5 %}-o{% elif single_product.averageReview >= 0.5 and single_product.averageReview < 1 %}-half-o {% endif %}"
+                  aria-hidden="true"
+                ></i>
+                <i
+                  class="fa fa-star{% if product.averageReview < 1.5 %}-o{% elif single_product.averageReview >= 1.5 and single_product.averageReview < 2 %}-half-o {% endif %}"
+                  aria-hidden="true"
+                ></i>
+                <i
+                  class="fa fa-star{% if product.averageReview < 2.5 %}-o{% elif single_product.averageReview >= 2.5 and single_product.averageReview < 3 %}-half-o {% endif %}"
+                  aria-hidden="true"
+                ></i>
+                <i
+                  class="fa fa-star{% if product.averageReview < 3.5 %}-o{% elif single_product.averageReview >= 3.5 and single_product.averageReview < 4 %}-half-o {% endif %}"
+                  aria-hidden="true"
+                ></i>
+                <i
+                  class="fa fa-star{% if product.averageReview < 4.5 %}-o{% elif single_product.averageReview >= 4.5 and single_product.averageReview < 5 %}-half-o {% endif %}"
+                  aria-hidden="true"
+                ></i>
+              </span>
+            </div>
+          </figcaption>
+        </div>
+      </div>
+      <!-- col.// -->
+      {% endfor %}
+    </div>
+    <!-- row.// -->
+  </div>
+  <!-- container // -->
 </section>
 
+<style>
+	/* ===== MINIMAL MODERN HERO BUTTON (MATCHES ECOMMERCE UI) ===== */
+.hero-btn-container {
+    position: absolute;
+    bottom: 115px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    pointer-events: none;
+}
 
+.hero-shop-btn {
+    pointer-events: auto;
+    padding: 12px 34px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #111;
+    text-decoration: none;
+    border-radius: 30px;
+    background: #ffffff;
+    border: 1.5px solid #000000;
+
+    /* Clean modern shadow */
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+
+    /* Smooth modern animation */
+    transition: all 0.25s ease;
+}
+
+/* Elegant hover (NOT flashy) */
+.hero-shop-btn:hover {
+    background: #111;
+    color: #ffffff;
+    border-color: #111;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.18);
+    transform: translateY(-2px);
+}
+
+/* Click feel (premium UX) */
+.hero-shop-btn:active {
+    transform: translateY(0px) scale(0.97);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+</style>
+
+
+<style>
+	/* ===== CONSTRAINED CATEGORY SLIDER (INSIDE ARROWS) ===== */
+.qcsl-section {
+    width: 100%;
+    padding: 60px 0;
+    background: #ffffff;
+}
+
+.qcsl-title {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 35px;
+    color: #222;
+}
+
+/* MAIN WRAPPER (keeps items inside arrows like reference) */
+.qcsl-wrapper {
+    position: relative;
+    max-width: 1250px; /* IMPORTANT: keeps items inside < > */
+    margin: 0 auto; /* center */
+}
+
+/* VIEWPORT */
+.qcsl-slider {
+    overflow: hidden;
+    width: 100%;
+}
+
+/* TRACK */
+.qcsl-track {
+    display: flex;
+    align-items: center;
+    gap: 28px; /* tighter spacing */
+    transition: transform 0.5s ease;
+    padding: 10px 0; /* removed side padding (MAIN FIX) */
+}
+
+/* ITEM */
+.qcsl-item {
+    min-width: 110px; /* smaller like reference */
+    text-align: center;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+/* SMALLER CIRCLE (more modern) */
+.qcsl-circle {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: #f3f3f3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    transition: all 0.35s ease;
+}
+
+.qcsl-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* TEXT */
+.qcsl-item span {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* HOVER (premium subtle) */
+.qcsl-item:hover .qcsl-circle {
+    transform: translateY(-4px) scale(1.05);
+    background: #f0efff;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* ARROWS - PERFECT ALIGNMENT */
+.qcsl-arrow {
+    position: absolute;
+    top: 45%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: #ffffff;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    font-size: 22px;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.25s ease;
+}
+
+.qcsl-prev {
+    left: -100px; /* sits just outside content */
+}
+
+.qcsl-next {
+    right: -100px;
+}
+
+.qcsl-arrow:hover {
+    background: #6c5ce7;
+    color: #fff;
+    transform: translateY(-50%) scale(1.08);
+}
+
+</style>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const track = document.getElementById("qcslTrack");
+    const prevBtn = document.getElementById("qcslPrev");
+    const nextBtn = document.getElementById("qcslNext");
+
+    if (!track) return;
+
+    // Duplicate items for infinite loop
+    track.innerHTML += track.innerHTML;
+
+    let position = 0;
+    const itemWidth = 138; // 110 circle + gap (important update)
+    const scrollStep = itemWidth * 2; // scroll 2 items each click
+    const maxScroll = track.scrollWidth / 2;
+
+    function moveSlider() {
+        track.style.transform = `translateX(-${position}px)`;
+    }
+
+    // AUTO SLIDE (3 sec)
+    let autoSlide = setInterval(() => {
+        position += scrollStep;
+        if (position >= maxScroll) position = 0;
+        moveSlider();
+    }, 3000);
+
+    // NEXT
+    nextBtn.addEventListener("click", () => {
+        position += scrollStep;
+        if (position >= maxScroll) position = 0;
+        moveSlider();
+        resetAuto();
+    });
+
+    // PREV
+    prevBtn.addEventListener("click", () => {
+        position -= scrollStep;
+        if (position < 0) position = maxScroll - scrollStep;
+        moveSlider();
+        resetAuto();
+    });
+
+    // Pause on hover (premium UX)
+    track.addEventListener("mouseenter", () => clearInterval(autoSlide));
+    track.addEventListener("mouseleave", startAuto);
+
+    function resetAuto() {
+        clearInterval(autoSlide);
+        startAuto();
+    }
+
+    function startAuto() {
+        autoSlide = setInterval(() => {
+            position += scrollStep;
+            if (position >= maxScroll) position = 0;
+            moveSlider();
+        }, 3000);
+    }
+});
+</script>
 
 
 {% endblock %}

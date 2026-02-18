@@ -1,101 +1,417 @@
 {% load static %}
 
 <header class="section-header">
-<nav class="navbar p-md-0 navbar-expand-sm navbar-light border-bottom">
-  <div class="container justify-content-between align-items-center">
-    
-    <!-- Left Side: Welcome Message -->
-    <div class="d-flex align-items-center">
-      {% if user.id is None %}
+  <nav
+    id="topBar"
+    class="navbar p-md-0 navbar-expand-sm navbar-light border-bottom"
+  >
+    <div class="container justify-content-between align-items-center">
+      <!-- Left Side: Welcome Message -->
+      <div class="d-flex align-items-center">
+        {% if user.id is None %}
         <small class="title">Welcome guest!</small>
-      {% else %}
+        {% else %}
         <small class="title">Welcome {{ user.first_name }}!</small>
-      {% endif %}
-    </div>
+        {% endif %}
+      </div>
 
-    <!-- Center: Logo / Promo Rotator -->
-    <div class="text-center">
-      <a href="{% url 'home' %}">
-        <img id="logoImage" src="{% static 'images/logo1-Picsart-BackgroundRemover.png' %}" style="height: 50px; padding: 4px;" alt="logo">
-      </a>
-      <div id="promoText" class="promo-text d-none">Fast Delivery • Best Offers • New Arrivals</div>
-    </div>
-
-    <!-- Right Side: Navigation Links -->
-    <ul class="navbar-nav">
-      <li><a href="#" class="nav-link">Contact</a></li>
-      <li><a href="templates\includes\about.html" class="nav-link">About</a></li>
-    </ul>
-
-  </div>
-</nav>
-
-
-
-    
-    <section class="header-main border-bottom">
-        <div class="container">
-    <div class="row align-items-center">
-        <div class="col-lg-2 col-md-3 col-6">
-            <!-- company name logo  -->
-            <a href="{% url 'home' %}" class="brand-wrap">
-                <img class="logo" src="{% static './images/logo.png'%}">
-            </a> <!-- brand-wrap.// -->
+      <!-- Center: Logo / Promo Rotator -->
+      <div class="text-center">
+        <a href="{% url 'home' %}">
+          <img
+            id="logoImage"
+            src="{% static 'images/logo1-Picsart-BackgroundRemover.png' %}"
+            style="height: 50px; padding: 4px"
+            alt="logo"
+          />
+        </a>
+        <div id="promoText" class="promo-text d-none">
+          Fast Delivery • Best Offers • New Arrivals
         </div>
-        <div class="col-lg col-sm col-md col-6 flex-grow-0">
-            <div class="category-wrap dropdown d-inline-block float-right">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> 
-                    <i class="fa fa-bars"></i> All category 
-                </button>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="{% url 'store' %}">All Products </a>
-                    {% for category in links %}
-                    <a class="dropdown-item" href="{{category.get_url}}">{{category.category_name}}</a>
-                    {% endfor %}
-                </div>
-            </div>  <!-- category-wrap.// -->
-        </div> <!-- col.// -->
-        <a href="{% url 'store' %}" class="btn btn-outline-primary">Store</a>
-        <div class="col-lg  col-md-6 col-sm-12 col">
-            <form action="{% url 'search' %}" class="search" method="GET">
-                <div class="input-group w-100">
-                    <input type="text" class="form-control" style="width:60%;" placeholder="Search" name="keyword">
-                    <div class="input-group-append">
-                      <button class="btn btn-primary" type="submit">
-                        <i class="fa fa-search"></i>
-                      </button>
-                    </div>
-                </div>
-            </form> <!-- search-wrap .end// -->
-        </div> <!-- col.// -->
-        <div class="col-lg-3 col-sm-6 col-8 order-2 order-lg-3">
-                    <div class="d-flex justify-content-end mb-3 mb-lg-0">
-                        {% if user.id is None %}
-                        <div class="widget-header">
-                            <small class="title text-muted">Welcome guest!</small>
-                            <div> 
-                                <a href="{% url 'login' %}">Sign in</a> <span class="dark-transp"> | </span>
-                                <a href="{% url 'register' %}"> Register</a>
-                            </div>
-                        </div>
-                        {% else %}
-                        <div class="widget-header">
-                            <small class="title text-muted">Welcome {{user.first_name}}!</small>
-                            <div> 
-                                <a href="{% url 'dashboard' %}">Dashboard</a> <span class="dark-transp"> | </span>
-                                <a href="{% url 'logout' %}">Logout</a>
-                            </div>
-                         </div>
-                        {% endif %}   
-                        <a href="{% url 'cart' %}" class="widget-header pl-3 ml-3">
-                            <div class="icon icon-sm rounded-circle border"><i class="fa fa-shopping-cart"></i></div>
-                            <span class="badge badge-pill badge-danger notify">{{cart_count}}</span>
-                        </a>
-                    </div> <!-- widgets-wrap.// -->
-                </div> <!-- col.// -->
-    </div> <!-- row.// -->
-        </div> <!-- container.// -->
-    </section> <!-- header-main .// -->
-    
-</header> <!-- section-header.// -->
-    
+      </div>
+
+      <!-- Right Side: Navigation Links -->
+      <ul class="navbar-nav">
+        <li><a href="#" class="nav-link">Contact</a></li>
+        <li>
+          <a href="templates\includes\about.html" class="nav-link">About</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <section id="mainNav" class="header-main fx-premium-navbar">
+    <div class="container">
+      <div class="fx-premium-nav">
+        <!-- LEFT: Logo -->
+        <div class="fx-nav-left">
+          <a href="{% url 'home' %}" class="fx-logo-wrap">
+            <img src="{% static './images/logo.png'%}" alt="logo" />
+          </a>
+        </div>
+
+        <!-- CENTER: Menu -->
+        <div class="fx-nav-center">
+          <a href="{% url 'home' %}" class="fx-nav-item">Home</a>
+
+          <div class="fx-nav-dropdown">
+            <button class="fx-nav-item fx-dropdown-btn">
+              All Category <i class="fa fa-chevron-down"></i>
+            </button>
+            <div class="fx-dropdown-menu">
+              <a href="{% url 'store' %}">All Products</a>
+              {% for category in links %}
+              <a href="{{category.get_url}}">{{category.category_name}}</a>
+              {% endfor %}
+            </div>
+          </div>
+
+          <a href="{% url 'store' %}" class="fx-nav-item">Shop</a>
+        </div>
+
+        <!-- RIGHT: Search + User + Icons -->
+        <div class="fx-nav-right">
+          <!-- Search -->
+          <form
+            action="{% url 'search' %}"
+            method="GET"
+            class="fx-search-modern"
+          >
+            <i class="fa fa-search"></i>
+            <input
+              type="text"
+              name="keyword"
+              placeholder="Search products..."
+            />
+          </form>
+
+          <!-- User -->
+          <div class="fx-user-box">
+            {% if user.id is None %}
+            <span class="fx-welcome">Welcome guest!</span>
+            <div class="fx-auth-links">
+              <a href="{% url 'login' %}">Sign in</a>
+              <span>|</span>
+              <a href="{% url 'register' %}">Register</a>
+            </div>
+            {% else %}
+            <span class="fx-welcome">Hi, {{user.first_name}}</span>
+            <div class="fx-auth-links">
+              <a href="{% url 'dashboard' %}">Dashboard</a>
+              <span>|</span>
+              <a href="{% url 'logout' %}">Logout</a>
+            </div>
+            {% endif %}
+          </div>
+
+          <!-- Icons -->
+          <a href="{% url 'cart' %}" class="fx-icon-btn">
+            <i class="fa fa-heart"></i>
+          </a>
+
+          <a href="{% url 'cart' %}" class="fx-icon-btn fx-cart-btn">
+            <i class="fa fa-shopping-cart"></i>
+            <span class="fx-cart-count">{{cart_count}}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</header>
+<!-- section-header.// -->
+
+<style>
+  /* ===== FINAL MODERN STICKY NAVBAR (SCROLL HIDE/SHOW FIXED) ===== */
+
+  .section-header {
+    position: sticky;
+    top: -38px;
+    z-index: 9999;
+    background: transparent;
+  }
+
+  /* MAIN NAVBAR */
+  .fx-premium-navbar {
+    width: 100%;
+    background: #ffffff;
+    padding: 12px 0;
+    transition:
+      transform 0.35s ease,
+      box-shadow 0.3s ease;
+    transform: translateY(0);
+  }
+
+  /* Hide on scroll down */
+  .fx-premium-navbar.nav-hide {
+    transform: translateY(-170%);
+  }
+
+  /* Show on scroll up */
+  .fx-premium-navbar.nav-show {
+    transform: translateY(0);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+  }
+
+  /* NAV CONTAINER */
+  .fx-premium-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+  }
+
+  /* LOGO */
+  .fx-logo-wrap img {
+    height: 30px;
+  }
+
+  /* CENTER MENU */
+  .fx-nav-center {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .fx-nav-item {
+    font-size: 15px;
+    font-weight: 600;
+    color: #222;
+    text-decoration: none;
+    position: relative;
+    transition: all 0.25s ease;
+  }
+
+  .fx-nav-item:hover {
+    color: #6c5ce7;
+  }
+
+  .fx-nav-item::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: #6c5ce7;
+    transition: width 0.3s ease;
+  }
+
+  .fx-nav-item:hover::after {
+    width: 100%;
+  }
+
+  /* DROPDOWN */
+  .fx-nav-dropdown {
+    position: relative;
+  }
+
+  .fx-dropdown-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .fx-dropdown-menu {
+    position: absolute;
+    top: 120%;
+    left: 0;
+    min-width: 220px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 10px 0;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: 0.3s ease;
+    z-index: 999;
+  }
+
+  .fx-nav-dropdown:hover .fx-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .fx-dropdown-menu a {
+    display: block;
+    padding: 10px 18px;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .fx-dropdown-menu a:hover {
+    background: #f4f4ff;
+    color: #6c5ce7;
+  }
+
+  /* SEARCH */
+  .fx-search-modern {
+    display: flex;
+    align-items: center;
+    background: #f5f6fa;
+    padding: 8px 14px;
+    border-radius: 30px;
+    gap: 8px;
+    width: 240px;
+    transition: all 0.3s ease;
+  }
+
+  .fx-search-modern:focus-within {
+    background: #fff;
+    box-shadow: 0 0 0 2px #e9e7ff;
+  }
+
+  .fx-search-modern input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+    width: 100%;
+  }
+
+  /* RIGHT SIDE */
+  .fx-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .fx-user-box {
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  .fx-welcome {
+    font-size: 12px;
+    color: #777;
+  }
+
+  .fx-auth-links a {
+    font-size: 14px;
+    font-weight: 600;
+    color: #222;
+    text-decoration: none;
+  }
+
+  .fx-auth-links a:hover {
+    color: #6c5ce7;
+  }
+
+  /* ICONS */
+  .fx-icon-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #f3f4f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    text-decoration: none;
+    position: relative;
+    transition: all 0.25s ease;
+  }
+
+  .fx-icon-btn:hover {
+    background: #6c5ce7;
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  .fx-cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff3b3b;
+    color: #fff;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 50%;
+    font-weight: bold;
+  }
+
+  /* ===== DUAL NAVBAR CONTROL (TOP + MAIN) ===== */
+
+  #topBar,
+  #mainNav {
+    transition:
+      transform 0.35s ease,
+      opacity 0.3s ease;
+    will-change: transform;
+  }
+
+  /* Hide both */
+  .hide-both {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  /* Show only main navbar */
+  .show-main {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* When only topbar should appear (top of page) */
+  .show-top {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* Make header sticky properly */
+  .section-header {
+    position: sticky;
+    top: -38 !important;
+    z-index: 9999;
+    background: transparent;
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const topBar = document.getElementById("topBar"); // <nav>
+    const mainNav = document.getElementById("mainNav"); // <section>
+
+    if (!topBar || !mainNav) return;
+
+    let lastScroll = 0;
+
+    window.addEventListener("scroll", function () {
+      const currentScroll =
+        window.pageYOffset || document.documentElement.scrollTop;
+
+      // 🔝 CASE 1: User at TOP of page → Show BOTH nav + section
+      if (currentScroll <= 30) {
+        topBar.style.transform = "translateY(0)";
+        topBar.style.opacity = "1";
+
+        mainNav.style.transform = "translateY(0)";
+        mainNav.style.opacity = "1";
+
+        lastScroll = currentScroll;
+        return;
+      }
+
+      // 🔽 CASE 2: Scrolling DOWN → Hide BOTH
+      if (currentScroll > lastScroll) {
+        topBar.style.transform = "translateY(-100%)";
+        topBar.style.opacity = "0";
+
+        mainNav.style.transform = "translateY(-100%)";
+        mainNav.style.opacity = "0";
+      }
+      // 🔼 CASE 3: Scrolling UP (middle/bottom) → Show ONLY main navbar
+      else {
+        topBar.style.transform = "translateY(-100%)";
+        topBar.style.opacity = "0";
+
+        mainNav.style.transform = "translateY(0)";
+        mainNav.style.opacity = "1";
+      }
+
+      lastScroll = currentScroll;
+    });
+  });
+</script>
