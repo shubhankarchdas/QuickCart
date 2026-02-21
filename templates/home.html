@@ -44,61 +44,20 @@
         <div class="qcsl-slider" id="qcslSlider">
             <div class="qcsl-track" id="qcslTrack">
 
+                {% for category in slider_categories %}
                 <div class="qcsl-item">
-                    <div class="qcsl-circle">
-                        <img src="{% static 'images/categories/category_1.png' %}" alt="Women Tops">
-                    </div>
-                    <span>Women Tops</span>
+                    <a href="{{ category.get_url }}">
+                        <div class="qcsl-circle">
+                            {% if category.category_image %}
+                                <img src="{{ category.category_image.url }}" alt="{{ category.category_name }}">
+                            {% else %}
+                                <img src="{% static 'images/default-category.png' %}" alt="{{ category.category_name }}">
+                            {% endif %}
+                        </div>
+                        <span>{{ category.category_name }}</span>
+                    </a>
                 </div>
-
-                <div class="qcsl-item">
-                    <div class="qcsl-circle">
-                        <img src="{% static 'images/categories/category_2.png' %}" alt="Women Pants">
-                    </div>
-                    <span>Women Pants</span>
-                </div>
-
-                <div class="qcsl-item">
-                    <div class="qcsl-circle">
-                        <img src="{% static 'images/categories/category_3.png' %}" alt="Women Clothes">
-                    </div>
-                    <span>Women Clothes</span>
-                </div>
-
-                <div class="qcsl-item">
-                    <div class="qcsl-circle">
-                        <img src="{% static 'images/categories/category_4.png' %}" alt="Men Jeans">
-                    </div>
-                    <span>Men Jeans</span>
-                </div>
-
-                <div class="qcsl-item">
-                    <div class="qcsl-circle">
-                        <img src="{% static 'images/categories/category_5.png' %}" alt="Men Shirts">
-                    </div>
-                    <span>Men Shirts</span>
-                </div>
-
-                <div class="qcsl-item">
-                    <div class="qcsl-circle">
-                        <img src="{% static 'images/categories/category_6.png' %}" alt="Men Shoes">
-                    </div>
-                    <span>Men Shoes</span>
-                </div>
-
-                <div class="qcsl-item">
-                    <div class="qcsl-circle">
-                        <img src="{% static 'images/categories/category_7.png' %}" alt="Women Dresses">
-                    </div>
-                    <span>Women Dresses</span>
-                </div>
-
-                <div class="qcsl-item">
-                    <div class="qcsl-circle">
-                        <img src="{% static 'images/categories/category_8.png' %}" alt="Kids Tops">
-                    </div>
-                    <span>Kids Tops</span>
-                </div>
+                {% endfor %}
 
             </div>
         </div>
@@ -1419,6 +1378,76 @@
     .gxflow-next {
         right: -30px;
     }
+    
+</style>
+<style>
+/* Add to your existing QC SLider styles */
+
+/* Make it more responsive */
+@media (max-width: 1400px) {
+    .qcsl-prev {
+        left: -50px;
+    }
+    .qcsl-next {
+        right: -50px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .qcsl-prev {
+        left: -30px;
+    }
+    .qcsl-next {
+        right: -30px;
+    }
+}
+
+@media (max-width: 992px) {
+    .qcsl-prev, .qcsl-next {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+    .qcsl-item {
+        min-width: 100px;
+    }
+    .qcsl-circle {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+@media (max-width: 768px) {
+    .qcsl-prev {
+        left: -15px;
+    }
+    .qcsl-next {
+        right: -15px;
+    }
+    .qcsl-item {
+        min-width: 90px;
+    }
+    .qcsl-circle {
+        width: 90px;
+        height: 90px;
+    }
+}
+
+@media (max-width: 576px) {
+    .qcsl-prev, .qcsl-next {
+        display: none; /* Hide arrows on mobile, rely on touch */
+    }
+    .qcsl-item {
+        min-width: 80px;
+    }
+    .qcsl-circle {
+        width: 80px;
+        height: 80px;
+    }
+    .qcsl-track {
+        gap: 15px;
+    }
+}
 </style>
 <!-- end css -->
 
@@ -1427,65 +1456,162 @@
 <!-- Script Start -->
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const track = document.getElementById("qcslTrack");
-        const prevBtn = document.getElementById("qcslPrev");
-        const nextBtn = document.getElementById("qcslNext");
+document.addEventListener("DOMContentLoaded", function () {
+    const track = document.getElementById("qcslTrack");
+    const items = Array.from(track.children);
+    const nextBtn = document.getElementById("qcslNext");
+    const prevBtn = document.getElementById("qcslPrev");
+    const slider = document.getElementById("qcslSlider");
 
-        if (!track) return;
+    if (!track || !items.length || !nextBtn || !prevBtn) return;
 
-        // Duplicate items for infinite loop
-        track.innerHTML += track.innerHTML;
+    const totalOriginal = items.length;
+    let currentIndex = 0;
+    let autoSlideInterval;
+    let isTransitioning = false;
 
-        let position = 0;
-        const itemWidth = 138; // 110 circle + gap (important update)
-        const scrollStep = itemWidth * 2; // scroll 2 items each click
-        const maxScroll = track.scrollWidth / 2;
+    // Clone items for infinite loop effect
+    // Clone first few items and append to end
+    for (let i = 0; i < totalOriginal; i++) {
+        const clone = items[i].cloneNode(true);
+        track.appendChild(clone);
+    }
+    
+    // Clone last few items and prepend to beginning
+    for (let i = totalOriginal - 1; i >= 0; i--) {
+        const clone = items[i].cloneNode(true);
+        track.insertBefore(clone, track.firstChild);
+    }
 
-        function moveSlider() {
-            track.style.transform = `translateX(-${position}px)`;
+    const allItems = Array.from(track.children);
+    const totalItems = allItems.length;
+    
+    // Set initial position to show original first item
+    currentIndex = totalOriginal;
+
+    const getItemWidth = () => {
+        if (!allItems[0]) return 0;
+        const itemWidth = allItems[0].offsetWidth;
+        const style = window.getComputedStyle(allItems[0]);
+        const gap = parseInt(style.marginRight) || 28; // Default gap from CSS
+        return itemWidth + gap;
+    };
+
+    const updateSlider = (animate = true) => {
+        if (isTransitioning && animate) return;
+        
+        const itemWidth = getItemWidth();
+        const translateX = currentIndex * itemWidth;
+        
+        if (animate) {
+            track.style.transition = "transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+        } else {
+            track.style.transition = "none";
         }
-
-        // AUTO SLIDE (3 sec)
-        let autoSlide = setInterval(() => {
-            position += scrollStep;
-            if (position >= maxScroll) position = 0;
-            moveSlider();
-        }, 3000);
-
-        // NEXT
-        nextBtn.addEventListener("click", () => {
-            position += scrollStep;
-            if (position >= maxScroll) position = 0;
-            moveSlider();
-            resetAuto();
-        });
-
-        // PREV
-        prevBtn.addEventListener("click", () => {
-            position -= scrollStep;
-            if (position < 0) position = maxScroll - scrollStep;
-            moveSlider();
-            resetAuto();
-        });
-
-        // Pause on hover (premium UX)
-        track.addEventListener("mouseenter", () => clearInterval(autoSlide));
-        track.addEventListener("mouseleave", startAuto);
-
-        function resetAuto() {
-            clearInterval(autoSlide);
-            startAuto();
+        
+        track.style.transform = `translateX(-${translateX}px)`;
+        
+        if (animate) {
+            isTransitioning = true;
+            setTimeout(() => {
+                isTransitioning = false;
+                checkLoopBoundary();
+            }, 500);
         }
+    };
 
-        function startAuto() {
-            autoSlide = setInterval(() => {
-                position += scrollStep;
-                if (position >= maxScroll) position = 0;
-                moveSlider();
-            }, 3000);
+    const checkLoopBoundary = () => {
+        // If we've gone past the clones at the end, jump back to original section
+        if (currentIndex >= totalOriginal * 2) {
+            currentIndex = totalOriginal;
+            updateSlider(false);
+        }
+        // If we've gone past the clones at the beginning, jump forward to original section
+        else if (currentIndex < 0) {
+            currentIndex = totalOriginal - 1;
+            updateSlider(false);
+        }
+    };
+
+    const nextSlide = () => {
+        if (isTransitioning) return;
+        currentIndex++;
+        updateSlider(true);
+    };
+
+    const prevSlide = () => {
+        if (isTransitioning) return;
+        currentIndex--;
+        updateSlider(true);
+    };
+
+    // Event listeners
+    nextBtn.addEventListener("click", nextSlide);
+    prevBtn.addEventListener("click", prevSlide);
+
+    // Auto-play
+    const startAutoPlay = () => {
+        if (autoSlideInterval) clearInterval(autoSlideInterval);
+        autoSlideInterval = setInterval(nextSlide, 3000);
+    };
+
+    const stopAutoPlay = () => {
+        if (autoSlideInterval) {
+            clearInterval(autoSlideInterval);
+            autoSlideInterval = null;
+        }
+    };
+
+    // Handle hover
+    slider.addEventListener("mouseenter", stopAutoPlay);
+    slider.addEventListener("mouseleave", startAutoPlay);
+
+    // Touch/swipe support for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    slider.addEventListener("touchstart", (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        stopAutoPlay();
+    }, { passive: true });
+
+    slider.addEventListener("touchend", (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        const diff = touchStartX - touchEndX;
+        
+        if (Math.abs(diff) > 50) { // Minimum swipe distance
+            if (diff > 0) {
+                nextSlide(); // Swipe left
+            } else {
+                prevSlide(); // Swipe right
+            }
+        }
+        
+        startAutoPlay();
+    }, { passive: true });
+
+    // Handle window resize
+    let resizeTimeout;
+    window.addEventListener("resize", () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            updateSlider(false);
+        }, 100);
+    });
+
+    // Initialize
+    updateSlider(false);
+    startAutoPlay();
+
+    // Pause auto-play when window is not visible
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+            stopAutoPlay();
+        } else {
+            startAutoPlay();
         }
     });
+});
 </script>
 
 <script>

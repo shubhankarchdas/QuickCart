@@ -4,39 +4,35 @@ from category.models import Category
 
 
 def home(request):
-    # All available products
+    # Products
     products = Product.objects.filter(is_available=True)
 
-    # New arrivals (latest 8)
     new_products = Product.objects.filter(
         is_available=True
     ).order_by('-created_at')[:8]
 
-    # Featured products (latest 8)
     featured_products = Product.objects.filter(
         is_available=True,
         is_featured=True
     ).order_by('-created_at')[:8]
 
-    # Get categories safely
+    # Women & Men categories for Shop Now
     women_category = Category.objects.filter(slug='women').first()
     men_category = Category.objects.filter(slug='men').first()
 
-    # Default fallback URLs
-    women_url = '/store/'
-    men_url = '/store/'
+    women_url = women_category.get_url() if women_category else '/store/'
+    men_url = men_category.get_url() if men_category else '/store/'
 
-    # If category exists, generate correct URL
-    if women_category:
-        women_url = f'/store/category/{women_category.slug}/'
-
-    if men_category:
-        men_url = f'/store/category/{men_category.slug}/'
+    # ONLY 8 custom selected categories
+    slider_categories = Category.objects.filter(
+        is_featured=True
+    )[:8]
 
     context = {
         'products': products,
         'new_products': new_products,
         'featured_products': featured_products,
+        'slider_categories': slider_categories,
         'women_url': women_url,
         'men_url': men_url,
     }
