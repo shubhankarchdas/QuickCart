@@ -2,43 +2,32 @@
 
 <!-- Hero section -->
 <div id="hero" class="swiper">
-  <div class="swiper-wrapper">
-    <div
-      class="swiper-slide hero-slide"
-      style="
+    <div class="swiper-wrapper">
+        <div class="swiper-slide hero-slide" style="
         background-image: url(&quot;static/images/banners/caro111.png&quot;);
-      "
-    >
+      ">
 
-</div>
-    <div
-      class="swiper-slide hero-slide"
-      style="
+        </div>
+        <div class="swiper-slide hero-slide" style="
         background-image: url(&quot;static/images/banners/caro222.png&quot;);
-      "
-    ></div>
-    <!-- <div class="swiper-slide hero-slide" style="background-image: url('static/images/banners/caro3.jpg');">
+      "></div>
+        <!-- <div class="swiper-slide hero-slide" style="background-image: url('static/images/banners/caro3.jpg');">
 			</div> -->
-    <div
-      class="swiper-slide hero-slide"
-      style="
+        <div class="swiper-slide hero-slide" style="
         background-image: url(&quot;static/images/banners/caro44444.png&quot;);
-      "
-    ></div>
-  </div>
+      "></div>
+    </div>
 
-  <!-- 👇 ADD THIS BUTTON ONLY (DO NOT TOUCH ANYTHING ELSE) -->
-  <div class="hero-btn-container">
-      <a href="{% url 'store' %}" class="hero-shop-btn">Shop Now →</a>
-  </div>
+    <!-- 👇 ADD THIS BUTTON ONLY (DO NOT TOUCH ANYTHING ELSE) -->
+    <div class="hero-btn-container">
+        <a href="{% url 'store' %}" class="hero-shop-btn">Shop Now →</a>
+    </div>
 
-  <!-- Navigation Buttons -->
-  <div class="swiper-button-next"></div>
-  <div class="swiper-button-prev"></div>
-  <div class="swiper-pagination"></div>
+    <!-- Navigation Buttons -->
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-pagination"></div>
 </div>
-
-
 
 
 <!-- ===== FULL WIDTH CATEGORY SLIDER (WHITE + AUTO + MANUAL CONTROL) ===== -->
@@ -122,294 +111,1465 @@
 </section>
 
 
-
-<!-- ========================= SECTION MAIN ========================= -->
-<section class="section-intro padding-y-sm">
-  <div class="container"></div>
-  <!-- container //  -->
-</section>
-<!-- ========================= SECTION MAIN END// ========================= -->
-
-<!-- ========================= SECTION  ========================= -->
-<section class="section-name padding-y-sm">
-  <div class="container">
-    <header class="section-heading">
-      <a href="{% url 'store' %}" class="btn btn-outline-primary float-right"
-        >See all</a
-      >
-      <h3 class="section-title">Popular products</h3>
-    </header>
-    <!-- sect-heading -->
-
-    <div class="row">
-      {% for product in products %}
-      <div class="col-md-3">
-        <div class="card card-product-grid">
-          <a href="{{product.get_url}}" class="img-wrap">
-            <img src="{{product.image.url}}" />
-          </a>
-          <figcaption class="info-wrap">
-            <a href="{{product.get_url}}" class="title"
-              >{{product.product_name}}</a
-            >
-            <div class="price mt-1">$ {{product.price}}</div>
-            <!-- price-wrap.// -->
-            <div class="rating-star">
-              <span>
-                <i
-                  class="fa fa-star{% if product.averageReview < 0.5 %}-o{% elif single_product.averageReview >= 0.5 and single_product.averageReview < 1 %}-half-o {% endif %}"
-                  aria-hidden="true"
-                ></i>
-                <i
-                  class="fa fa-star{% if product.averageReview < 1.5 %}-o{% elif single_product.averageReview >= 1.5 and single_product.averageReview < 2 %}-half-o {% endif %}"
-                  aria-hidden="true"
-                ></i>
-                <i
-                  class="fa fa-star{% if product.averageReview < 2.5 %}-o{% elif single_product.averageReview >= 2.5 and single_product.averageReview < 3 %}-half-o {% endif %}"
-                  aria-hidden="true"
-                ></i>
-                <i
-                  class="fa fa-star{% if product.averageReview < 3.5 %}-o{% elif single_product.averageReview >= 3.5 and single_product.averageReview < 4 %}-half-o {% endif %}"
-                  aria-hidden="true"
-                ></i>
-                <i
-                  class="fa fa-star{% if product.averageReview < 4.5 %}-o{% elif single_product.averageReview >= 4.5 and single_product.averageReview < 5 %}-half-o {% endif %}"
-                  aria-hidden="true"
-                ></i>
-              </span>
-            </div>
-          </figcaption>
+<!-- ===== NEW ARRIVALS SECTION (MODERN & CLEAN) ===== -->
+<section class="new-arrival-section">
+    <div class="container">
+        <div class="na-header">
+            <h2 class="na-title">New Arrivals</h2>
+            <p class="na-subtitle">Latest products just added to the store</p>
         </div>
-      </div>
-      <!-- col.// -->
-      {% endfor %}
+
+        <div class="row">
+            {% for product in new_products %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="na-card">
+
+                    <!-- Product Image -->
+                    <div class="na-img-wrap">
+                        <a href="{{ product.get_url }}">
+                            <img src="{{ product.image.url }}" alt="{{ product.product_name }}">
+                        </a>
+
+                        <!-- NEW BADGE -->
+                        <span class="na-badge">NEW</span>
+
+                        <!-- Hover Button -->
+                        <div class="na-hover">
+                            <a href="{{ product.get_url }}" class="na-btn">
+                                View Product
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Product Info -->
+                    <div class="na-info">
+                        <a href="{{ product.get_url }}" class="na-product-title">
+                            {{ product.product_name }}
+                        </a>
+                        <div class="na-price">
+                            $ {{ product.price }}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            {% empty %}
+            <!-- If no products -->
+            <div class="col-12 text-center">
+                <p style="font-size:18px; color:#777; padding:40px 0;">
+                    No new products available.
+                </p>
+            </div>
+            {% endfor %}
+        </div>
     </div>
-    <!-- row.// -->
-  </div>
-  <!-- container // -->
 </section>
 
+
+<!-- ===== MEN & WOMEN CATEGORY BANNER (SAFE - NO BG CHANGE) ===== -->
+<section class="qc-cat-sec">
+    <div class="container"> <!-- IMPORTANT: keeps same page width -->
+        <div class="qc-cat-row">
+
+            <!-- WOMEN CARD -->
+            <div class="qc-cat-card">
+                <div class="qc-cat-img">
+                    <img src="{% static 'images/banners/category_9.jpg' %}" alt="Women">
+                    <span class="qc-cat-badge">STARTING<br>AT $19</span>
+                </div>
+
+                <div class="qc-cat-content">
+                    <h3 class="qc-cat-title">Women</h3>
+                    <a href="{{ women_url }}" class="qc-cat-btn" style="color: #000;">
+                        <span>Shop Now</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- MEN CARD -->
+            <div class="qc-cat-card">
+                <div class="qc-cat-img">
+                    <img src="{% static 'images/banners/category_10.jpg' %}" alt="Men">
+                    <span class="qc-cat-badge">STARTING<br>AT $19</span>
+                </div>
+
+                <div class="qc-cat-content">
+                    <h3 class="qc-cat-title">Men</h3>
+                    <a href="{{ men_url }}" class="qc-cat-btn" style="color: #000;">
+                        <span>Shop Now</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ===== FEATURED PRODUCTS SECTION ===== -->
+<section class="featured-section new-arrival-section">
+    <div class="container">
+
+        <div class="fp-header">
+            <h2 class="fp-title">Featured Products</h2>
+            <p class="fp-subtitle">Handpicked premium products for you</p>
+        </div>
+
+        <div class="row">
+            {% for product in featured_products %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="fp-card">
+
+                    <!-- Image -->
+                    <div class="fp-img-wrap">
+                        <a href="{{ product.get_url }}">
+                            <img src="{{ product.image.url }}" alt="{{ product.product_name }}">
+                        </a>
+
+                        <!-- Hover Button -->
+                        <div class="fp-hover">
+                            <a href="{{ product.get_url }}" class="fp-btn">
+                                View Product
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Info -->
+                    <div class="fp-info">
+                        <a href="{{ product.get_url }}" class="fp-title-link">
+                            {{ product.product_name }}
+                        </a>
+
+                        <div class="fp-price">
+                            $ {{ product.price }}
+                        </div>
+
+                        <!-- Rating -->
+                        <div class="fp-rating">
+                            {% for i in "12345" %}
+                            {% if product.averageReview >= forloop.counter %}
+                            <i class="fa fa-star"></i>
+                            {% elif product.averageReview >= forloop.counter0|add:0.5 %}
+                            <i class="fa fa-star-half-o"></i>
+                            {% else %}
+                            <i class="fa fa-star-o"></i>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p style="padding:40px 0; color:#777;">
+                    No featured products available.
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- LOAD MORE BUTTON -->
+        <div class="fp-loadmore">
+            <a href="{% url 'store' %}" class="qc-cat-btn" style="color: #000; font-size: 16px;">
+                <span>Load More →</span>
+            </a>
+        </div>
+
+    </div>
+</section>
+
+
+<div class="fp-header">
+        <h2 class="fp-title">Why <span style="color: #0013ff;font-weight: 900;">QuickCart</span> ?</h2>
+        <p class="fp-subtitle">Fast. Reliable. Affordable. Shopping made simple.</p>
+    </div>
+<div class="gx-card-container">
+
+    <div data-text="Fast Delivery" style="--gx-r:-20;" class="gx-card">
+        <img src="https://png.pngtree.com/png-vector/20191129/ourmid/pngtree-fast-delivery-icon-delivery-icon-png-image_2047531.jpg"
+            alt="Free Delivery" class="gx-card-img">
+    </div>
+
+    <div data-text="250+ Pin Codes" style="--gx-r:-10;" class="gx-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/2928/2928892.png" alt="250+ Pin Codes" class="gx-card-img">
+    </div>
+
+    <div data-text="Easy Return" style="--gx-r:0;" class="gx-card">
+        <img src="https://static.vecteezy.com/system/resources/previews/018/928/660/non_2x/easy-return-replacement-concept-icon-in-line-style-design-isolated-on-white-background-editable-stroke-vector.jpg"
+            alt="Easy Return" class="gx-card-img">
+    </div>
+
+    <div data-text="Exclusive Sale" style="--gx-r:10;" class="gx-card">
+        <img src="https://www.clipartmax.com/png/middle/88-889405_sales-sale-discount-price-off-comments-perks.png"
+            alt="Exclusive Sale" class="gx-card-img">
+    </div>
+
+    <div data-text="Save Money" style="--gx-r:20;" class="gx-card">
+        <img src="https://i.pinimg.com/564x/e0/1b/30/e01b3019a0192486540b57f4cd7bbcda.jpg" alt="Save Money"
+            class="gx-card-img">
+    </div>
+
+</div>
+
+
+<!-- ===== FORCE BANNER SECTION (UNIQUE CLASSES - SAFE) ===== -->
+<section class="force-banner-section">
+    <div class="force-banner-container">
+
+        <!-- LEFT CONTENT -->
+        <div class="force-banner-content">
+            <h1 class="force-banner-title">
+                THE FORCE BEHIND<br>EVERYTHING
+            </h1>
+
+            <p class="force-banner-subtitle">
+                He protects. He creates. He destroys.
+            </p>
+
+            <a href="{% url 'store' %}" class="force-banner-btn">
+                Own the Power
+            </a>
+        </div>
+
+        <!-- RIGHT IMAGE -->
+        <div class="force-banner-image">
+            <img src="{% static 'images/banners/me.png' %}" alt="Banner Model">
+        </div>
+
+    </div>
+</section>
+
+
+<div class="fp-header">
+    <h2 class="fp-title">Trusted Brands In Our Collection</h2>
+    <p class="fp-subtitle">Shop confidently from brands that define excellence.</p>
+</div>
+<div class="jp-slider">
+    <div class="jp-slides">
+        <img src="https://i.pinimg.com/736x/bf/b1/2f/bfb12f9dc4f806be63b57ec481c91ab2.jpg" class="jp-slide active" />
+        <img src="https://i.pinimg.com/564x/08/d4/09/08d4097c08bc650980508357b3c62710.jpg"
+            class="jp-slide" />
+        <img src="https://cdn.dribbble.com/userupload/42777422/file/still-f34da492526f8f3a7d2b33c7939128e5.png"
+            class="jp-slide" />
+        <img src="https://i.pinimg.com/474x/eb/fc/54/ebfc5455b2eb0a1c34609bed68f4fe8b.jpg"
+            class="jp-slide" />
+        <img src="https://i.pinimg.com/736x/44/5f/b3/445fb38c7ed5a04194e1ba382e2ad57a.jpg"
+            class="jp-slide" />
+        <img src="https://en.zoxee.com/cache/thumbnails/wp/0/0/1/1/8/6/7/4/tr_9gyaluc3_400_400.jpg"
+            class="jp-slide" />
+    </div>
+
+    <div class="jp-bottom">
+        <h3 class="jp-heading">Elevate Your Everyday <span style="color: #e60023;"># Style</span></h3>
+        <p class="jp-subtitle">Discover curated fashion pieces crafted for modern elegance</p>
+
+        <div class="jp-buttons">
+            <button class="jp-btn jp-primary" onclick="window.location.href='{% url 'store' %}'">Shop
+                Collection</button>
+        </div>
+
+        <div class="jp-indicators">
+            <span class="jp-dot active"></span>
+            <span class="jp-dot"></span>
+            <span class="jp-dot"></span>
+            <span class="jp-dot"></span>
+            <span class="jp-dot"></span>
+            <span class="jp-dot"></span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ===== GX COVERFLOW SLIDER (PROJECT SAFE UNIQUE CLASSES) ===== -->
+<section class="gxflow-section">
+    <div class="gxflow-wrapper">
+
+        <button class="gxflow-nav gxflow-prev">&#10094;</button>
+
+        <div class="gxflow-container">
+            <div class="gxflow-track">
+
+                <div class="gxflow-card">
+                    <img src="{% static 'images/banners/gm3.jpg' %}" />
+                    <a href="{% url 'home' %}" class="gxflow-btn">Blog</a>
+                </div>
+
+                <div class="gxflow-card">
+                    <img src="{% static 'images/banners/gm0.jpg' %}" />
+                    <a href="{% url 'store' %}" class="gxflow-btn">Shop</a>
+                </div>
+
+                <div class="gxflow-card">
+                    <img src="{% static 'images/banners/gm1.webp' %}" />
+                    <a href="{% url 'home' %}" class="gxflow-btn gxflow-main">About Us</a>
+                </div>
+
+                <div class="gxflow-card">
+                    <img src="{% static 'images/banners/gm2.png' %}" />
+                    <a href="{% url 'home' %}" class="gxflow-btn">Contact</a>
+                </div>
+
+                <!-- <div class="gxflow-card">
+                    <img src="{% static 'images/banners/me.png' %}" />
+                    <a href="{% url 'store' %}" class="gxflow-btn">Shop</a>
+                </div> -->
+
+            </div>
+        </div>
+
+        <button class="gxflow-nav gxflow-next">&#10095;</button>
+
+    </div>
+</section>
+
+
+<!-- CSS START -->
 <style>
-	/* ===== MINIMAL MODERN HERO BUTTON (MATCHES ECOMMERCE UI) ===== */
-.hero-btn-container {
-    position: absolute;
-    bottom: 115px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-    pointer-events: none;
-}
+    /* ===== NEW ARRIVAL SECTION (PROJECT SAFE - NO CONFLICT) ===== */
+    .new-arrival-section {
+        background: #ffffff;
+        padding: 60px 0;
+        width: 100%;
+    }
 
-.hero-shop-btn {
-    pointer-events: auto;
-    padding: 12px 34px;
-    font-size: 15px;
-    font-weight: 600;
-    color: #111;
-    text-decoration: none;
-    border-radius: 30px;
-    background: #ffffff;
-    border: 1.5px solid #000000;
+    /* Make it align like "You Might Like" (less side gap) */
+    .new-arrival-section .container {
+        max-width: 1250px;
+        /* match category slider width */
+    }
 
-    /* Clean modern shadow */
-    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    /* HEADER (use site default font) */
+    .na-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
 
-    /* Smooth modern animation */
-    transition: all 0.25s ease;
-}
+    .na-title {
+        font-size: 32px;
+        /* match You Might Like */
+        font-weight: 600;
+        color: #222;
+        margin-bottom: 6px;
+        font-family: inherit;
+        /* IMPORTANT: use site font */
+    }
 
-/* Elegant hover (NOT flashy) */
-.hero-shop-btn:hover {
-    background: #111;
-    color: #ffffff;
-    border-color: #111;
-    box-shadow: 0 10px 28px rgba(0,0,0,0.18);
-    transform: translateY(-2px);
-}
+    .na-subtitle {
+        font-size: 14px;
+        color: #777;
+        margin: 0;
+        font-family: inherit;
+        /* match existing project font */
+    }
 
-/* Click feel (premium UX) */
-.hero-shop-btn:active {
-    transform: translateY(0px) scale(0.97);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-}
+    /* CARD */
+    .na-card {
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid #eee;
+        height: 100%;
+        /* FIX uneven height */
+    }
 
+    .na-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    /* IMAGE WRAP (FIX HOVER POSITION ISSUE) */
+    .na-img-wrap {
+        position: relative;
+        background: #f8f9fb;
+        height: 260px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        /* VERY IMPORTANT */
+    }
+
+    .na-img-wrap img {
+        border-radius: 10px;
+        max-width: 100%;
+        max-height: 210px;
+        object-fit: contain;
+        transition: transform 0.35s ease;
+    }
+
+    .na-card:hover img {
+        transform: scale(1.05);
+    }
+
+    /* NEW BADGE */
+    .na-badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: #0013ff;
+        color: #fff;
+        font-size: 10px;
+        font-weight: 600;
+        padding: 4px 10px;
+
+    }
+
+    /* FIXED HOVER BUTTON (NO JUMP, ALWAYS CENTERED) */
+    .na-hover {
+        position: absolute;
+        bottom: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .na-card:hover .na-hover {
+        opacity: 1;
+        /* only fade, no movement */
+    }
+
+    .na-btn {
+        background: #ff0000;
+        color: #fff;
+        padding: 9px 20px;
+        border-radius: 25px;
+        font-size: 13px;
+        text-decoration: none;
+        font-weight: 600;
+        white-space: nowrap;
+        transition: all 0.25s ease;
+    }
+
+    .na-btn:hover {
+        background: #000;
+        color: #fff;
+    }
+
+    /* INFO */
+    .na-info {
+        padding: 16px 14px 20px;
+        text-align: center;
+    }
+
+    .na-product-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #222;
+        text-decoration: none;
+        display: block;
+        margin-bottom: 5px;
+        font-family: inherit;
+        /* MATCH PROJECT FONT */
+    }
+
+    .na-product-title:hover {
+        color: #000;
+    }
+
+    .na-price {
+        font-size: 15px;
+        font-weight: 700;
+        color: #111;
+    }
 </style>
 
-
 <style>
-	/* ===== CONSTRAINED CATEGORY SLIDER (INSIDE ARROWS) ===== */
-.qcsl-section {
-    width: 100%;
-    padding: 60px 0;
-    background: #ffffff;
-}
+    /* ===== SAFE CATEGORY BANNER (WILL NOT TOUCH PAGE BG) ===== */
+    .qc-cat-sec {
+        padding: 50px 0;
+        /* spacing only, no background */
+    }
 
-.qcsl-title {
-    text-align: center;
-    font-size: 32px;
-    font-weight: 600;
-    margin-bottom: 35px;
-    color: #222;
-}
+    /* Row aligned with your container width */
+    .qc-cat-row {
+        display: flex;
+        gap: 30px;
+    }
 
-/* MAIN WRAPPER (keeps items inside arrows like reference) */
-.qcsl-wrapper {
-    position: relative;
-    max-width: 1250px; /* IMPORTANT: keeps items inside < > */
-    margin: 0 auto; /* center */
-}
+    /* Card */
+    .qc-cat-card {
+        position: relative;
+        flex: 1;
+        border-radius: 14px;
+        overflow: hidden;
+        background: white;
+        /* card bg only, not page */
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
-/* VIEWPORT */
-.qcsl-slider {
-    overflow: hidden;
-    width: 100%;
-}
+    .qc-cat-card:hover {
+        /* transform: translateY(-5px); */
+        box-shadow: 0 16px 35px rgba(0, 0, 0, 0.08);
+    }
 
-/* TRACK */
-.qcsl-track {
-    display: flex;
-    align-items: center;
-    gap: 28px; /* tighter spacing */
-    transition: transform 0.5s ease;
-    padding: 10px 0; /* removed side padding (MAIN FIX) */
-}
+    /* Image wrapper */
+    .qc-cat-img {
+        position: relative;
+        /* height: 420px; */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-/* ITEM */
-.qcsl-item {
-    min-width: 110px; /* smaller like reference */
-    text-align: center;
-    flex-shrink: 0;
-    cursor: pointer;
-}
+    .qc-cat-img img {
+        /* max-width: 90%;
+    max-height: 100%; */
+        object-fit: contain;
+    }
 
-/* SMALLER CIRCLE (more modern) */
-.qcsl-circle {
-    width: 110px;
-    height: 110px;
-    border-radius: 50%;
-    background: #f3f3f3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 10px;
-    transition: all 0.35s ease;
-}
+    /* Red circle badge */
+    .qc-cat-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: #e60023;
+        color: #fff;
+        width: 85px;
+        height: 85px;
+        border-radius: 50%;
+        font-size: 12px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        line-height: 1.2;
+    }
 
-.qcsl-circle img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
+    /* Bottom floating content (like your reference image) */
+    .qc-cat-content {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 70%;
+        background: white;
+        text-align: center;
+        padding: 18px 10px 22px;
+        border-radius: 12px 12px 0 0;
+    }
 
-/* TEXT */
-.qcsl-item span {
-    font-size: 14px;
-    font-weight: 600;
-    color: #333;
-}
+    /* Title - inherit site font (no mismatch) */
+    .qc-cat-title {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: #111;
+        font-family: inherit;
+        /* fixes font mismatch */
+    }
 
-/* HOVER (premium subtle) */
-.qcsl-item:hover .qcsl-circle {
-    transform: translateY(-4px) scale(1.05);
-    background: #f0efff;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-}
+    /* SHOP NOW button (MODERN underline FIXED) */
+    .qc-cat-btn {
+        position: relative;
+        font-size: 13px;
+        font-weight: 600;
+        color: #111;
+        text-decoration: none;
+        display: inline-block;
+        padding-bottom: 3px;
+    }
 
-/* ARROWS - PERFECT ALIGNMENT */
-.qcsl-arrow {
-    position: absolute;
-    top: 45%;
-    transform: translateY(-50%);
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    border: none;
-    background: #ffffff;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-    font-size: 22px;
-    cursor: pointer;
-    z-index: 10;
-    transition: all 0.25s ease;
-}
+    /* Animated underline (NOW WORKS PROPERLY) */
+    .qc-cat-btn span {
+        position: relative;
+    }
 
-.qcsl-prev {
-    left: -100px; /* sits just outside content */
-}
+    .qc-cat-btn span::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -3px;
+        width: 0%;
+        height: 2px;
+        background: #111;
+        transition: width 0.3s ease;
+    }
 
-.qcsl-next {
-    right: -100px;
-}
+    .qc-cat-btn:hover span::after {
+        width: 100%;
+    }
 
-.qcsl-arrow:hover {
-    background: #6c5ce7;
-    color: #fff;
-    transform: translateY(-50%) scale(1.08);
-}
+    /* Responsive (keeps design intact in bootstrap layout) */
+    @media (max-width: 768px) {
+        .qc-cat-row {
+            flex-direction: column;
+        }
 
+        .qc-cat-img {
+            height: 320px;
+        }
+
+        .qc-cat-content {
+            width: 85%;
+        }
+    }
 </style>
 
+<style>
+    .featured-section {
+        padding: 60px 0;
+        background: #ffffff;
+    }
+
+    .fp-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .fp-title {
+        font-size: 32px;
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: #222;
+    }
+
+    .fp-subtitle {
+        font-size: 14px;
+        color: #777;
+    }
+
+    .fp-card {
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #eee;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+    .fp-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .fp-img-wrap {
+        position: relative;
+        background: #f8f9fb;
+        height: 260px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .fp-img-wrap img {
+        border-radius: 10px;
+        max-width: 100%;
+        max-height: 210px;
+        object-fit: contain;
+        transition: transform 0.35s ease;
+    }
+
+    .fp-card:hover img {
+        transform: scale(1.05);
+    }
+
+    .fp-hover {
+        white-space: nowrap;
+        position: absolute;
+        bottom: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .fp-card:hover .fp-hover {
+        opacity: 1;
+    }
+
+    .fp-btn {
+        background: #111;
+        color: #fff;
+        padding: 9px 20px;
+        border-radius: 25px;
+        font-size: 13px;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .fp-btn:hover {
+        background: #ff0000;
+        /* 🔥 CHANGE THIS COLOR */
+        color: #fff;
+        /* text color on hover */
+    }
+
+
+    .fp-info {
+        padding: 16px;
+        text-align: center;
+    }
+
+    .fp-title-link {
+        font-size: 14px;
+        font-weight: 600;
+        color: #222;
+        text-decoration: none;
+        display: block;
+        margin-bottom: 6px;
+    }
+
+    .fp-price {
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+
+    .fp-rating i {
+        color: #f5a623;
+        font-size: 14px;
+        margin: 0 1px;
+    }
+
+    /* LOAD MORE */
+    .fp-loadmore {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .fp-load-btn {
+        display: inline-block;
+        padding: 12px 36px;
+        border-radius: 30px;
+        background: #111;
+        color: #fff;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.25s ease;
+    }
+
+    .fp-load-btn:hover {
+        background: #000;
+        transform: translateY(-2px);
+    }
+</style>
+
+<style>
+    /* ===== MINIMAL MODERN HERO BUTTON (MATCHES ECOMMERCE UI) ===== */
+    .hero-btn-container {
+        position: absolute;
+        bottom: 115px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        pointer-events: none;
+    }
+
+    .hero-shop-btn {
+        pointer-events: auto;
+        padding: 12px 34px;
+        font-size: 15px;
+        font-weight: 600;
+        color: #ffffff;
+        text-decoration: none;
+        background: red;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        transition: all 0.25s ease;
+    }
+
+    /* Elegant hover (NOT flashy) */
+    .hero-shop-btn:hover {
+        background: #111;
+        color: #ffffff;
+        border-color: #111;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+        transform: translateY(-2px);
+    }
+
+    /* Click feel (premium UX) */
+    .hero-shop-btn:active {
+        transform: translateY(0px) scale(0.97);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+</style>
+
+<style>
+    /* ===== CONSTRAINED CATEGORY SLIDER (INSIDE ARROWS) ===== */
+    .qcsl-section {
+        width: 100%;
+        padding: 60px 0;
+        background: #ffffff;
+    }
+
+    .qcsl-title {
+        text-align: center;
+        font-size: 32px;
+        font-weight: 600;
+        margin-bottom: 35px;
+        color: #222;
+    }
+
+    /* MAIN WRAPPER (keeps items inside arrows like reference) */
+    .qcsl-wrapper {
+        position: relative;
+        max-width: 1250px;
+        /* IMPORTANT: keeps items inside < > */
+        margin: 0 auto;
+        /* center */
+    }
+
+    /* VIEWPORT */
+    .qcsl-slider {
+        overflow: hidden;
+        width: 100%;
+    }
+
+    /* TRACK */
+    .qcsl-track {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        /* tighter spacing */
+        transition: transform 0.5s ease;
+        padding: 10px 0;
+        /* removed side padding (MAIN FIX) */
+    }
+
+    /* ITEM */
+    .qcsl-item {
+        min-width: 110px;
+        /* smaller like reference */
+        text-align: center;
+        flex-shrink: 0;
+        cursor: pointer;
+    }
+
+    /* SMALLER CIRCLE (more modern) */
+    .qcsl-circle {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        background: #f3f3f3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 10px;
+        transition: all 0.35s ease;
+    }
+
+    .qcsl-circle img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    /* TEXT */
+    .qcsl-item span {
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    /* HOVER (premium subtle) */
+    .qcsl-item:hover .qcsl-circle {
+        transform: translateY(-4px) scale(1.05);
+        background: #f0efff;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    /* ARROWS - PERFECT ALIGNMENT */
+    .qcsl-arrow {
+        position: absolute;
+        top: 45%;
+        transform: translateY(-50%);
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: none;
+        background: #ffffff;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        font-size: 22px;
+        cursor: pointer;
+        z-index: 10;
+        transition: all 0.25s ease;
+    }
+
+    .qcsl-prev {
+        left: -100px;
+        /* sits just outside content */
+    }
+
+    .qcsl-next {
+        right: -100px;
+    }
+
+    .qcsl-arrow:hover {
+        background: #6c5ce7;
+        color: #fff;
+        transform: translateY(-50%) scale(1.08);
+    }
+</style>
+
+<style>
+    .gx-card-container {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 60px 0;
+    }
+
+    .gx-card-container .gx-card {
+        position: relative;
+        width: 180px;
+        height: 200px;
+        background: linear-gradient(#fff2, transparent);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 25px 25px rgba(0, 0, 0, 0.25);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: 0.5s;
+        border-radius: 10px;
+        margin: 0 -45px;
+        backdrop-filter: blur(10px);
+        transform: rotate(calc(var(--gx-r) * 1deg));
+    }
+
+    .gx-card-container:hover .gx-card {
+        transform: rotate(0deg);
+        margin: 0 10px;
+    }
+
+    .gx-card-container .gx-card::before {
+        content: attr(data-text);
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 40px;
+        background: rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #000000;
+    }
+
+    .gx-card-container .gx-card svg {
+        font-size: 2.5em;
+        fill: #000000;
+    }
+
+    .gx-card-img {
+        width: 60px;
+        /* control icon size here */
+        height: 60px;
+        object-fit: contain;
+        transition: 0.3s ease;
+    }
+
+    .gx-card:hover .gx-card-img {
+        transform: scale(1.1);
+    }
+</style>
+
+<style>
+    /* ===== FORCE BANNER (UNIQUE - WILL NOT BREAK HERO SLIDER) ===== */
+    .force-banner-section {
+        margin: 50px 0;
+        width: 100%;
+        min-height: 520px;
+        background: radial-gradient(circle at right, #0b1c3a 0%, #000000 55%);
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        position: relative;
+    }
+
+    /* Container */
+    .force-banner-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 60px 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 40px;
+    }
+
+    /* LEFT TEXT CONTENT */
+    .force-banner-content {
+        max-width: 600px;
+        z-index: 2;
+    }
+
+    /* BIG TITLE */
+    .force-banner-title {
+        font-size: 64px;
+        font-weight: 800;
+        line-height: 1.1;
+        color: #e6e6e6;
+        letter-spacing: 2px;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+    }
+
+    /* SUBTITLE */
+    .force-banner-subtitle {
+        font-size: 24px;
+        color: #cfcfcf;
+        margin-bottom: 35px;
+        font-weight: 400;
+    }
+
+    /* MODERN BUTTON (MATCHS FASHION UI) */
+    .force-banner-btn {
+        display: inline-block;
+        padding: 14px 28px;
+        border-radius: 30px;
+        background: linear-gradient(135deg, #ffffff, #dcdcdc);
+        color: #111;
+        font-weight: 600;
+        font-size: 16px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 18px rgba(255, 255, 255, 0.15);
+    }
+
+    .force-banner-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(255, 255, 255, 0.25);
+        color: #000;
+    }
+
+    /* RIGHT IMAGE */
+    .force-banner-image {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .force-banner-image img {
+        max-height: 600px;
+        border-radius: 20px;
+        width: auto;
+        object-fit: contain;
+        transition: transform 0.4s ease;
+    }
+
+    .force-banner-image img:hover {
+        transform: scale(1.03);
+    }
+
+    /* RESPONSIVE (MOBILE) */
+    @media (max-width: 992px) {
+        .force-banner-container {
+            flex-direction: column;
+            text-align: center;
+            padding: 50px 40px;
+        }
+
+        .force-banner-title {
+            font-size: 42px;
+        }
+
+        .force-banner-subtitle {
+            font-size: 18px;
+        }
+
+        .force-banner-image {
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .force-banner-image img {
+            max-height: 400px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .force-banner-title {
+            font-size: 32px;
+        }
+
+        .force-banner-section {
+            min-height: auto;
+        }
+    }
+</style>
+
+<style>
+    .jp-slider {
+        position: relative;
+        width: 800px;
+        max-width: 100%;
+        height: 530px;
+        margin: 50px auto;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .jp-slides {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.6s ease-in-out;
+        border-radius: 15px 15px 0 0;
+    }
+
+    .jp-slide {
+        min-width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 15px 15px 0 0;
+        flex-shrink: 0;
+        user-select: none;
+        pointer-events: none;
+    }
+
+    .jp-slide.active {
+        pointer-events: auto;
+    }
+
+    .jp-bottom {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 70%;
+        background: #fff;
+        padding: 15px 20px 0;
+        text-align: center;
+        box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 20px 20px 0 0;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .jp-bottom::before,
+    .jp-bottom::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        width: 50px;
+        height: 40px;
+        background: #fff;
+        border-radius: 0;
+        z-index: -1;
+    }
+
+    .jp-bottom::before {
+        left: -30px;
+        bottom: -10px;
+        mask: radial-gradient(30px at top left, #0000 98%, #000);
+    }
+
+    .jp-bottom::after {
+        right: -30px;
+        bottom: -10px;
+        mask: radial-gradient(30px at top right, #0000 98%, #000);
+    }
+
+    .jp-heading {
+        /* font-family: "Gloock", serif; */
+        font-weight: 700;
+        font-size: 2.2rem;
+        color: #2c2a29;
+        margin-bottom: 0.3em;
+    }
+
+    .jp-subtitle {
+        /* font-family: "Montserrat", sans-serif; */
+        font-size: 1rem;
+        color: #777;
+        opacity: 0.85;
+    }
+
+    .jp-buttons {
+        margin: 20px 0 12px;
+    }
+
+    .jp-btn {
+        font-weight: 600;
+        padding: 0.7em 1.4em;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s ease;
+        margin: 0 8px 10px;
+        border: none;
+    }
+
+    .jp-primary {
+        border: 1.5px solid #000000;
+        background: transparent;
+        color: #000000;
+    }
+
+    .jp-primary:hover {
+        color: white;
+        background: #000000;
+        transform: translateY(-2px);
+    }
+
+    .jp-secondary {
+        background: transparent;
+        border: 2px solid #ffc727;
+        color: #ffc727;
+    }
+
+    .jp-secondary:hover {
+        background: #fff8e1;
+        color: #222;
+    }
+
+    .jp-indicators {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin: 15px 0 20px;
+    }
+
+    .jp-dot {
+        width: 10px;
+        height: 10px;
+        background: #ccc;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .jp-dot.active {
+        background: #333;
+    }
+</style>
+
+<style>
+    .gxflow-section {
+        padding: 100px 0;
+        background: #ffffff;
+        overflow: hidden;
+    }
+
+    .gxflow-wrapper {
+        position: relative;
+        max-width: 1400px;
+        margin: auto;
+    }
+
+    .gxflow-container {
+        perspective: 1200px;
+        height: 520px;
+        position: relative;
+    }
+
+    .gxflow-track {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 420px;
+        height: 520px;
+    }
+
+    .gxflow-card {
+        position: absolute;
+        width: 420px;
+        height: 520px;
+        border-radius: 25px;
+        overflow: hidden;
+        transition: all .6s cubic-bezier(.22, .61, .36, 1);
+    }
+
+    .gxflow-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .gxflow-btn {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #9c0000;
+        color: #ffffff;
+        padding: 10px 26px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .gxflow-btn:hover {
+        color: #000;
+        background-color: #fff;
+    }
+
+
+
+    /* NAV BUTTONS */
+    .gxflow-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        border: none;
+        background: #fff;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        font-size: 24px;
+        cursor: pointer;
+        z-index: 20;
+    }
+
+    .gxflow-prev {
+        left: -30px;
+    }
+
+    .gxflow-next {
+        right: -30px;
+    }
+</style>
+<!-- end css -->
+
+
+
+<!-- Script Start -->
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const track = document.getElementById("qcslTrack");
-    const prevBtn = document.getElementById("qcslPrev");
-    const nextBtn = document.getElementById("qcslNext");
+    document.addEventListener("DOMContentLoaded", function () {
+        const track = document.getElementById("qcslTrack");
+        const prevBtn = document.getElementById("qcslPrev");
+        const nextBtn = document.getElementById("qcslNext");
 
-    if (!track) return;
+        if (!track) return;
 
-    // Duplicate items for infinite loop
-    track.innerHTML += track.innerHTML;
+        // Duplicate items for infinite loop
+        track.innerHTML += track.innerHTML;
 
-    let position = 0;
-    const itemWidth = 138; // 110 circle + gap (important update)
-    const scrollStep = itemWidth * 2; // scroll 2 items each click
-    const maxScroll = track.scrollWidth / 2;
+        let position = 0;
+        const itemWidth = 138; // 110 circle + gap (important update)
+        const scrollStep = itemWidth * 2; // scroll 2 items each click
+        const maxScroll = track.scrollWidth / 2;
 
-    function moveSlider() {
-        track.style.transform = `translateX(-${position}px)`;
-    }
+        function moveSlider() {
+            track.style.transform = `translateX(-${position}px)`;
+        }
 
-    // AUTO SLIDE (3 sec)
-    let autoSlide = setInterval(() => {
-        position += scrollStep;
-        if (position >= maxScroll) position = 0;
-        moveSlider();
-    }, 3000);
-
-    // NEXT
-    nextBtn.addEventListener("click", () => {
-        position += scrollStep;
-        if (position >= maxScroll) position = 0;
-        moveSlider();
-        resetAuto();
-    });
-
-    // PREV
-    prevBtn.addEventListener("click", () => {
-        position -= scrollStep;
-        if (position < 0) position = maxScroll - scrollStep;
-        moveSlider();
-        resetAuto();
-    });
-
-    // Pause on hover (premium UX)
-    track.addEventListener("mouseenter", () => clearInterval(autoSlide));
-    track.addEventListener("mouseleave", startAuto);
-
-    function resetAuto() {
-        clearInterval(autoSlide);
-        startAuto();
-    }
-
-    function startAuto() {
-        autoSlide = setInterval(() => {
+        // AUTO SLIDE (3 sec)
+        let autoSlide = setInterval(() => {
             position += scrollStep;
             if (position >= maxScroll) position = 0;
             moveSlider();
         }, 3000);
-    }
-});
+
+        // NEXT
+        nextBtn.addEventListener("click", () => {
+            position += scrollStep;
+            if (position >= maxScroll) position = 0;
+            moveSlider();
+            resetAuto();
+        });
+
+        // PREV
+        prevBtn.addEventListener("click", () => {
+            position -= scrollStep;
+            if (position < 0) position = maxScroll - scrollStep;
+            moveSlider();
+            resetAuto();
+        });
+
+        // Pause on hover (premium UX)
+        track.addEventListener("mouseenter", () => clearInterval(autoSlide));
+        track.addEventListener("mouseleave", startAuto);
+
+        function resetAuto() {
+            clearInterval(autoSlide);
+            startAuto();
+        }
+
+        function startAuto() {
+            autoSlide = setInterval(() => {
+                position += scrollStep;
+                if (position >= maxScroll) position = 0;
+                moveSlider();
+            }, 3000);
+        }
+    });
 </script>
 
+<script>
+    let jpCurrent = 0;
+    const jpSlides = document.querySelectorAll(".jp-slide");
+    const jpDots = document.querySelectorAll(".jp-dot");
+    const jpContainer = document.querySelector(".jp-slides");
+
+    function jpShowSlide(index) {
+        if (index < 0) index = jpSlides.length - 1;
+        if (index >= jpSlides.length) index = 0;
+
+        jpCurrent = index;
+        jpContainer.style.transform = `translateX(-${jpCurrent * 100}%)`;
+
+        jpDots.forEach(dot => dot.classList.remove("active"));
+        jpDots[jpCurrent].classList.add("active");
+    }
+
+    setInterval(() => {
+        jpShowSlide(jpCurrent + 1);
+    }, 4000);
+
+    jpDots.forEach((dot, i) => {
+        dot.addEventListener("click", () => jpShowSlide(i));
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const cards = document.querySelectorAll(".gxflow-card");
+        const next = document.querySelector(".gxflow-next");
+        const prev = document.querySelector(".gxflow-prev");
+
+        let current = 2; // starting center
+        const total = cards.length;
+
+        function updateCards() {
+
+            cards.forEach((card, i) => {
+
+                // 🔥 infinite circular offset calculation
+                let offset = (i - current + total) % total;
+
+                // convert to negative side when needed
+                if (offset > total / 2) {
+                    offset = offset - total;
+                }
+
+                card.style.zIndex = 10 - Math.abs(offset);
+
+                if (offset === 0) {
+                    card.style.transform = "translateX(0px) scale(1)";
+                    card.style.opacity = "1";
+                }
+                else if (offset === -1) {
+                    card.style.transform = "translateX(-450px) scale(.75)";
+                    card.style.opacity = ".6";
+                }
+                else if (offset === 1) {
+                    card.style.transform = "translateX(450px) scale(.75)";
+                    card.style.opacity = ".6";
+                }
+                else {
+                    card.style.transform = "translateX(" + (offset * 450) + "px) scale(.55)";
+                    card.style.opacity = "0";
+                }
+            });
+        }
+
+        next.addEventListener("click", () => {
+            current = (current + 1) % total;  // 🔥 real infinite forward
+            updateCards();
+        });
+
+        prev.addEventListener("click", () => {
+            current = (current - 1 + total) % total; // 🔥 real infinite backward
+            updateCards();
+        });
+
+        updateCards();
+
+    });
+</script>
 
 {% endblock %}

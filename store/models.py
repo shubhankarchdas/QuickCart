@@ -15,6 +15,8 @@ class Product(models.Model):
     stock = models.IntegerField()
 
     is_available = models.BooleanField(default=True)
+    is_featured = models.BooleanField(default=False)
+    sales_count = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

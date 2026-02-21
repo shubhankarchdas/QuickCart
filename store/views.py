@@ -107,3 +107,7 @@ def submit_review(request, product_id):
                 messages.error(request, 'There was an error submitting your review.')
         
         return redirect(url)
+    
+
+
+
