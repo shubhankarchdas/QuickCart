@@ -38,3 +38,29 @@ def home(request):
     }
 
     return render(request, 'home.html', context)
+
+
+
+def contact(request):
+    return render(request, 'pages/contact.html')
+
+def about(request):
+    return render(request, 'pages/about.html')
+
+def blog(request):
+    return render(request, 'pages/blog.html')
+
+def faq(request):
+    return render(request, 'policies/faq.html')
+
+def shipping_policy(request):
+    return render(request, 'policies/shipping_policy.html')
+
+def return_policy(request):
+    return render(request, 'policies/return_policy.html')
+
+def privacy_policy(request):
+    return render(request, 'policies/privacy_policy.html')
+
+def terms(request):
+    return render(request, 'policies/terms.html')

@@ -32,12 +32,12 @@
 
       <!-- Right Side: Navigation Links -->
       <ul class="navbar-nav">
-        <li><a href="#" class="nav-link">Contact</a></li>
+        <li><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
         <li>
-          <a href="templates\includes\about.html" class="nav-link">About</a>
+          <a href="{% url 'about' %}" class="nav-link">About</a>
         </li>
         <li>
-          <a href="templates\includes\about.html" class="nav-link">Blog</a>
+          <a href="{% url 'blog' %}" class="nav-link">Blog</a>
         </li>
       </ul>
     </div>
