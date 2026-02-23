@@ -1,11 +1,15 @@
 /* Promo navber */
   .navbar {
-    background: linear-gradient(90deg, #0f2027, #203a43, #2c5364); /* dark teal shades */
+    background: radial-gradient(circle at right, #0b1c3a 0%, #000000 55%); /* dark teal shades */
     color: white;
   }
   .navbar .nav-link {
     color: white !important;
     font-weight: 500;
+  }
+  .navbar .nav-link:hover {
+    color: #2563eb !important;
+    text-decoration: none;
   }
   .navbar .title {
     color: white;

@@ -1,3 +1,431 @@
-<h1>
-    about us
-</h1>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- ===== MODERN ANIMATED ABOUT US PAGE ===== -->
+<!-- For fashion e‑commerce: sleek, smooth, responsive, with micro‑interactions -->
+
+<style>
+  /* ----------------------------------------------
+     GLOBAL STYLES & VARIABLES
+     ---------------------------------------------- */
+  :root {
+    --primary: #2c2c2c;
+    --secondary: #8b7355;
+    --accent: #d4af37;
+    --light: #f9f6f2;
+    --white: #ffffff;
+    --font-serif: 'Playfair Display', serif;
+    --font-sans: 'Montserrat', sans-serif;
+    --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  /* import modern fonts (fallback to system) */
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
+
+  .about-page {
+    
+    background-color: var(--white);
+    font-family: var(--font-sans);
+    color: var(--primary);
+  }
+
+  /* smooth section transitions */
+  section {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* elegant container spacing */
+  .about-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 5%;
+  }
+
+  /* headings with underline animation */
+  .section-title {
+    font-family: var(--font-serif);
+    font-size: 2.8rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 80px;
+    height: 3px;
+    background: var(--secondary);
+    transition: width 0.4s ease;
+  }
+
+  .section-title:hover::after {
+    width: 150px;
+  }
+
+  /* buttons with ripple effect */
+  .btn-ripple {
+    display: inline-block;
+    padding: 14px 38px;
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    border-radius: 40px;
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition);
+    border: 1px solid transparent;
+    z-index: 1;
+  }
+
+  .btn-ripple::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+    z-index: -1;
+  }
+
+  .btn-ripple:hover {
+    background: var(--secondary);
+    border-color: var(--secondary);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-ripple:hover::after {
+    width: 300px;
+    height: 300px;
+  }
+
+  /* image hover zoom with overlay */
+  .img-zoom {
+    overflow: hidden;
+    border-radius: 12px;
+    position: relative;
+  }
+
+  .img-zoom img {
+    width: 100%;
+    height: auto;
+    transition: transform 1.2s ease;
+    will-change: transform;
+  }
+
+  .img-zoom:hover img {
+    transform: scale(1.05);
+  }
+
+  .img-zoom::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(139, 115, 85, 0.1) 0%, rgba(0, 0, 0, 0.2) 100%);
+    opacity: 0;
+    transition: opacity 0.5s;
+    z-index: 1;
+    pointer-events: none;
+    border-radius: 12px;
+  }
+
+  .img-zoom:hover::before {
+    opacity: 1;
+  }
+
+  /* floating animation for subtle movement */
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+  }
+
+  .float-element {
+    animation: float 5s infinite ease-in-out;
+  }
+
+  /* responsive */
+  @media (max-width: 768px) {
+    .section-title {
+      font-size: 2.2rem;
+    }
+    .about-container {
+      padding: 0 20px;
+    }
+  }
+</style>
+
+<div class="about-page">
+
+  <!-- ===== HERO SECTION (fullscreen with parallax) ===== -->
+  <section id="about-hero" style="min-height: 90vh; display: flex; align-items: center;">
+    <div class="about-container" style="display: flex; flex-wrap: wrap; align-items: center; gap: 40px;">
+      <!-- left text -->
+      <div style="flex: 1 1 400px; animation: fadeInUp 1.2s;">
+        <span style="font-size: 1.1rem; letter-spacing: 3px; color: var(--secondary); text-transform: uppercase; font-weight: 300;">since 2025</span>
+        <h1 style="font-family: var(--font-serif); font-size: clamp(3rem, 8vw, 5rem); font-weight: 700; line-height: 1.1; margin: 20px 0;">Where fashion<br>tells your story</h1>
+        <p style="font-size: 1.2rem; color: #4a4a4a; max-width: 500px; margin-bottom: 35px; font-weight: 300;">QuickCart isn't just an e‑commerce platform — it's a curated journey through style, quality, and self‑expression.</p>
+        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+          <a href="#our-story" class="btn-ripple">Discover our story</a>
+          <a href="{% url 'store' %}" class="btn-ripple" style="background: transparent; color: var(--primary); border: 1px solid var(--primary);">Shop collection →</a>
+        </div>
+        <!-- floating trust badges -->
+        <div style="display: flex; gap: 35px; margin-top: 60px; flex-wrap: wrap;">
+          <div class="float-element" style="display: flex; align-items: center; gap: 8px;"><span style="font-weight: 600; font-size: 1.4rem;">50k+</span> <span style="color: #666;">happy customers</span></div>
+          <div class="float-element" style="display: flex; align-items: center; gap: 8px; animation-delay: 0.3s;"><span style="font-weight: 600; font-size: 1.4rem;">100%</span> <span style="color: #666;">authentic</span></div>
+          <div class="float-element" style="display: flex; align-items: center; gap: 8px; animation-delay: 0.6s;"><span style="font-weight: 600; font-size: 1.4rem;">free</span> <span style="color: #666;">shipping*</span></div>
+        </div>
+      </div>
+      <!-- right image with parallax effect -->
+      <div style="flex: 1 1 400px; position: relative;" class="img-zoom">
+        <img src="{% static 'images/avatars/about-hero.jpg' %}" alt="Fashion story" style="border-radius: 20px; box-shadow: 20px 20px 40px rgba(0,0,0,0.05);" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1469334031218-e382a71b716b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80'">
+        <!-- tiny decorative element -->
+        <div style="position: absolute; bottom: -20px; right: -20px; width: 150px; height: 150px; background: var(--accent); border-radius: 50%; z-index: -1; opacity: 0.2;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== OUR STORY (with smooth reveal) ===== -->
+  <section id="our-story" style="padding: 100px 0; background: white;">
+    <div class="about-container" style="display: flex; flex-wrap: wrap; align-items: center; gap: 60px;">
+      <div style="flex: 1 1 300px;" class="img-zoom">
+        <img src="{% static 'images/avatars/about-story.jpg' %}" alt="Our studio" style="border-radius: 20px; box-shadow: 10px 15px 30px rgba(0,0,0,0.05);" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80'">
+      </div>
+      <div style="flex: 1 1 400px;">
+        <h2 class="section-title">Our story</h2>
+        <p style="font-size: 1.2rem; line-height: 1.8; color: #333; margin-bottom: 25px; font-weight: 300;">QuickCart was born from a passion to merge timeless elegance with modern convenience. What started as a small studio in 2020 has grown into a destination for fashion lovers who refuse to compromise on style or ethics.</p>
+        <p style="font-size: 1.1rem; color: #555; line-height: 1.8; margin-bottom: 30px;">Every piece is curated with attention to fabric, fit, and sustainability. We work directly with artisans and ethical manufacturers to bring you clothing that feels as good as it looks.</p>
+        <div style="display: flex; gap: 30px; align-items: center;">
+          <div><span style="font-size: 2.5rem; font-weight: 600; color: var(--secondary);">4+</span><br>years of trust</div>
+          <div style="width: 1px; height: 40px; background: #ddd;"></div>
+          <div><span style="font-size: 2.5rem; font-weight: 600; color: var(--secondary);">15k+</span><br>products sold</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== VALUES (cards with hover animations) ===== -->
+  <section style="padding: 80px 0; background: var(--light);">
+    <div class="about-container">
+      <h2 class="section-title" style="display: block; text-align: center; margin-bottom: 60px;">What we stand for</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: center;">
+        <!-- card 1 -->
+        <div style="flex: 1 1 280px; background: white; border-radius: 24px; padding: 40px 25px; text-align: center; transition: var(--transition); box-shadow: 0 10px 25px rgba(0,0,0,0.02);" class="value-card">
+          <div style="font-size: 3rem; margin-bottom: 20px;">🌿</div>
+          <h3 style="font-size: 1.8rem; font-family: var(--font-serif); margin-bottom: 15px;">Sustainable</h3>
+          <p style="color: #555;">Ethically sourced materials, eco‑friendly packaging, and a commitment to reducing waste.</p>
+        </div>
+        <!-- card 2 -->
+        <div style="flex: 1 1 280px; background: white; border-radius: 24px; padding: 40px 25px; text-align: center; transition: var(--transition); box-shadow: 0 10px 25px rgba(0,0,0,0.02);" class="value-card">
+          <div style="font-size: 3rem; margin-bottom: 20px;">✨</div>
+          <h3 style="font-size: 1.8rem; font-family: var(--font-serif); margin-bottom: 15px;">Quality First</h3>
+          <p style="color: #555;">We personally test every product for durability, comfort, and timeless style.</p>
+        </div>
+        <!-- card 3 -->
+        <div style="flex: 1 1 280px; background: white; border-radius: 24px; padding: 40px 25px; text-align: center; transition: var(--transition); box-shadow: 0 10px 25px rgba(0,0,0,0.02);" class="value-card">
+          <div style="font-size: 3rem; margin-bottom: 20px;">🤝</div>
+          <h3 style="font-size: 1.8rem; font-family: var(--font-serif); margin-bottom: 15px;">Inclusive</h3>
+          <p style="color: #555;">Fashion for every body, every style, and every budget. Size‑inclusive collections.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TEAM SECTION (modern grid) ===== -->
+  <section style="padding: 100px 0; background: white;">
+    <div class="about-container">
+      <h2 class="section-title" style="display: block; text-align: center; margin-bottom: 20px;">Meet Our Leaders</h2>
+      <p style="text-align: center; max-width: 600px; margin: 0 auto 60px; color: #666; font-size: 1.1rem;">Experienced professionals driving QuickCart's vision forward.</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 40px; justify-content: center;">
+        <!-- team member 1 -->
+        <div style="flex: 0 1 260px; text-align: center; transition: var(--transition);" class="team-card">
+          <div class="img-zoom" style="border-radius: 50%; width: 200px; height: 200px; margin: 0 auto 20px;">
+            <img src="{% static 'images/avatars/team1.jpg' %}" alt="Shubhankar Ch Das" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1494790108777-2fd95d3e93f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80'">
+          </div>
+          <h3 style="font-size: 1.6rem; font-family: var(--font-serif); margin: 10px 0 5px;">Shubhankar Ch Das</h3>
+          <p style="color: var(--secondary); font-weight: 500;">Founder & CEO</p>
+        </div>
+        <!-- team member 2 -->
+        <div style="flex: 0 1 260px; text-align: center;" class="team-card">
+          <div class="img-zoom" style="border-radius: 50%; width: 200px; height: 200px; margin: 0 auto 20px;">
+            <img src="{% static 'images/avatars/team2.png' %}" alt="James Okafor" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80'">
+          </div>
+          <h3 style="font-size: 1.6rem; font-family: var(--font-serif); margin: 10px 0 5px;">Pranay Kumar Das</h3>
+          <p style="color: var(--secondary); font-weight: 500;">Co-Founder & Chief Growth</p>
+        </div>
+        <!-- team member 3 -->
+        <div style="flex: 0 1 260px; text-align: center;" class="team-card">
+          <div class="img-zoom" style="border-radius: 50%; width: 200px; height: 200px; margin: 0 auto 20px;">
+            <img src="{% static 'images/avatars/team3.png' %}" alt="Sophie Laurent" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80'">
+          </div>
+          <h3 style="font-size: 1.6rem; font-family: var(--font-serif); margin: 10px 0 5px;">Biplab Das</h3>
+          <p style="color: var(--secondary); font-weight: 500;">Co-Founder & Chief Tech</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== STATS / FUN FACTS (counter animation) ===== -->
+  <section style="padding: 70px 0; background: linear-gradient(135deg, #2c2c2c 0%, #3a3a3a 100%); color: white;">
+    <div class="about-container" style="display: flex; flex-wrap: wrap; justify-content: space-around; gap: 40px; text-align: center;">
+      <div class="stat-item">
+        <span class="counter" data-target="50" style="font-size: 4rem; font-weight: 700; font-family: var(--font-serif);">0</span><span style="font-size: 2rem;">k+</span>
+        <p style="letter-spacing: 1px; opacity: 0.8;">happy customers</p>
+      </div>
+      <div class="stat-item">
+        <span class="counter" data-target="15" style="font-size: 4rem; font-weight: 700; font-family: var(--font-serif);">0</span><span style="font-size: 2rem;">k+</span>
+        <p style="letter-spacing: 1px; opacity: 0.8;">orders fulfilled</p>
+      </div>
+      <div class="stat-item">
+        <span class="counter" data-target="100" style="font-size: 4rem; font-weight: 700; font-family: var(--font-serif);">0</span><span style="font-size: 2rem;">%</span>
+        <p style="letter-spacing: 1px; opacity: 0.8;">secure checkout</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TESTIMONIAL CAROUSEL (minimal with fade) ===== -->
+  <section style="padding: 100px 0; background: white;">
+    <div class="about-container">
+      <h2 class="section-title" style="display: block; text-align: center;">From our community</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 30px; margin-top: 50px; justify-content: center;">
+        <!-- testimonial 1 -->
+        <div style="flex: 1 1 300px; background: var(--light); border-radius: 30px; padding: 35px; transition: 0.3s;">
+          <p style="font-size: 1.2rem; font-style: italic; color: #333;">"QuickCart transformed my wardrobe. The quality is unmatched and the packaging is gorgeous!"</p>
+          <div style="display: flex; align-items: center; margin-top: 25px;">
+            <div style="width: 50px; height: 50px; border-radius: 50%; overflow: hidden; margin-right: 15px;">
+              <img src="{% static 'images/avatars/testimonial1.jpg' %}" alt="customer" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='https://randomuser.me/api/portraits/women/44.jpg'">
+            </div>
+            <div><strong>Anita Desai</strong><br><span style="color: #777;">verified buyer</span></div>
+          </div>
+        </div>
+        <!-- testimonial 2 -->
+        <div style="flex: 1 1 300px; background: var(--light); border-radius: 30px; padding: 35px;">
+          <p style="font-size: 1.2rem; font-style: italic; color: #333;">"I love the sustainable approach. Finally a brand that cares about the planet as much as style."</p>
+          <div style="display: flex; align-items: center; margin-top: 25px;">
+            <div style="width: 50px; height: 50px; border-radius: 50%; overflow: hidden; margin-right: 15px;">
+              <img src="{% static 'images/avatars/testimonial2.jpg' %}" alt="customer" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='https://randomuser.me/api/portraits/men/32.jpg'">
+            </div>
+            <div><strong>Marcus Lee</strong><br><span style="color: #777;">verified buyer</span></div>
+          </div>
+        </div>
+        <!-- testimonial 3 -->
+        <div style="flex: 1 1 300px; background: var(--light); border-radius: 30px; padding: 35px;">
+          <p style="font-size: 1.2rem; font-style: italic; color: #333;">"The customer service is phenomenal. They helped me with sizing and the dress fits like a dream."</p>
+          <div style="display: flex; align-items: center; margin-top: 25px;">
+            <div style="width: 50px; height: 50px; border-radius: 50%; overflow: hidden; margin-right: 15px;">
+              <img src="{% static 'images/avatars/testimonial3.jpg' %}" alt="customer" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='https://randomuser.me/api/portraits/women/68.jpg'">
+            </div>
+            <div><strong>Clara Gomez</strong><br><span style="color: #777;">verified buyer</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CALL TO ACTION (newsletter / connect) ===== -->
+  <section style="padding: 80px 0; background: var(--light); text-align: center;">
+    <div class="about-container">
+      <h2 style="font-family: var(--font-serif); font-size: 3rem; margin-bottom: 20px;">Join the journey</h2>
+      <p style="max-width: 500px; margin: 0 auto 40px; color: #444;">Be the first to know about new collections, exclusive offers, and behind‑the‑scenes stories.</p>
+      <form style="display: flex; max-width: 500px; margin: 0 auto; gap: 10px; flex-wrap: wrap; justify-content: center;">
+        <input type="email" placeholder="Your email address" style="flex: 1 1 250px; padding: 16px 25px; border: none; border-radius: 50px; outline: none; font-size: 1rem;">
+        <button type="submit" class="btn-ripple" style="border: none; cursor: pointer;">Subscribe</button>
+      </form>
+    </div>
+  </section>
+</div>
+
+<!-- Intersection Observer for reveal animations + counter simple script -->
+<script>
+  (function() {
+    // reveal sections on scroll
+    const sections = document.querySelectorAll('section');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+    
+    sections.forEach(section => observer.observe(section));
+
+    // simple counter animation for stats (visible class triggers)
+    const counters = document.querySelectorAll('.counter');
+    const speed = 200;
+
+    const countObserver = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const counter = entry.target;
+          const updateCount = () => {
+            const target = parseInt(counter.getAttribute('data-target'));
+            const count = parseInt(counter.innerText);
+            const increment = Math.ceil(target / 15);
+            
+            if (count < target) {
+              counter.innerText = count + increment;
+              setTimeout(updateCount, 40);
+            } else {
+              counter.innerText = target;
+            }
+          };
+          updateCount();
+          obs.unobserve(counter); // only once
+        }
+      });
+    }, { threshold: 0.5 });
+
+    counters.forEach(counter => countObserver.observe(counter));
+
+    // hover animations for value cards and team cards
+    const cards = document.querySelectorAll('.value-card, .team-card');
+    cards.forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-10px)';
+        this.style.boxShadow = '0 20px 35px rgba(0,0,0,0.07)';
+      });
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+        this.style.boxShadow = '0 10px 25px rgba(0,0,0,0.02)';
+      });
+    });
+
+    // ensure hero appears quickly
+    document.getElementById('about-hero').classList.add('visible');
+  })();
+</script>
+
+<!-- Fallback small style for card hover (already in JS, but safe) -->
+<style>
+  .value-card, .team-card { transition: transform 0.4s ease, box-shadow 0.4s ease; }
+  .counter { display: inline-block; }
+  section { opacity: 0; transform: translateY(30px); transition: opacity 0.9s cubic-bezier(0.2, 0.9, 0.3, 1), transform 0.9s cubic-bezier(0.2, 0.9, 0.3, 1); }
+  section.visible { opacity: 1; transform: translateY(0); }
+  .btn-ripple { transition: background 0.3s, transform 0.2s, box-shadow 0.2s; }
+</style>
+
+{% endblock %}

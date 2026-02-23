@@ -1,4 +1,568 @@
-<h1>Privacy Policy</h1>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
 
-<p>We collect basic information such as name, email and address for order processing.</p>
-<p>Your data is never sold or shared with third parties.</p>
+<!-- ===== MODERN PRIVACY POLICY PAGE ===== -->
+<!-- For QuickCart fashion e‑commerce: clean, transparent, with clear sections and animations -->
+
+<style>
+  /* ----------------------------------------------
+     GLOBAL STYLES & VARIABLES (matching all other pages)
+     ---------------------------------------------- */
+  :root {
+    --primary: #2c2c2c;
+    --secondary: #8b7355;
+    --accent: #d4af37;
+    --light: #f9f6f2;
+    --white: #ffffff;
+    --font-serif: 'Playfair Display', serif;
+    --font-sans: 'Montserrat', sans-serif;
+    --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    --shadow-sm: 0 10px 30px rgba(0, 0, 0, 0.03);
+    --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.08);
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
+
+  .privacy-page {
+    overflow-x: hidden;
+    background-color: var(--white);
+    font-family: var(--font-sans);
+    color: var(--primary);
+  }
+
+  /* section reveal animation */
+  section {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .privacy-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 5%;
+  }
+
+  /* section titles */
+  .section-title {
+    font-family: var(--font-serif);
+    font-size: 2.8rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 80px;
+    height: 3px;
+    background: var(--secondary);
+    transition: width 0.4s ease;
+  }
+
+  .section-title:hover::after {
+    width: 150px;
+  }
+
+  /* policy cards for sections */
+  .policy-section {
+    margin-bottom: 40px;
+    scroll-margin-top: 30px;
+  }
+
+  .section-heading {
+    font-family: var(--font-serif);
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-heading .icon {
+    font-size: 2rem;
+    background: var(--light);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .policy-card {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 30px;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    border: 1px solid rgba(0,0,0,0.02);
+    margin-bottom: 20px;
+  }
+
+  .policy-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-3px);
+  }
+
+  .policy-card p {
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 15px;
+  }
+
+  .policy-card ul, .policy-card ol {
+    color: #555;
+    line-height: 1.8;
+    padding-left: 20px;
+    margin-bottom: 15px;
+  }
+
+  .policy-card li {
+    margin-bottom: 8px;
+  }
+
+  .policy-card strong {
+    color: var(--primary);
+  }
+
+  /* highlight box */
+  .highlight-box {
+    background: var(--light);
+    border-radius: 20px;
+    padding: 25px;
+    margin: 30px 0;
+    border-left: 4px solid var(--secondary);
+  }
+
+  /* table of contents */
+  .toc-card {
+    background: var(--light);
+    border-radius: 30px;
+    padding: 35px;
+    margin-bottom: 50px;
+    position: sticky;
+    top: 100px;
+    z-index: 10;
+  }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+  }
+
+  .toc-link {
+    display: block;
+    padding: 12px 18px;
+    background: var(--white);
+    border-radius: 50px;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+    border: 1px solid transparent;
+    text-align: center;
+  }
+
+  .toc-link:hover {
+    background: var(--secondary);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  /* last updated badge */
+  .last-updated {
+    display: inline-block;
+    background: var(--secondary);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    margin-bottom: 30px;
+  }
+
+  .btn-ripple {
+    display: inline-block;
+    padding: 14px 32px;
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    border-radius: 40px;
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition);
+    border: 1px solid transparent;
+    z-index: 1;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+
+  .btn-ripple::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+    z-index: -1;
+  }
+
+  .btn-ripple:hover {
+    background: var(--secondary);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-ripple:hover::after {
+    width: 300px;
+    height: 300px;
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+  }
+
+  .btn-outline:hover {
+    background: var(--primary);
+    color: white;
+  }
+
+  /* responsive */
+  @media (max-width: 768px) {
+    .section-title {
+      font-size: 2.2rem;
+    }
+    .section-heading {
+      font-size: 1.5rem;
+    }
+    .toc-card {
+      padding: 25px;
+      position: relative;
+      top: 0;
+    }
+  }
+</style>
+
+<div class="privacy-page">
+
+  <!-- ===== HERO SECTION ===== -->
+  <section id="privacy-hero" style="padding: 80px 0 40px; text-align: center;">
+    <div class="privacy-container">
+      <span style="font-size: 1.1rem; letter-spacing: 4px; color: var(--secondary); text-transform: uppercase;">your data matters</span>
+      <h1 class="section-title" style="font-size: 4rem; display: block; text-align: center; margin: 20px 0;">Privacy policy</h1>
+      <p style="font-size: 1.2rem; color: #555; max-width: 700px; margin: 0 auto;">We respect your privacy and are committed to protecting your personal data. This policy explains how we collect, use, and safeguard your information.</p>
+      
+      <div class="last-updated" style="margin-top: 30px;">
+        Last updated: March 15, 2025
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TABLE OF CONTENTS (sticky on desktop) ===== -->
+  <section style="padding: 20px 0;">
+    <div class="privacy-container">
+      <div class="toc-card">
+        <h2 style="font-family: var(--font-serif); font-size: 2rem; margin-bottom: 10px;">📋 Table of contents</h2>
+        <p style="color: #555; margin-bottom: 20px;">Jump to a specific section:</p>
+        <div class="toc-grid">
+          <a href="#introduction" class="toc-link">1. Introduction</a>
+          <a href="#data-collection" class="toc-link">2. Data we collect</a>
+          <a href="#how-we-use" class="toc-link">3. How we use data</a>
+          <a href="#cookies" class="toc-link">4. Cookies</a>
+          <a href="#sharing" class="toc-link">5. Data sharing</a>
+          <a href="#your-rights" class="toc-link">6. Your rights</a>
+          <a href="#security" class="toc-link">7. Security</a>
+          <a href="#children" class="toc-link">8. Children's privacy</a>
+          <a href="#changes" class="toc-link">9. Policy changes</a>
+          <a href="#contact" class="toc-link">10. Contact us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRIVACY POLICY SECTIONS ===== -->
+  <section style="padding: 20px 0 60px;">
+    <div class="privacy-container">
+
+      <!-- 1. INTRODUCTION -->
+      <div id="introduction" class="policy-section">
+        <h2 class="section-heading">
+          <span class="icon">📌</span>
+          1. Introduction
+        </h2>
+        <div class="policy-card">
+          <p>Welcome to QuickCart ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy. This Privacy Policy describes how we collect, use, disclose, and safeguard your information when you visit our website or make a purchase from our fashion e-commerce platform.</p>
+          <p>Please read this policy carefully. If you do not agree with the terms, do not access or use our services. By using QuickCart, you consent to the practices described in this policy.</p>
+          <p><strong>Data Controller:</strong> QuickCart Inc., 23 Fashion Avenue, New York, NY 10001. For privacy-related questions, contact <a href="mailto:privacy@quickcart.com" style="color: var(--secondary);">privacy@quickcart.com</a>.</p>
+        </div>
+      </div>
+
+      <!-- 2. DATA WE COLLECT -->
+      <div id="data-collection" class="policy-section">
+        <h2 class="section-heading">
+          <span class="icon">📋</span>
+          2. Information we collect
+        </h2>
+        <div class="policy-card">
+          <p>We collect personal information that you voluntarily provide to us when you:</p>
+          <ul>
+            <li><strong>Create an account:</strong> name, email address, password, profile picture</li>
+            <li><strong>Make a purchase:</strong> billing address, shipping address, payment information (processed securely by Razorpay), phone number</li>
+            <li><strong>Contact us:</strong> any information you provide in messages or support requests</li>
+            <li><strong>Participate in promotions:</strong> survey responses, contest entries</li>
+            <li><strong>Write reviews:</strong> your name, profile photo, and review content</li>
+          </ul>
+          <p><strong>Automatically collected data:</strong> When you visit our site, we automatically collect certain information via cookies and similar technologies, including:</p>
+          <ul>
+            <li>IP address, browser type, device information</li>
+            <li>Pages visited, time spent, referral source</li>
+            <li>Shopping behavior (items viewed, cart activity)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 3. HOW WE USE YOUR DATA -->
+      <div id="how-we-use" class="policy-section">
+        <h2 class="section-heading">
+          <span class="icon">🔧</span>
+          3. How we use your information
+        </h2>
+        <div class="policy-card">
+          <p>We use your personal information for the following purposes:</p>
+          <ul>
+            <li><strong>To process orders:</strong> fulfill your purchases, send order confirmations, and handle returns/exchanges</li>
+            <li><strong>To manage your account:</strong> create and maintain your profile, remember your preferences</li>
+            <li><strong>To communicate with you:</strong> respond to inquiries, send order updates, and provide customer support</li>
+            <li><strong>To improve our services:</strong> analyze website usage, personalize your shopping experience, and develop new features</li>
+            <li><strong>To send marketing communications:</strong> with your consent, we may send you newsletters, promotions, and style inspiration (you can opt out anytime)</li>
+            <li><strong>To prevent fraud:</strong> verify transactions, detect and prevent fraudulent activity</li>
+            <li><strong>To comply with legal obligations:</strong> maintain records for tax and regulatory purposes</li>
+          </ul>
+          <div class="highlight-box" style="margin-top: 20px;">
+            <p style="margin-bottom: 0;"><strong>Legal basis (for EEA users):</strong> We process your data based on contract performance (orders), legitimate interests (improvement, security), and consent (marketing).</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. COOKIES AND TRACKING -->
+      <div id="cookies" class="policy-section">
+        <h2 class="section-heading">
+          <span class="icon">🍪</span>
+          4. Cookies and tracking technologies
+        </h2>
+        <div class="policy-card">
+          <p>We use cookies and similar tracking technologies to enhance your browsing experience. Cookies are small text files stored on your device.</p>
+          <p><strong>Types of cookies we use:</strong></p>
+          <ul>
+            <li><strong>Essential cookies:</strong> Required for site functionality (cart, login, checkout)</li>
+            <li><strong>Performance cookies:</strong> Help us understand how visitors use our site (Google Analytics)</li>
+            <li><strong>Functionality cookies:</strong> Remember your preferences (language, currency)</li>
+            <li><strong>Targeting cookies:</strong> Track your browsing habits to show relevant ads</li>
+          </ul>
+          <p>You can manage cookie preferences through your browser settings. However, disabling certain cookies may affect site functionality.</p>
+          <p>Third-party services we use that set cookies:</p>
+          <ul>
+            <li>Google Analytics (website analytics)</li>
+            <li>Razorpay (payment processing)</li>
+            <li>Social media platforms (for sharing features)</li>
+          </ul>
+          <p><a href="#" style="color: var(--secondary);">Manage cookie preferences →</a></p>
+        </div>
+      </div>
+
+      <!-- 5. DATA SHARING AND DISCLOSURE -->
+      <div id="sharing" class="policy-section">
+        <h2 class="section-heading">
+          <span class="icon">🤝</span>
+          5. How we share your information
+        </h2>
+        <div class="policy-card">
+          <p>We do not sell your personal information. We may share your data in the following circumstances:</p>
+          <ul>
+            <li><strong>Service providers:</strong> We share information with trusted third parties who help us operate our business (payment processors like Razorpay, shipping carriers, email marketing platforms, customer support tools). These parties are contractually obligated to protect your data.</li>
+            <li><strong>Legal requirements:</strong> We may disclose information if required by law, court order, or government regulation.</li>
+            <li><strong>Business transfers:</strong> In the event of a merger, acquisition, or sale of assets, your information may be transferred to the new owner.</li>
+            <li><strong>With your consent:</strong> We may share information for other purposes if you give us explicit consent.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 6. YOUR RIGHTS -->
+      <div id="your-rights" class="policy-section">
+        <h2 class="section-heading">
+          <span class="icon">⚖️</span>
+          6. Your privacy rights
+        </h2>
+        <div class="policy-card">
+          <p>Depending on your location, you may have the following rights regarding your personal data:</p>
+          <ul>
+            <li><strong>Access:</strong> Request a copy of the personal information we hold about you</li>
+            <li><strong>Correction:</strong> Update or correct inaccurate information</li>
+            <li><strong>Deletion:</strong> Request deletion of your personal data (subject to legal obligations)</li>
+            <li><strong>Restriction:</strong> Limit how we process your data</li>
+            <li><strong>Portability:</strong> Receive your data in a structured, machine-readable format</li>
+            <li><strong>Objection:</strong> Object to processing based on legitimate interests or direct marketing</li>
+            <li><strong>Withdraw consent:</strong> At any time for consent-based processing</li>
+          </ul>
+          <p>To exercise your rights, contact us at <a href="mailto:privacy@quickcart.com" style="color: var(--secondary);">privacy@quickcart.com</a>. We will respond within 30 days.</p>
+          <div class="highlight-box" style="margin-top: 15px;">
+            <p style="margin-bottom: 0;"><strong>For California residents:</strong> You have the right to request information about the categories of personal information we disclose for business purposes. We do not sell your personal information.</p>
+          </div>
+          <div class="highlight-box" style="margin-top: 15px; background: #e8f0fe;">
+            <p style="margin-bottom: 0;"><strong>For EEA/UK residents:</strong> You have the right to lodge a complaint with your local data protection authority.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. DATA SECURITY -->
+      <div id="security" class="policy-section">
+        <h2 class="section-heading">
+          <span class="icon">🔒</span>
+          7. Data security
+        </h2>
+        <div class="policy-card">
+          <p>We implement appropriate technical and organizational measures to protect your personal information:</p>
+          <ul>
+            <li>SSL encryption for all data transmitted between your browser and our servers</li>
+            <li>Secure payment processing via Razorpay (PCI-DSS compliant)</li>
+            <li>Regular security audits and monitoring</li>
+            <li>Access controls and employee training on data protection</li>
+            <li>Data anonymization where possible</li>
+          </ul>
+          <p>While we strive to protect your data, no method of transmission over the Internet is 100% secure. We encourage you to use strong passwords and keep your login credentials confidential.</p>
+        </div>
+      </div>
+
+      <!-- 8. CHILDREN'S PRIVACY -->
+      <div id="children" class="policy-section">
+        <h2 class="section-heading">
+          <span class="icon">🧒</span>
+          8. Children's privacy
+        </h2>
+        <div class="policy-card">
+          <p>Our services are not directed to individuals under the age of 16. We do not knowingly collect personal information from children. If you become aware that a child has provided us with personal data, please contact us, and we will take steps to delete such information.</p>
+        </div>
+      </div>
+
+      <!-- 9. CHANGES TO THIS POLICY -->
+      <div id="changes" class="policy-section">
+        <h2 class="section-heading">
+          <span class="icon">📅</span>
+          9. Changes to this policy
+        </h2>
+        <div class="policy-card">
+          <p>We may update this Privacy Policy from time to time to reflect changes in our practices or legal requirements. When we make material changes, we will notify you by email (if you have an account) or through a notice on our website. The "Last updated" date at the top of this page indicates when the policy was last revised.</p>
+          <p>We encourage you to review this policy periodically to stay informed about how we protect your information.</p>
+        </div>
+      </div>
+
+      <!-- 10. CONTACT US -->
+      <div id="contact" class="policy-section">
+        <h2 class="section-heading">
+          <span class="icon">📞</span>
+          10. Contact us
+        </h2>
+        <div class="policy-card">
+          <p>If you have questions or concerns about this Privacy Policy or our data practices, please contact us:</p>
+          <ul style="list-style-type: none; padding-left: 0;">
+            <li style="margin-bottom: 12px;"><strong>📧 Email:</strong> <a href="mailto:privacy@quickcart.com" style="color: var(--secondary);">privacy@quickcart.com</a></li>
+            <li style="margin-bottom: 12px;"><strong>📞 Phone:</strong> +1 (212) 555-7890 (Mon–Fri, 9am–6pm EST)</li>
+            <li style="margin-bottom: 12px;"><strong>📬 Mail:</strong> QuickCart Inc., Attn: Privacy Officer, 23 Fashion Avenue, New York, NY 10001, USA</li>
+            <li style="margin-bottom: 12px;"><strong>💬 Live chat:</strong> Available on our website during business hours</li>
+          </ul>
+          <p>For data protection inquiries, you may also contact our Data Protection Officer at <a href="mailto:dpo@quickcart.com" style="color: var(--secondary);">dpo@quickcart.com</a>.</p>
+        </div>
+      </div>
+
+      <!-- ADDITIONAL CONSENT SECTION -->
+      <div class="policy-card" style="margin-top: 40px; background: var(--light);">
+        <h3 style="font-family: var(--font-serif); font-size: 1.8rem; margin-bottom: 15px;">✅ Your consent</h3>
+        <p style="margin-bottom: 20px;">By using our website, you consent to our Privacy Policy and agree to its terms. If you have provided your email for marketing, you can unsubscribe at any time using the link in our emails.</p>
+        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+          <a href="#" class="btn-ripple">Download privacy policy (PDF)</a>
+          <a href="{% url 'contact' %}" class="btn-ripple btn-outline">Contact privacy team</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TRUST BADGES / CERTIFICATIONS ===== -->
+  <section style="padding: 30px 0 80px;">
+    <div class="privacy-container">
+      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; align-items: center; opacity: 0.7;">
+        <span style="font-size: 1rem; letter-spacing: 1px;">🔒 SSL SECURE</span>
+        <span style="font-size: 1rem;">⚡ PCI DSS COMPLIANT</span>
+        <span style="font-size: 1rem;">🌍 GDPR READY</span>
+        <span style="font-size: 1rem;">📜 CCPA COMPLIANT</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Intersection Observer for reveal animations -->
+<script>
+  (function() {
+    const sections = document.querySelectorAll('section');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+    
+    sections.forEach(section => observer.observe(section));
+    document.getElementById('privacy-hero').classList.add('visible');
+
+    // Smooth scroll for table of contents links
+    document.querySelectorAll('.toc-link').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  })();
+</script>
+
+<style>
+  .policy-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .toc-link {
+    transition: all 0.3s ease;
+  }
+  .section-heading .icon {
+    transition: transform 0.3s ease;
+  }
+  .section-heading:hover .icon {
+    transform: scale(1.1);
+  }
+</style>
+
+{% endblock %}

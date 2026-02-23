@@ -1,10 +1,861 @@
-<h1>Frequently Asked Questions</h1>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
 
-<h4>How long does shipping take?</h4>
-<p>Orders are delivered within 3-7 business days.</p>
+<!-- ===== MODERN ANIMATED FAQ PAGE ===== -->
+<!-- For QuickCart fashion e‑commerce: accordion layout, categorized, searchable, with smooth animations -->
 
-<h4>What payment methods do you accept?</h4>
-<p>We accept UPI, Debit/Credit Cards, Net Banking and COD.</p>
+<style>
+  /* ----------------------------------------------
+     GLOBAL STYLES & VARIABLES (matching about/contact/blog)
+     ---------------------------------------------- */
+  :root {
+    --primary: #2c2c2c;
+    --secondary: #8b7355;
+    --accent: #d4af37;
+    --light: #f9f6f2;
+    --white: #ffffff;
+    --font-serif: 'Playfair Display', serif;
+    --font-sans: 'Montserrat', sans-serif;
+    --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    --shadow-sm: 0 10px 30px rgba(0, 0, 0, 0.03);
+    --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.08);
+  }
 
-<h4>Can I return a product?</h4>
-<p>Yes, returns are accepted within 7 days of delivery.</p>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
+
+  .faq-page {
+    overflow-x: hidden;
+    background-color: var(--white);
+    font-family: var(--font-sans);
+    color: var(--primary);
+  }
+
+  /* section reveal animation */
+  section {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .faq-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 5%;
+  }
+
+  /* section titles */
+  .section-title {
+    font-family: var(--font-serif);
+    font-size: 2.8rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 80px;
+    height: 3px;
+    background: var(--secondary);
+    transition: width 0.4s ease;
+  }
+
+  .section-title:hover::after {
+    width: 150px;
+  }
+
+  /* category pills (reuse from blog) */
+  .category-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 40px 0 30px;
+    justify-content: center;
+  }
+
+  .category-pill {
+    padding: 12px 30px;
+    background: var(--light);
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--primary);
+    text-decoration: none;
+    transition: var(--transition);
+    border: 1px solid transparent;
+    cursor: pointer;
+    border: none;
+    font-family: var(--font-sans);
+  }
+
+  .category-pill:hover,
+  .category-pill.active {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  /* search bar */
+  .search-wrapper {
+    max-width: 600px;
+    margin: 0 auto 50px;
+    position: relative;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: #999;
+  }
+
+  .faq-search {
+    width: 100%;
+    padding: 18px 25px 18px 55px;
+    font-size: 1.1rem;
+    border: 1px solid #eaeaea;
+    border-radius: 60px;
+    transition: var(--transition);
+    font-family: var(--font-sans);
+    outline: none;
+    background: var(--light);
+  }
+
+  .faq-search:focus {
+    border-color: var(--secondary);
+    box-shadow: 0 5px 20px rgba(139, 115, 85, 0.15);
+    background: var(--white);
+  }
+
+  /* accordion */
+  .faq-category {
+    margin-bottom: 50px;
+  }
+
+  .category-title {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    margin-bottom: 30px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--light);
+    position: relative;
+  }
+
+  .category-title span {
+    color: var(--secondary);
+    font-size: 1rem;
+    margin-left: 15px;
+    font-family: var(--font-sans);
+    font-weight: 400;
+  }
+
+  .accordion-item {
+    background: var(--white);
+    border-radius: 20px;
+    margin-bottom: 15px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(0,0,0,0.02);
+    transition: var(--transition);
+  }
+
+  .accordion-item:hover {
+    box-shadow: var(--shadow-hover);
+  }
+
+  .accordion-header {
+    padding: 22px 30px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+    font-size: 1.2rem;
+    transition: background 0.3s;
+    border-radius: 20px;
+  }
+
+  .accordion-header:hover {
+    background: var(--light);
+  }
+
+  .accordion-header .question {
+    flex: 1;
+    padding-right: 20px;
+  }
+
+  .accordion-header .icon {
+    font-size: 1.5rem;
+    color: var(--secondary);
+    transition: transform 0.3s;
+  }
+
+  .accordion-item.active .accordion-header .icon {
+    transform: rotate(45deg);
+  }
+
+  .accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, padding 0.3s ease;
+    padding: 0 30px;
+    color: #555;
+    line-height: 1.7;
+  }
+
+  .accordion-item.active .accordion-content {
+    max-height: 500px; /* plenty for answers */
+    padding: 0 30px 25px 30px;
+  }
+
+  /* contact support card */
+  .support-card {
+    background: linear-gradient(135deg, #f9f6f2 0%, #ffffff 100%);
+    border-radius: 50px;
+    padding: 60px 40px;
+    text-align: center;
+    margin: 80px 0 40px;
+    border: 1px solid rgba(139,115,85,0.1);
+  }
+
+  .support-card h3 {
+    font-family: var(--font-serif);
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+  }
+
+  .support-card p {
+    max-width: 500px;
+    margin: 0 auto 30px;
+    color: #555;
+  }
+
+  .support-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-ripple {
+    display: inline-block;
+    padding: 16px 42px;
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    border-radius: 40px;
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition);
+    border: 1px solid transparent;
+    z-index: 1;
+    cursor: pointer;
+    font-size: 1rem;
+    border: none;
+  }
+
+  .btn-ripple::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+    z-index: -1;
+  }
+
+  .btn-ripple:hover {
+    background: var(--secondary);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-ripple:hover::after {
+    width: 300px;
+    height: 300px;
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+  }
+
+  .btn-outline:hover {
+    background: var(--primary);
+    color: white;
+  }
+
+  /* no results */
+  .no-results {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--light);
+    border-radius: 40px;
+    margin: 30px 0;
+  }
+
+  .no-results p {
+    font-size: 1.3rem;
+    color: #555;
+    margin-bottom: 20px;
+  }
+
+  /* responsive */
+  @media (max-width: 768px) {
+    .section-title {
+      font-size: 2.2rem;
+    }
+    .category-title {
+      font-size: 1.8rem;
+    }
+    .accordion-header {
+      padding: 18px 20px;
+      font-size: 1.1rem;
+    }
+    .support-card {
+      padding: 40px 20px;
+    }
+  }
+</style>
+
+<div class="faq-page">
+
+  <!-- ===== FAQ HERO ===== -->
+  <section id="faq-hero" style="padding: 80px 0 40px; text-align: center;">
+    <div class="faq-container">
+      <span style="font-size: 1.1rem; letter-spacing: 4px; color: var(--secondary); text-transform: uppercase;">help center</span>
+      <h1 class="section-title" style="font-size: 4rem; display: block; text-align: center; margin: 20px 0;">Frequently asked questions</h1>
+      <p style="font-size: 1.2rem; color: #555; max-width: 600px; margin: 0 auto 30px;">Find answers to common questions about ordering, shipping, returns, and more.</p>
+      
+      <!-- search bar -->
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="faq-search" id="faqSearch" placeholder="Search for questions..." autocomplete="off">
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CATEGORY FILTER PILLS ===== -->
+  <section>
+    <div class="faq-container">
+      <div class="category-filter" id="categoryFilter">
+        <button class="category-pill active" data-category="all">all questions</button>
+        <button class="category-pill" data-category="orders">orders</button>
+        <button class="category-pill" data-category="shipping">shipping & delivery</button>
+        <button class="category-pill" data-category="returns">returns & refunds</button>
+        <button class="category-pill" data-category="payments">payments</button>
+        <button class="category-pill" data-category="account">account</button>
+        <button class="category-pill" data-category="product">product info</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ACCORDION FAQ SECTIONS ===== -->
+  <section style="padding: 20px 0 40px;">
+    <div class="faq-container" id="faqContainer">
+      
+      <!-- ORDERS CATEGORY -->
+      <div class="faq-category" data-category="orders">
+        <h2 class="category-title">🛍️ Orders <span>(6 questions)</span></h2>
+        
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">How do I place an order?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            Simply browse our collection, select your size and quantity, and click "Add to Cart." Once you're ready, proceed to checkout, enter your shipping and payment details, and confirm your order. You'll receive a confirmation email shortly.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">Can I modify or cancel my order after placing it?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            We process orders quickly to ensure fast delivery. If you need to make changes, contact us within 1 hour of placing your order at support@quickcart.com. After that, we may not be able to modify it, but you can always return items for a refund.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">Will I receive an order confirmation?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            Yes! Once your order is successfully placed, you'll receive an email confirmation with your order number and details. If you don't see it, check your spam folder or contact us.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">How do I track my order?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            After your order ships, we'll send you a tracking link via email. You can also log into your account dashboard and view your order history for real-time tracking updates.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">What payment methods do you accept?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            We accept all major credit cards (Visa, Mastercard, American Express), PayPal, Apple Pay, Google Pay, and Razorpay for secure online payments.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">Is it safe to use my credit card on your site?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            Absolutely. We use industry-standard SSL encryption and partner with trusted payment gateways like Razorpay. Your payment information is never stored on our servers.
+          </div>
+        </div>
+      </div>
+
+      <!-- SHIPPING CATEGORY -->
+      <div class="faq-category" data-category="shipping">
+        <h2 class="category-title">🚚 Shipping & Delivery <span>(5 questions)</span></h2>
+        
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">How much does shipping cost?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            We offer free standard shipping on all orders over $50. For orders under $50, shipping is a flat rate of $4.99. Express shipping is available starting at $12.99.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">How long will it take to receive my order?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            Standard shipping typically takes 3–7 business days within the US. Express shipping takes 1–3 business days. International shipping may take 7–14 business days depending on customs.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">Do you ship internationally?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            Yes, we ship to most countries worldwide. Shipping costs and delivery times vary by location. You can see the exact cost at checkout.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">Will I have to pay customs fees or import duties?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            International orders may be subject to customs fees, duties, or taxes imposed by your country. These charges are the responsibility of the customer. Please check with your local customs office for more information.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">What if my package is lost or stolen?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            If your tracking shows delivered but you haven't received it, contact us immediately. We'll work with the carrier to resolve the issue. For lost packages, we'll either reship or issue a refund.
+          </div>
+        </div>
+      </div>
+
+      <!-- RETURNS CATEGORY -->
+      <div class="faq-category" data-category="returns">
+        <h2 class="category-title">🔄 Returns & Refunds <span>(5 questions)</span></h2>
+        
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">What is your return policy?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            We offer a 30-day hassle-free return policy from the date of delivery. Items must be unworn, unwashed, and with original tags attached. Some final sale items are not eligible for return.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">How do I initiate a return?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            Log into your account, go to your orders, and click "Return Items." Follow the instructions to print a return label. You can also contact our support team for assistance.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">Do I have to pay for return shipping?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            For customers in the US, return shipping is free for most items. For international returns, the customer is responsible for return shipping costs unless the item was defective or incorrect.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">How long do refunds take?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            Once we receive your return, we process refunds within 3–5 business days. The amount will be credited to your original payment method. Depending on your bank, it may take another 2–5 business days to appear.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">Can I exchange an item instead of returning?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            Yes! For exchanges, please return the original item for a refund and place a new order for the desired item. This ensures you get the correct size/color as quickly as possible.
+          </div>
+        </div>
+      </div>
+
+      <!-- PAYMENTS CATEGORY -->
+      <div class="faq-category" data-category="payments">
+        <h2 class="category-title">💳 Payments <span>(4 questions)</span></h2>
+        
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">Which payment methods do you accept?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            We accept Visa, Mastercard, American Express, Discover, PayPal, Apple Pay, Google Pay, and Razorpay. All transactions are secure and encrypted.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">Do you offer installment payments or BNPL?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            Yes, through Razorpay we offer "Buy Now, Pay Later" options like Klarna and Affirm at checkout for eligible orders. You can split your payment into interest-free installments.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">Is my payment information secure?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            Absolutely. We use SSL encryption and are PCI-DSS compliant. Your payment details are processed directly by our payment partners; we never see or store your full card information.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">Why was my payment declined?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            Declines can happen for various reasons: insufficient funds, incorrect CVV, or bank security blocks. Try another payment method or contact your bank. If the issue persists, our support team can help.
+          </div>
+        </div>
+      </div>
+
+      <!-- ACCOUNT CATEGORY -->
+      <div class="faq-category" data-category="account">
+        <h2 class="category-title">👤 Account <span>(4 questions)</span></h2>
+        
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">How do I create an account?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            Click on "My Account" at the top of the page and select "Register." Enter your email and create a password. You can also sign up using Google for faster checkout.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">I forgot my password. How can I reset it?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            On the login page, click "Forgot Password." Enter your email address, and we'll send you a link to reset your password. If you don't receive it, check your spam folder.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">How do I update my profile or change my email?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            Log into your account and go to the "Profile" section. You can edit your personal information, change your email, upload a profile picture, and update saved addresses.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">Can I delete my account?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            Yes. Please contact our support team at support@quickcart.com with your account details, and we'll assist you in deleting your account and associated data.
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCT INFO CATEGORY -->
+      <div class="faq-category" data-category="product">
+        <h2 class="category-title">👗 Product Info <span>(5 questions)</span></h2>
+        
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">How do I find my correct size?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            Each product page has a detailed size guide with measurements. You can also refer to our general size chart in the footer. If you're between sizes, we recommend sizing up for a comfortable fit.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">Are your clothes true to size?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            Most of our items are designed to fit true to size based on standard measurements. However, certain styles may have a relaxed or tailored fit – this is noted in the product description.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">What fabrics do you use?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            We prioritize natural and sustainable fibers like organic cotton, linen, Tencel, and recycled polyester. Each product page lists the fabric composition and care instructions.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">How do I care for my items?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            Care instructions are included on the product page and on the garment's label. Generally, we recommend gentle washing in cold water and air drying to extend the life of your clothes.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="question">Are your products sustainably made?</span>
+            <span class="icon">+</span>
+          </div>
+          <div class="accordion-content">
+            We're committed to sustainability. We work with ethical manufacturers, use eco-friendly materials where possible, and continuously reduce our carbon footprint. Check our "Our Story" page for more details.
+          </div>
+        </div>
+      </div>
+
+      <!-- no results message (hidden by default) -->
+      <div class="no-results" id="noResults" style="display: none;">
+        <p>😕 No questions match your search</p>
+        <p style="font-size: 1rem;">Try different keywords or browse categories above.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== STILL HAVE QUESTIONS? SUPPORT CARD ===== -->
+  <section>
+    <div class="faq-container">
+      <div class="support-card">
+        <h3>Still have questions?</h3>
+        <p>Our customer support team is here to help. Reach out and we'll get back to you within 24 hours.</p>
+        <div class="support-buttons">
+          <a href="{% url 'contact' %}" class="btn-ripple">Contact us</a>
+          <a href="mailto:support@quickcart.com" class="btn-ripple btn-outline">Email support</a>
+        </div>
+        <p style="margin-top: 30px; font-size: 0.9rem;">📞 Or call us: +1 (212) 555-7890 (Mon–Fri, 9am–6pm EST)</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- JavaScript for accordion, search, and filtering -->
+<script>
+  (function() {
+    // Intersection Observer for section reveals
+    const sections = document.querySelectorAll('section');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+    sections.forEach(section => observer.observe(section));
+    document.getElementById('faq-hero').classList.add('visible');
+
+    // ----- ACCORDION FUNCTIONALITY -----
+    const accordionItems = document.querySelectorAll('.accordion-item');
+    accordionItems.forEach(item => {
+      const header = item.querySelector('.accordion-header');
+      header.addEventListener('click', () => {
+        // close others if desired? (optional: keep only one open)
+        // for better UX, we allow multiple open, but you can modify
+        item.classList.toggle('active');
+      });
+    });
+
+    // ----- CATEGORY FILTERING (by pills) -----
+    const categoryPills = document.querySelectorAll('.category-pill');
+    const faqCategories = document.querySelectorAll('.faq-category');
+    const noResultsDiv = document.getElementById('noResults');
+
+    function filterByCategory(category) {
+      let anyVisible = false;
+      
+      faqCategories.forEach(cat => {
+        const catName = cat.getAttribute('data-category');
+        if (category === 'all' || catName === category) {
+          cat.style.display = 'block';
+          anyVisible = true;
+        } else {
+          cat.style.display = 'none';
+        }
+      });
+
+      // show/hide no results (though categories have content, but after search may hide)
+      // also for search we handle separately
+      if (!anyVisible) {
+        noResultsDiv.style.display = 'block';
+      } else {
+        noResultsDiv.style.display = 'none';
+      }
+    }
+
+    categoryPills.forEach(pill => {
+      pill.addEventListener('click', function() {
+        categoryPills.forEach(p => p.classList.remove('active'));
+        this.classList.add('active');
+        const category = this.getAttribute('data-category');
+        filterByCategory(category);
+        // also clear search input if any
+        document.getElementById('faqSearch').value = '';
+        filterBySearch(''); // reset search
+      });
+    });
+
+    // ----- SEARCH FUNCTIONALITY -----
+    const searchInput = document.getElementById('faqSearch');
+    const allQuestions = document.querySelectorAll('.accordion-item');
+
+    function filterBySearch(term) {
+      term = term.toLowerCase().trim();
+      let anyMatch = false;
+
+      // first show all categories (based on active category filter)
+      const activeCategory = document.querySelector('.category-pill.active').getAttribute('data-category');
+      filterByCategory(activeCategory); // ensure categories are shown/hidden
+
+      // now filter questions within visible categories
+      allQuestions.forEach(q => {
+        const questionText = q.querySelector('.question').innerText.toLowerCase();
+        const answerText = q.querySelector('.accordion-content').innerText.toLowerCase();
+        const matches = questionText.includes(term) || answerText.includes(term);
+        
+        if (term === '') {
+          q.style.display = 'block';
+          anyMatch = true;
+        } else {
+          if (matches) {
+            q.style.display = 'block';
+            anyMatch = true;
+          } else {
+            q.style.display = 'none';
+          }
+        }
+      });
+
+      // check if any question visible in each category, else hide category
+      faqCategories.forEach(cat => {
+        const visibleQuestions = cat.querySelectorAll('.accordion-item[style="display: block;"]');
+        if (visibleQuestions.length === 0 && term !== '') {
+          cat.style.display = 'none';
+        }
+      });
+
+      // show no results message if needed
+      const anyVisibleQuestion = Array.from(allQuestions).some(q => q.style.display !== 'none');
+      if (!anyVisibleQuestion && term !== '') {
+        noResultsDiv.style.display = 'block';
+      } else {
+        noResultsDiv.style.display = 'none';
+      }
+    }
+
+    searchInput.addEventListener('input', function() {
+      filterBySearch(this.value);
+    });
+
+    // initialize
+    filterByCategory('all');
+  })();
+</script>
+
+<!-- extra style tweaks -->
+<style>
+  .accordion-item.active .accordion-header .icon {
+    transform: rotate(45deg);
+  }
+  .accordion-header .icon {
+    font-size: 2rem;
+    line-height: 1;
+  }
+  .no-results {
+    transition: all 0.3s;
+  }
+  .faq-category {
+    transition: opacity 0.3s;
+  }
+</style>
+
+{% endblock %}

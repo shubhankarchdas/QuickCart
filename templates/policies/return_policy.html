@@ -1,5 +1,574 @@
-<h1>Return Policy</h1>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
 
-<p>You can return products within 7 days of delivery.</p>
-<p>Items must be unused and in original packaging.</p>
-<p>Refunds are processed within 5-7 business days.</p>
+<!-- ===== MODERN RETURN POLICY PAGE ===== -->
+<!-- For QuickCart fashion e‑commerce: clean, organized, with step-by-step return process and animations -->
+
+<style>
+  /* ----------------------------------------------
+     GLOBAL STYLES & VARIABLES (matching all other pages)
+     ---------------------------------------------- */
+  :root {
+    --primary: #2c2c2c;
+    --secondary: #8b7355;
+    --accent: #d4af37;
+    --light: #f9f6f2;
+    --white: #ffffff;
+    --font-serif: 'Playfair Display', serif;
+    --font-sans: 'Montserrat', sans-serif;
+    --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    --shadow-sm: 0 10px 30px rgba(0, 0, 0, 0.03);
+    --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.08);
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
+
+  .return-page {
+    overflow-x: hidden;
+    background-color: var(--white);
+    font-family: var(--font-sans);
+    color: var(--primary);
+  }
+
+  /* section reveal animation */
+  section {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .return-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 5%;
+  }
+
+  /* section titles */
+  .section-title {
+    font-family: var(--font-serif);
+    font-size: 2.8rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 80px;
+    height: 3px;
+    background: var(--secondary);
+    transition: width 0.4s ease;
+  }
+
+  .section-title:hover::after {
+    width: 150px;
+  }
+
+  /* policy cards */
+  .policy-card {
+    background: var(--white);
+    border-radius: 30px;
+    padding: 35px;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    height: 100%;
+    border: 1px solid rgba(0,0,0,0.02);
+  }
+
+  .policy-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .policy-icon {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    display: inline-block;
+    background: var(--light);
+    width: 70px;
+    height: 70px;
+    line-height: 70px;
+    text-align: center;
+    border-radius: 20px;
+  }
+
+  /* step by step process */
+  .step-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin: 40px 0;
+    counter-reset: step-counter;
+  }
+
+  .step-item {
+    flex: 1 1 200px;
+    background: var(--light);
+    border-radius: 30px;
+    padding: 30px 25px;
+    position: relative;
+    transition: var(--transition);
+    counter-increment: step-counter;
+  }
+
+  .step-item:hover {
+    transform: translateY(-8px);
+    background: var(--white);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .step-item::before {
+    content: counter(step-counter);
+    position: absolute;
+    top: -15px;
+    left: 25px;
+    background: var(--secondary);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.3rem;
+    box-shadow: 0 5px 15px rgba(139, 115, 85, 0.3);
+  }
+
+  .step-item h3 {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    margin: 20px 0 15px;
+  }
+
+  /* notice boxes */
+  .notice-box {
+    background: var(--light);
+    border-left: 4px solid var(--secondary);
+    padding: 25px 30px;
+    border-radius: 20px;
+    margin: 30px 0;
+  }
+
+  .notice-box.warning {
+    border-left-color: var(--accent);
+    background: #fff9f0;
+  }
+
+  .notice-box.success {
+    border-left-color: #28a745;
+    background: #f0fff4;
+  }
+
+  /* table styles */
+  .return-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 30px 0;
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .return-table th {
+    background: var(--primary);
+    color: white;
+    font-weight: 500;
+    padding: 18px 15px;
+    text-align: left;
+    font-size: 1.1rem;
+  }
+
+  .return-table td {
+    padding: 16px 15px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .return-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .return-table tr:hover td {
+    background: var(--light);
+  }
+
+  .btn-ripple {
+    display: inline-block;
+    padding: 16px 38px;
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    border-radius: 40px;
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition);
+    border: 1px solid transparent;
+    z-index: 1;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+
+  .btn-ripple::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+    z-index: -1;
+  }
+
+  .btn-ripple:hover {
+    background: var(--secondary);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-ripple:hover::after {
+    width: 300px;
+    height: 300px;
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+  }
+
+  .btn-outline:hover {
+    background: var(--primary);
+    color: white;
+  }
+
+  /* responsive */
+  @media (max-width: 768px) {
+    .section-title {
+      font-size: 2.2rem;
+    }
+    .return-table {
+      font-size: 0.9rem;
+    }
+    .return-table th,
+    .return-table td {
+      padding: 12px 8px;
+    }
+    .step-item::before {
+      left: 15px;
+    }
+  }
+</style>
+
+<div class="return-page">
+
+  <!-- ===== HERO SECTION ===== -->
+  <section id="return-hero" style="padding: 80px 0 40px; text-align: center;">
+    <div class="return-container">
+      <span style="font-size: 1.1rem; letter-spacing: 4px; color: var(--secondary); text-transform: uppercase;">hassle-free returns</span>
+      <h1 class="section-title" style="font-size: 4rem; display: block; text-align: center; margin: 20px 0;">Return policy</h1>
+      <p style="font-size: 1.2rem; color: #555; max-width: 700px; margin: 0 auto;">We want you to love your purchase. If something isn't right, our 30-day return policy makes it easy to send items back for a refund or exchange.</p>
+    </div>
+  </section>
+
+  <!-- ===== RETURN HIGHLIGHTS CARDS ===== -->
+  <section style="padding: 30px 0;">
+    <div class="return-container">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px;">
+        
+        <div class="policy-card" style="text-align: center;">
+          <div class="policy-icon">🔄</div>
+          <h3 style="font-family: var(--font-serif); font-size: 1.6rem; margin-bottom: 10px;">30-day returns</h3>
+          <p style="color: #555;">You have 30 days from delivery to initiate a return. Most items qualify for free return shipping.</p>
+        </div>
+
+        <div class="policy-card" style="text-align: center;">
+          <div class="policy-icon">💰</div>
+          <h3 style="font-family: var(--font-serif); font-size: 1.6rem; margin-bottom: 10px;">Full refund</h3>
+          <p style="color: #555;">Once we receive your return, we'll issue a refund to your original payment method within 5 business days.</p>
+        </div>
+
+        <div class="policy-card" style="text-align: center;">
+          <div class="policy-icon">🔄</div>
+          <h3 style="font-family: var(--font-serif); font-size: 1.6rem; margin-bottom: 10px;">Easy exchanges</h3>
+          <p style="color: #555;">Need a different size or color? Return for a refund and place a new order – it's the fastest way.</p>
+        </div>
+
+        <div class="policy-card" style="text-align: center;">
+          <div class="policy-icon">🏷️</div>
+          <h3 style="font-family: var(--font-serif); font-size: 1.6rem; margin-bottom: 10px;">Final sale items</h3>
+          <p style="color: #555;">Some marked-down items are final sale and cannot be returned. Check product page for details.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== STEP-BY-STEP RETURN PROCESS ===== -->
+  <section style="padding: 50px 0;">
+    <div class="return-container">
+      <h2 class="section-title">How to return an item</h2>
+      <p style="margin-bottom: 20px; color: #555;">Follow these simple steps to initiate your return:</p>
+
+      <div class="step-container">
+        <div class="step-item">
+          <h3>Log into your account</h3>
+          <p style="color: #555;">Go to "My Orders" and find the order containing the item you wish to return. Click "Return Items".</p>
+        </div>
+        <div class="step-item">
+          <h3>Select items & reason</h3>
+          <p style="color: #555;">Choose which items you're returning and select a reason. This helps us improve.</p>
+        </div>
+        <div class="step-item">
+          <h3>Print return label</h3>
+          <p style="color: #555;">Download and print your prepaid return shipping label. Pack your items securely.</p>
+        </div>
+        <div class="step-item">
+          <h3>Ship & track</h3>
+          <p style="color: #555;">Drop off at any carrier location. You'll receive email updates when we process your return.</p>
+        </div>
+      </div>
+
+      <div class="notice-box success" style="margin-top: 20px;">
+        <p style="font-weight: 500;">💡 <strong>No account?</strong> You can also initiate a return by contacting our support team at <a href="mailto:returns@quickcart.com" style="color: var(--secondary);">returns@quickcart.com</a> with your order number.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== RETURN CONDITIONS TABLE ===== -->
+  <section style="padding: 40px 0;">
+    <div class="return-container">
+      <h2 class="section-title">Return conditions</h2>
+      <p style="margin-bottom: 20px; color: #555;">To ensure a smooth return process, please note the following requirements:</p>
+
+      <table class="return-table">
+        <thead>
+          <tr>
+            <th>Condition</th>
+            <th>Status</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Item unworn/unwashed</strong></td>
+            <td><span style="color: #28a745;">✓ Required</span></td>
+            <td>Items must be in original condition with no signs of wear, stains, or odor.</td>
+          </tr>
+          <tr>
+            <td><strong>Original tags attached</strong></td>
+            <td><span style="color: #28a745;">✓ Required</span></td>
+            <td>All tags must be intact and attached to the garment.</td>
+          </tr>
+          <tr>
+            <td><strong>Original packaging</strong></td>
+            <td><span style="color: #ffc107;">⚠️ Recommended</span></td>
+            <td>Please use the original packaging if possible, or any sturdy box/envelope.</td>
+          </tr>
+          <tr>
+            <td><strong>Return window</strong></td>
+            <td><span style="color: #28a745;">✓ 30 days</span></td>
+            <td>Returns must be initiated within 30 days of delivery date.</td>
+          </tr>
+          <tr>
+            <td><strong>Receipt/invoice</strong></td>
+            <td><span style="color: #28a745;">✓ Included</span></td>
+            <td>Include the packing slip or a note with your order number inside the package.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== NON-RETURNABLE ITEMS ===== -->
+  <section style="padding: 30px 0;">
+    <div class="return-container">
+      <div class="notice-box warning">
+        <h3 style="font-family: var(--font-serif); font-size: 2rem; margin-bottom: 15px;">🚫 Non-returnable items</h3>
+        <p style="margin-bottom: 15px;">The following items cannot be returned for hygiene or safety reasons:</p>
+        <ul style="list-style-type: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+          <li style="margin-bottom: 8px; display: flex; gap: 8px;"><span style="color: var(--secondary);">•</span> Intimates & lingerie (unless sealed)</li>
+          <li style="margin-bottom: 8px; display: flex; gap: 8px;"><span style="color: var(--secondary);">•</span> Swimwear (if hygiene seal is broken)</li>
+          <li style="margin-bottom: 8px; display: flex; gap: 8px;"><span style="color: var(--secondary);">•</span> Earrings & jewelry</li>
+          <li style="margin-bottom: 8px; display: flex; gap: 8px;"><span style="color: var(--secondary);">•</span> Gift cards</li>
+          <li style="margin-bottom: 8px; display: flex; gap: 8px;"><span style="color: var(--secondary);">•</span> Final sale items (marked clearly)</li>
+          <li style="margin-bottom: 8px; display: flex; gap: 8px;"><span style="color: var(--secondary);">•</span> Customized or personalized items</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== REFUND TIMELINE & PROCESS ===== -->
+  <section style="padding: 50px 0;">
+    <div class="return-container">
+      <div style="display: flex; flex-wrap: wrap; gap: 40px;">
+        <div style="flex: 1 1 300px;">
+          <h2 class="section-title">Refund timeline</h2>
+          <p style="margin-bottom: 20px; color: #555;">Once we receive your return, here's what to expect:</p>
+          
+          <div style="background: var(--light); border-radius: 30px; padding: 30px;">
+            <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
+              <div style="background: var(--secondary); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">1</div>
+              <div><strong>Inspection</strong> (1–2 business days)</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
+              <div style="background: var(--secondary); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">2</div>
+              <div><strong>Refund processing</strong> (2–3 business days)</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 20px;">
+              <div style="background: var(--secondary); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">3</div>
+              <div><strong>Bank posting</strong> (2–5 business days, varies by bank)</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex: 1 1 300px;">
+          <div class="policy-card" style="height: 100%;">
+            <h3 style="font-family: var(--font-serif); font-size: 1.8rem; margin-bottom: 20px;">💵 Refund methods</h3>
+            <p style="color: #555; margin-bottom: 20px;">Refunds are issued to the original payment method:</p>
+            <ul style="list-style-type: none; padding: 0;">
+              <li style="margin-bottom: 15px; display: flex; gap: 10px;"><span style="color: var(--secondary);">•</span> <strong>Credit/debit cards:</strong> 5–10 business days</li>
+              <li style="margin-bottom: 15px; display: flex; gap: 10px;"><span style="color: var(--secondary);">•</span> <strong>PayPal:</strong> 2–3 business days</li>
+              <li style="margin-bottom: 15px; display: flex; gap: 10px;"><span style="color: var(--secondary);">•</span> <strong>Razorpay/UPI:</strong> 3–5 business days</li>
+              <li style="margin-bottom: 15px; display: flex; gap: 10px;"><span style="color: var(--secondary);">•</span> <strong>Store credit:</strong> Instant (if you choose this option)</li>
+            </ul>
+            <p style="color: #777; font-size: 0.9rem; margin-top: 20px;">You'll receive an email confirmation when your refund is processed.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== EXCHANGE INFORMATION ===== -->
+  <section style="padding: 40px 0;">
+    <div class="return-container">
+      <div style="background: var(--light); border-radius: 40px; padding: 40px;">
+        <div style="display: flex; flex-wrap: wrap; gap: 30px; align-items: center;">
+          <div style="flex: 1 1 250px;">
+            <h2 style="font-family: var(--font-serif); font-size: 2.5rem; margin-bottom: 15px;">Want to exchange?</h2>
+            <p style="color: #555; margin-bottom: 20px;">We don't offer direct exchanges, but here's the fastest way to get the item you want:</p>
+            <ol style="color: #555; line-height: 1.8;">
+              <li>Return the original item for a refund (free return shipping)</li>
+              <li>Place a new order for the desired size/color</li>
+              <li>You'll get your refund faster, and we'll ship your new item right away</li>
+            </ol>
+          </div>
+          <div style="flex: 0 0 auto;">
+            <a href="{% url 'store' %}" class="btn-ripple">Shop now →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== INTERNATIONAL RETURNS ===== -->
+  <section style="padding: 40px 0;">
+    <div class="return-container">
+      <div class="policy-card">
+        <h3 style="font-family: var(--font-serif); font-size: 2rem; margin-bottom: 20px;">🌍 International returns</h3>
+        <p style="color: #555; margin-bottom: 20px;">For customers outside the United States:</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+          <div>
+            <h4 style="font-size: 1.2rem; margin-bottom: 10px;">Return shipping</h4>
+            <p style="color: #555;">International customers are responsible for return shipping costs unless the item was defective or incorrect.</p>
+          </div>
+          <div>
+            <h4 style="font-size: 1.2rem; margin-bottom: 10px;">Customs & duties</h4>
+            <p style="color: #555;">We cannot refund any customs duties or taxes paid. Please check with your local customs office.</p>
+          </div>
+          <div>
+            <h4 style="font-size: 1.2rem; margin-bottom: 10px;">Processing time</h4>
+            <p style="color: #555;">International returns may take up to 15 business days to reach us. Refunds will be processed upon receipt.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ SNIPPET ===== -->
+  <section style="padding: 30px 0;">
+    <div class="return-container">
+      <h2 class="section-title" style="display: block; text-align: center;">Common return questions</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top: 40px;">
+        
+        <div style="background: var(--light); border-radius: 25px; padding: 25px;">
+          <h4 style="font-size: 1.3rem; margin-bottom: 10px;">What if I received a defective item?</h4>
+          <p style="color: #555;">We're sorry! Please contact us immediately with photos, and we'll provide a prepaid return label and issue a full refund or replacement.</p>
+        </div>
+
+        <div style="background: var(--light); border-radius: 25px; padding: 25px;">
+          <h4 style="font-size: 1.3rem; margin-bottom: 10px;">Can I return a gift?</h4>
+          <p style="color: #555;">Yes, but refunds will be issued as store credit to the gift recipient unless the original payment method is provided.</p>
+        </div>
+
+        <div style="background: var(--light); border-radius: 25px; padding: 25px;">
+          <h4 style="font-size: 1.3rem; margin-bottom: 10px;">Do I need the original box?</h4>
+          <p style="color: #555;">No, any sturdy box or envelope works. Just ensure items are well-protected and include your order number.</p>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 30px;">
+        <a href="{% url 'faq' %}" class="btn-ripple btn-outline">View all FAQs →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT SUPPORT SECTION ===== -->
+  <section style="padding: 60px 0 80px;">
+    <div class="return-container">
+      <div style="background: linear-gradient(135deg, #2c2c2c 0%, #3a3a3a 100%); border-radius: 60px; padding: 60px 40px; text-align: center; color: white;">
+        <h2 style="font-family: var(--font-serif); font-size: 2.8rem; margin-bottom: 20px;">Need help with a return?</h2>
+        <p style="opacity: 0.9; max-width: 600px; margin: 0 auto 30px; font-size: 1.2rem;">Our returns team is here to assist with any questions or issues.</p>
+        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+          <a href="{% url 'contact' %}" class="btn-ripple" style="background: var(--secondary);">Contact support</a>
+          <a href="mailto:returns@quickcart.com" class="btn-ripple btn-outline" style="border-color: white; color: white;">Email returns team</a>
+        </div>
+        <p style="margin-top: 30px; opacity: 0.7;">📧 returns@quickcart.com  |  📞 +1 (212) 555-7890</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Intersection Observer for reveal animations -->
+<script>
+  (function() {
+    const sections = document.querySelectorAll('section');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+    
+    sections.forEach(section => observer.observe(section));
+    document.getElementById('return-hero').classList.add('visible');
+  })();
+</script>
+
+<style>
+  .return-table tr:hover td {
+    background: var(--light);
+    transition: background 0.2s;
+  }
+  .policy-card, .step-item {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+</style>
+
+{% endblock %}

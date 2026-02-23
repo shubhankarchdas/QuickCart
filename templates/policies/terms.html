@@ -1,4 +1,634 @@
-<h1>Terms & Conditions</h1>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
 
-<p>By using our website, you agree to our terms.</p>
-<p>We reserve the right to update policies anytime.</p>
+<!-- ===== MODERN TERMS & CONDITIONS PAGE ===== -->
+<!-- For QuickCart fashion e‑commerce: clear, transparent, with organized sections and animations -->
+
+<style>
+  /* ----------------------------------------------
+     GLOBAL STYLES & VARIABLES (matching all other pages)
+     ---------------------------------------------- */
+  :root {
+    --primary: #2c2c2c;
+    --secondary: #8b7355;
+    --accent: #d4af37;
+    --light: #f9f6f2;
+    --white: #ffffff;
+    --font-serif: 'Playfair Display', serif;
+    --font-sans: 'Montserrat', sans-serif;
+    --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    --shadow-sm: 0 10px 30px rgba(0, 0, 0, 0.03);
+    --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.08);
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
+
+  .terms-page {
+    overflow-x: hidden;
+    background-color: var(--white);
+    font-family: var(--font-sans);
+    color: var(--primary);
+  }
+
+  /* section reveal animation */
+  section {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .terms-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 5%;
+  }
+
+  /* section titles */
+  .section-title {
+    font-family: var(--font-serif);
+    font-size: 2.8rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 80px;
+    height: 3px;
+    background: var(--secondary);
+    transition: width 0.4s ease;
+  }
+
+  .section-title:hover::after {
+    width: 150px;
+  }
+
+  /* terms cards for sections */
+  .terms-section {
+    margin-bottom: 40px;
+    scroll-margin-top: 30px;
+  }
+
+  .section-heading {
+    font-family: var(--font-serif);
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-heading .icon {
+    font-size: 2rem;
+    background: var(--light);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .terms-card {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 30px;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    border: 1px solid rgba(0,0,0,0.02);
+    margin-bottom: 20px;
+  }
+
+  .terms-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-3px);
+  }
+
+  .terms-card p {
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 15px;
+  }
+
+  .terms-card ul, .terms-card ol {
+    color: #555;
+    line-height: 1.8;
+    padding-left: 20px;
+    margin-bottom: 15px;
+  }
+
+  .terms-card li {
+    margin-bottom: 8px;
+  }
+
+  .terms-card strong {
+    color: var(--primary);
+  }
+
+  /* highlight boxes */
+  .highlight-box {
+    background: var(--light);
+    border-radius: 20px;
+    padding: 25px;
+    margin: 30px 0;
+    border-left: 4px solid var(--secondary);
+  }
+
+  .highlight-box.warning {
+    border-left-color: var(--accent);
+    background: #fff9f0;
+  }
+
+  /* table of contents */
+  .toc-card {
+    background: var(--light);
+    border-radius: 30px;
+    padding: 35px;
+    margin-bottom: 50px;
+    position: sticky;
+    top: 100px;
+    z-index: 10;
+  }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+  }
+
+  .toc-link {
+    display: block;
+    padding: 12px 18px;
+    background: var(--white);
+    border-radius: 50px;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+    border: 1px solid transparent;
+    text-align: center;
+  }
+
+  .toc-link:hover {
+    background: var(--secondary);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  /* last updated badge */
+  .last-updated {
+    display: inline-block;
+    background: var(--secondary);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    margin-bottom: 30px;
+  }
+
+  .btn-ripple {
+    display: inline-block;
+    padding: 14px 32px;
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    border-radius: 40px;
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition);
+    border: 1px solid transparent;
+    z-index: 1;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+
+  .btn-ripple::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+    z-index: -1;
+  }
+
+  .btn-ripple:hover {
+    background: var(--secondary);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-ripple:hover::after {
+    width: 300px;
+    height: 300px;
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+  }
+
+  .btn-outline:hover {
+    background: var(--primary);
+    color: white;
+  }
+
+  /* responsive */
+  @media (max-width: 768px) {
+    .section-title {
+      font-size: 2.2rem;
+    }
+    .section-heading {
+      font-size: 1.5rem;
+    }
+    .toc-card {
+      padding: 25px;
+      position: relative;
+      top: 0;
+    }
+  }
+</style>
+
+<div class="terms-page">
+
+  <!-- ===== HERO SECTION ===== -->
+  <section id="terms-hero" style="padding: 80px 0 40px; text-align: center;">
+    <div class="terms-container">
+      <span style="font-size: 1.1rem; letter-spacing: 4px; color: var(--secondary); text-transform: uppercase;">legal agreement</span>
+      <h1 class="section-title" style="font-size: 4rem; display: block; text-align: center; margin: 20px 0;">Terms & conditions</h1>
+      <p style="font-size: 1.2rem; color: #555; max-width: 700px; margin: 0 auto;">Please read these terms carefully before using our website or making a purchase. By using QuickCart, you agree to be bound by these terms.</p>
+      
+      <div class="last-updated" style="margin-top: 30px;">
+        Last updated: March 15, 2025
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TABLE OF CONTENTS (sticky on desktop) ===== -->
+  <section style="padding: 20px 0;">
+    <div class="terms-container">
+      <div class="toc-card">
+        <h2 style="font-family: var(--font-serif); font-size: 2rem; margin-bottom: 10px;">📋 Table of contents</h2>
+        <p style="color: #555; margin-bottom: 20px;">Jump to a specific section:</p>
+        <div class="toc-grid">
+          <a href="#acceptance" class="toc-link">1. Acceptance</a>
+          <a href="#account" class="toc-link">2. Account terms</a>
+          <a href="#orders" class="toc-link">3. Orders & payments</a>
+          <a href="#pricing" class="toc-link">4. Pricing & availability</a>
+          <a href="#shipping" class="toc-link">5. Shipping & delivery</a>
+          <a href="#returns" class="toc-link">6. Returns & refunds</a>
+          <a href="#intellectual" class="toc-link">7. Intellectual property</a>
+          <a href="#conduct" class="toc-link">8. User conduct</a>
+          <a href="#disclaimers" class="toc-link">9. Disclaimers</a>
+          <a href="#limitation" class="toc-link">10. Limitation of liability</a>
+          <a href="#indemnification" class="toc-link">11. Indemnification</a>
+          <a href="#termination" class="toc-link">12. Termination</a>
+          <a href="#governing" class="toc-link">13. Governing law</a>
+          <a href="#changes" class="toc-link">14. Changes to terms</a>
+          <a href="#contact" class="toc-link">15. Contact us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TERMS & CONDITIONS SECTIONS ===== -->
+  <section style="padding: 20px 0 60px;">
+    <div class="terms-container">
+
+      <!-- 1. ACCEPTANCE OF TERMS -->
+      <div id="acceptance" class="terms-section">
+        <h2 class="section-heading">
+          <span class="icon">📌</span>
+          1. Acceptance of terms
+        </h2>
+        <div class="terms-card">
+          <p>Welcome to QuickCart ("Company," "we," "our," "us"). These Terms and Conditions ("Terms") govern your use of our website, mobile application, and services (collectively, the "Platform"). By accessing or using our Platform, you agree to be bound by these Terms and our Privacy Policy.</p>
+          <p>If you do not agree with any part of these Terms, you must not use our Platform. We may modify these Terms at any time, and your continued use constitutes acceptance of the updated Terms.</p>
+          <p><strong>Eligibility:</strong> You must be at least 18 years old or have parental consent to use our Platform. By using QuickCart, you represent that you have the legal capacity to enter into binding contracts.</p>
+        </div>
+      </div>
+
+      <!-- 2. ACCOUNT REGISTRATION -->
+      <div id="account" class="terms-section">
+        <h2 class="section-heading">
+          <span class="icon">👤</span>
+          2. Account registration and security
+        </h2>
+        <div class="terms-card">
+          <p>To access certain features, you may need to create an account. You agree to:</p>
+          <ul>
+            <li>Provide accurate, current, and complete information</li>
+            <li>Maintain and update your information promptly</li>
+            <li>Keep your password confidential and not share it with others</li>
+            <li>Notify us immediately of any unauthorized account use</li>
+            <li>Accept responsibility for all activities under your account</li>
+          </ul>
+          <p>We reserve the right to suspend or terminate accounts that violate these terms or provide false information.</p>
+        </div>
+      </div>
+
+      <!-- 3. ORDERS AND PAYMENTS -->
+      <div id="orders" class="terms-section">
+        <h2 class="section-heading">
+          <span class="icon">🛍️</span>
+          3. Orders and payments
+        </h2>
+        <div class="terms-card">
+          <p><strong>Order acceptance:</strong> When you place an order, you make an offer to purchase products. We may accept or decline orders for any reason, including product unavailability, payment issues, or suspected fraud. We will confirm acceptance by sending an order confirmation email.</p>
+          <p><strong>Payment:</strong> All payments are processed securely through Razorpay. By providing payment information, you represent that you are authorized to use that payment method. Prices are in USD unless otherwise stated.</p>
+          <p><strong>Order cancellation:</strong> We reserve the right to cancel any order for reasons including but not limited to: pricing errors, stock unavailability, or fraudulent activity. If we cancel your order after payment, we will issue a full refund.</p>
+          <div class="highlight-box" style="margin-top: 15px;">
+            <p style="margin-bottom: 0;"><strong>Note:</strong> Some orders may require additional verification before processing.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. PRICING AND AVAILABILITY -->
+      <div id="pricing" class="terms-section">
+        <h2 class="section-heading">
+          <span class="icon">💰</span>
+          4. Pricing and product availability
+        </h2>
+        <div class="terms-card">
+          <p><strong>Pricing:</strong> We strive to display accurate prices, but errors may occur. If we discover a pricing error after you've placed an order, we will contact you to either confirm at the correct price or cancel the order with a full refund.</p>
+          <p><strong>Availability:</strong> Product availability is subject to change without notice. We do not guarantee that items shown on the website are in stock at the time of order. If an item becomes unavailable after you order, we will notify you and issue a refund.</p>
+          <p><strong>Sales tax:</strong> Applicable sales tax will be added to orders based on your shipping address and local regulations.</p>
+        </div>
+      </div>
+
+      <!-- 5. SHIPPING AND DELIVERY -->
+      <div id="shipping" class="terms-section">
+        <h2 class="section-heading">
+          <span class="icon">🚚</span>
+          5. Shipping and delivery
+        </h2>
+        <div class="terms-card">
+          <p><strong>Shipping policy:</strong> We ship to addresses within the United States and select international destinations. Shipping costs and estimated delivery times are provided at checkout and in our <a href="" style="color: var(--secondary);">Shipping Policy</a>.</p>
+          <p><strong>Risk of loss:</strong> Once your order is handed to the carrier, risk of loss passes to you. We are not responsible for delays caused by carriers or customs.</p>
+          <p><strong>Incorrect addresses:</strong> Please ensure your shipping address is accurate. We are not responsible for packages delivered to incorrect addresses provided by you.</p>
+        </div>
+      </div>
+
+      <!-- 6. RETURNS AND REFUNDS -->
+      <div id="returns" class="terms-section">
+        <h2 class="-section-heading">
+          <span class="icon">🔄</span>
+          6. Returns and refunds
+        </h2>
+        <div class="terms-card">
+          <p>Our <a href="{% url 'return_policy' %}" style="color: var(--secondary);">Return Policy</a> is incorporated into these Terms. Key points:</p>
+          <ul>
+            <li>You have 30 days from delivery to initiate a return</li>
+            <li>Items must be unworn, unwashed, with original tags</li>
+            <li>Final sale items cannot be returned</li>
+            <li>Refunds are issued to the original payment method</li>
+            <li>Return shipping is free for most US orders</li>
+          </ul>
+          <p>We reserve the right to refuse returns that do not comply with our policy.</p>
+        </div>
+      </div>
+
+      <!-- 7. INTELLECTUAL PROPERTY -->
+      <div id="intellectual" class="terms-section">
+        <h2 class="section-heading">
+          <span class="icon">©️</span>
+          7. Intellectual property rights
+        </h2>
+        <div class="terms-card">
+          <p>All content on our Platform, including but not limited to text, graphics, logos, images, product descriptions, and software, is the property of QuickCart or our licensors and is protected by copyright, trademark, and other intellectual property laws.</p>
+          <p>You may not:</p>
+          <ul>
+            <li>Reproduce, distribute, or modify any content without written permission</li>
+            <li>Use our trademarks or trade dress without prior consent</li>
+            <li>Copy or imitate any part of our website design</li>
+            <li>Use automated means to access or scrape our content</li>
+          </ul>
+          <p>You retain ownership of any content you submit (reviews, comments), but you grant us a worldwide, royalty-free license to use, reproduce, and display that content on our Platform.</p>
+        </div>
+      </div>
+
+      <!-- 8. USER CONDUCT -->
+      <div id="conduct" class="terms-section">
+        <h2 class="section-heading">
+          <span class="icon">⚖️</span>
+          8. User conduct and prohibited activities
+        </h2>
+        <div class="terms-card">
+          <p>When using our Platform, you agree not to:</p>
+          <ul>
+            <li>Violate any laws or regulations</li>
+            <li>Infringe upon others' rights</li>
+            <li>Post false, misleading, or defamatory content</li>
+            <li>Upload viruses or malicious code</li>
+            <li>Attempt unauthorized access to our systems</li>
+            <li>Interfere with other users' enjoyment of the Platform</li>
+            <li>Use our Platform for commercial purposes without written consent</li>
+            <li>Engage in any activity that could harm our business or reputation</li>
+          </ul>
+          <p>We reserve the right to remove any user content that violates these terms and to suspend or terminate accounts of repeat offenders.</p>
+        </div>
+      </div>
+
+      <!-- 9. DISCLAIMERS -->
+      <div id="disclaimers" class="terms-section">
+        <h2 class="section-heading">
+          <span class="icon">⚠️</span>
+          9. Disclaimers and warranties
+        </h2>
+        <div class="terms-card">
+          <p>OUR PLATFORM AND PRODUCTS ARE PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO:</p>
+          <ul>
+            <li>Warranties of merchantability or fitness for a particular purpose</li>
+            <li>Warranties that the Platform will be uninterrupted or error-free</li>
+            <li>Warranties regarding the accuracy or reliability of content</li>
+          </ul>
+          <p>We do not warrant that product descriptions, colors, or images are completely accurate. Actual products may vary slightly due to monitor settings and manufacturing variations.</p>
+          <p>Some jurisdictions do not allow the exclusion of implied warranties, so these disclaimers may not apply to you.</p>
+        </div>
+      </div>
+
+      <!-- 10. LIMITATION OF LIABILITY -->
+      <div id="limitation" class="terms-section">
+        <h2 class="section-heading">
+          <span class="icon">🔨</span>
+          10. Limitation of liability
+        </h2>
+        <div class="terms-card">
+          <p>TO THE MAXIMUM EXTENT PERMITTED BY LAW, QUICKCART AND ITS AFFILIATES, OFFICERS, EMPLOYEES, AND AGENTS SHALL NOT BE LIABLE FOR:</p>
+          <ul>
+            <li>INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES</li>
+            <li>LOSS OF PROFITS, REVENUE, OR DATA</li>
+            <li>DAMAGES ARISING FROM YOUR USE OR INABILITY TO USE THE PLATFORM</li>
+            <li>PRODUCTS OR SERVICES PURCHASED THROUGH THE PLATFORM</li>
+          </ul>
+          <p>OUR TOTAL LIABILITY TO YOU FOR ANY CLAIMS ARISING FROM THESE TERMS SHALL NOT EXCEED THE AMOUNT YOU PAID TO US FOR THE PRODUCTS GIVING RISE TO THE CLAIM.</p>
+          <div class="highlight-box warning" style="margin-top: 15px;">
+            <p style="margin-bottom: 0;"><strong>Some jurisdictions do not allow limitations of liability, so this may not apply to you.</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11. INDEMNIFICATION -->
+      <div id="indemnification" class="terms-section">
+        <h2 class="section-heading">
+          <span class="icon">🛡️</span>
+          11. Indemnification
+        </h2>
+        <div class="terms-card">
+          <p>You agree to indemnify, defend, and hold harmless QuickCart, its officers, directors, employees, and agents from any claims, damages, losses, liabilities, and expenses (including reasonable attorneys' fees) arising out of or related to:</p>
+          <ul>
+            <li>Your use of the Platform</li>
+            <li>Your violation of these Terms</li>
+            <li>Your violation of any third-party rights</li>
+            <li>Any content you submit to the Platform</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 12. TERMINATION -->
+      <div id="termination" class="terms-section">
+        <h2 class="section-heading">
+          <span class="icon">⛔</span>
+          12. Termination
+        </h2>
+        <div class="terms-card">
+          <p>We may terminate or suspend your account and access to the Platform at our sole discretion, without prior notice, for conduct that we believe violates these Terms or is harmful to other users, us, or third parties.</p>
+          <p>Upon termination, your right to use the Platform will immediately cease. Sections that by their nature should survive termination shall survive, including intellectual property, disclaimers, limitation of liability, and indemnification.</p>
+        </div>
+      </div>
+
+      <!-- 13. GOVERNING LAW -->
+      <div id="governing" class="terms-section">
+        <h2 class="section-heading">
+          <span class="icon">⚖️</span>
+          13. Governing law and dispute resolution
+        </h2>
+        <div class="terms-card">
+          <p>These Terms shall be governed by and construed in accordance with the laws of the State of New York, without regard to its conflict of law provisions.</p>
+          <p><strong>Dispute resolution:</strong> Any disputes arising from these Terms or your use of the Platform shall first be attempted to be resolved through informal negotiation. If not resolved within 30 days, disputes shall be submitted to binding arbitration in New York, NY, in accordance with the rules of the American Arbitration Association.</p>
+          <p>You agree to bring any claims in your individual capacity, not as a class action or representative proceeding.</p>
+        </div>
+      </div>
+
+      <!-- 14. CHANGES TO TERMS -->
+      <div id="changes" class="terms-section">
+        <h2 class="section-heading">
+          <span class="icon">📅</span>
+          14. Changes to terms
+        </h2>
+        <div class="terms-card">
+          <p>We reserve the right to update or modify these Terms at any time without prior notice. Changes will be effective immediately upon posting on the Platform. Your continued use of the Platform after any changes constitutes acceptance of the revised Terms.</p>
+          <p>We encourage you to review these Terms periodically. The "Last updated" date at the top of this page indicates when these Terms were last revised.</p>
+        </div>
+      </div>
+
+      <!-- 15. CONTACT INFORMATION -->
+      <div id="contact" class="terms-section">
+        <h2 class="section-heading">
+          <span class="icon">📞</span>
+          15. Contact information
+        </h2>
+        <div class="terms-card">
+          <p>If you have any questions about these Terms, please contact us:</p>
+          <ul style="list-style-type: none; padding-left: 0;">
+            <li style="margin-bottom: 12px;"><strong>📧 Email:</strong> <a href="mailto:legal@quickcart.com" style="color: var(--secondary);">legal@quickcart.com</a></li>
+            <li style="margin-bottom: 12px;"><strong>📞 Phone:</strong> +1 (212) 555-7890 (Mon–Fri, 9am–6pm EST)</li>
+            <li style="margin-bottom: 12px;"><strong>📬 Mail:</strong> QuickCart Inc., Attn: Legal Department, 23 Fashion Avenue, New York, NY 10001, USA</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ACKNOWLEDGMENT -->
+      <div class="terms-card" style="margin-top: 40px; background: var(--light);">
+        <h3 style="font-family: var(--font-serif); font-size: 1.8rem; margin-bottom: 15px;">✅ Acknowledgment</h3>
+        <p style="margin-bottom: 20px;">BY USING OUR PLATFORM, YOU ACKNOWLEDGE THAT YOU HAVE READ THESE TERMS AND CONDITIONS AND AGREE TO BE BOUND BY THEM.</p>
+        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+          <a href="#" class="btn-ripple">Download terms (PDF)</a>
+          <a href="{% url 'contact' %}" class="btn-ripple btn-outline">Contact legal team</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== COMPLIANCE BADGES ===== -->
+  <section style="padding: 30px 0 80px;">
+    <div class="terms-container">
+      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; align-items: center; opacity: 0.7;">
+        <span style="font-size: 1rem; letter-spacing: 1px;">📜 LEGAL COMPLIANCE</span>
+        <span style="font-size: 1rem;">⚖️ NEW YORK LAW</span>
+        <span style="font-size: 1rem;">🔒 BINDING ARBITRATION</span>
+        <span style="font-size: 1rem;">🌐 INTERNATIONAL USE</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Intersection Observer for reveal animations -->
+<script>
+  (function() {
+    const sections = document.querySelectorAll('section');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+    
+    sections.forEach(section => observer.observe(section));
+    document.getElementById('terms-hero').classList.add('visible');
+
+    // Smooth scroll for table of contents links
+    document.querySelectorAll('.toc-link').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  })();
+</script>
+
+<style>
+  .terms-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .toc-link {
+    transition: all 0.3s ease;
+  }
+  .section-heading .icon {
+    transition: transform 0.3s ease;
+  }
+  .section-heading:hover .icon {
+    transform: scale(1.1);
+  }
+  .highlight-box.warning {
+    border-left-width: 4px;
+  }
+</style>
+
+{% endblock %}

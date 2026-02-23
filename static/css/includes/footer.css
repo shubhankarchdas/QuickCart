@@ -1,5 +1,5 @@
     .section-footer {
-        background: linear-gradient(90deg, #0f2027, #203a43, #2c5364); /* dark teal shades */
+        background: radial-gradient(circle at right, #0b1c3a 0%, #000000 55%); /* dark teal shades */
 
     }
     .section-footer a {

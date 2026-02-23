@@ -1,3 +1,627 @@
-<h1>
-    blog
-</h1>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- ===== MODERN ANIMATED BLOG PAGE ===== -->
+<!-- For QuickCart fashion e‑commerce: responsive grid, category filters, featured posts, and smooth animations -->
+
+<style>
+  /* ----------------------------------------------
+     GLOBAL STYLES & VARIABLES (matching about/contact)
+     ---------------------------------------------- */
+  :root {
+    --primary: #2c2c2c;
+    --secondary: #8b7355;
+    --accent: #d4af37;
+    --light: #f9f6f2;
+    --white: #ffffff;
+    --font-serif: 'Playfair Display', serif;
+    --font-sans: 'Montserrat', sans-serif;
+    --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    --shadow-sm: 0 10px 30px rgba(0, 0, 0, 0.03);
+    --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.08);
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
+
+  .blog-page {
+    overflow-x: hidden;
+    background-color: var(--white);
+    font-family: var(--font-sans);
+    color: var(--primary);
+  }
+
+  /* section reveal animation */
+  section {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .blog-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 5%;
+  }
+
+  /* section titles */
+  .section-title {
+    font-family: var(--font-serif);
+    font-size: 2.8rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 80px;
+    height: 3px;
+    background: var(--secondary);
+    transition: width 0.4s ease;
+  }
+
+  .section-title:hover::after {
+    width: 150px;
+  }
+
+  /* blog cards */
+  .blog-card {
+    background: var(--white);
+    border-radius: 24px;
+    overflow: hidden;
+    transition: var(--transition);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(0,0,0,0.02);
+  }
+
+  .blog-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .blog-card-image {
+    height: 260px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .blog-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1s ease;
+  }
+
+  .blog-card:hover .blog-card-image img {
+    transform: scale(1.05);
+  }
+
+  .blog-card-content {
+    padding: 30px 25px 25px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .blog-category {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--secondary);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+
+  .blog-title {
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    line-height: 1.3;
+    margin-bottom: 15px;
+    font-weight: 600;
+    transition: color 0.3s;
+  }
+
+  .blog-title a {
+    color: var(--primary);
+    text-decoration: none;
+  }
+
+  .blog-title a:hover {
+    color: var(--secondary);
+  }
+
+  .blog-excerpt {
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 20px;
+    flex: 1;
+  }
+
+  .blog-meta {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 0.95rem;
+    color: #777;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    margin-top: auto;
+  }
+
+  .blog-meta img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .read-more {
+    color: var(--secondary);
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: gap 0.3s;
+  }
+
+  .read-more:hover {
+    gap: 10px;
+    color: var(--primary);
+  }
+
+  /* featured post (large card) */
+  .featured-card {
+    display: flex;
+    flex-wrap: wrap;
+    background: var(--light);
+    border-radius: 40px;
+    overflow: hidden;
+    margin-bottom: 60px;
+  }
+
+  .featured-image {
+    flex: 1 1 400px;
+    min-height: 400px;
+    overflow: hidden;
+  }
+
+  .featured-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s;
+  }
+
+  .featured-card:hover .featured-image img {
+    transform: scale(1.03);
+  }
+
+  .featured-content {
+    flex: 1 1 400px;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .featured-label {
+    background: var(--secondary);
+    color: white;
+    display: inline-block;
+    padding: 6px 18px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    align-self: flex-start;
+  }
+
+  .featured-content .blog-title {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+  }
+
+  /* category pills */
+  .category-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 40px 0 30px;
+    justify-content: center;
+  }
+
+  .category-pill {
+    padding: 10px 28px;
+    background: var(--light);
+    border-radius: 50px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--primary);
+    text-decoration: none;
+    transition: var(--transition);
+    border: 1px solid transparent;
+  }
+
+  .category-pill:hover,
+  .category-pill.active {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  /* newsletter signup */
+  .newsletter-box {
+    background: linear-gradient(135deg, #2c2c2c 0%, #3a3a3a 100%);
+    border-radius: 50px;
+    padding: 60px 40px;
+    color: white;
+    text-align: center;
+    margin: 80px 0;
+  }
+
+  .newsletter-box h3 {
+    font-family: var(--font-serif);
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+  }
+
+  .newsletter-box p {
+    opacity: 0.8;
+    max-width: 500px;
+    margin: 0 auto 30px;
+  }
+
+  .newsletter-form {
+    display: flex;
+    max-width: 500px;
+    margin: 0 auto;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .newsletter-input {
+    flex: 1 1 250px;
+    padding: 16px 25px;
+    border: none;
+    border-radius: 50px;
+    outline: none;
+    font-size: 1rem;
+  }
+
+  /* pagination */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 60px 0 20px;
+  }
+
+  .page-link {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--light);
+    color: var(--primary);
+    text-decoration: none;
+    transition: var(--transition);
+  }
+
+  .page-link:hover,
+  .page-link.active {
+    background: var(--primary);
+    color: white;
+  }
+
+  /* responsive */
+  @media (max-width: 768px) {
+    .section-title {
+      font-size: 2.2rem;
+    }
+    .featured-content {
+      padding: 30px;
+    }
+    .featured-content .blog-title {
+      font-size: 2rem;
+    }
+    .newsletter-box {
+      padding: 40px 20px;
+      border-radius: 30px;
+    }
+  }
+</style>
+
+<div class="blog-page">
+
+  <!-- ===== BLOG HERO ===== -->
+  <section id="blog-hero" style="padding: 60px 0 30px; text-align: center;">
+    <div class="blog-container">
+      <span style="font-size: 1.1rem; letter-spacing: 4px; color: var(--secondary); text-transform: uppercase;">the journal</span>
+      <h1 class="section-title" style="font-size: 4rem; display: block; text-align: center; margin: 20px 0;">QuickCart Stories</h1>
+      <p style="font-size: 1.2rem; color: #555; max-width: 600px; margin: 0 auto;">Fashion inspiration, style guides, behind‑the‑scenes, and sustainable living.</p>
+    </div>
+  </section>
+
+  <!-- ===== FEATURED POST ===== -->
+  <section style="padding: 30px 0 20px;">
+    <div class="blog-container">
+      <div class="featured-card">
+        <div class="featured-image">
+          <img src="{% static 'images/avatars/blog-featured.jpg' %}" alt="Featured post" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80'">
+        </div>
+        <div class="featured-content">
+          <span class="featured-label">editor's pick</span>
+          <div class="blog-category" style="color: var(--secondary);">sustainable fashion</div>
+          <h2 class="blog-title"><a href="">The Sustainable Style Guide: How to Build an Eco‑Conscious Wardrobe</a></h2>
+          <p class="blog-excerpt" style="font-size: 1.1rem;">From fabric choices to mindful shopping — we share practical tips to make your fashion choices kinder to the planet without compromising on style.</p>
+          <div class="blog-meta" style="border: none; padding: 0;">
+            <img src="{% static 'images/avatars/author1.jpg' %}" alt="author" onerror="this.onerror=null; this.src='https://randomuser.me/api/portraits/women/68.jpg'">
+            <span>Elena Rossi</span>
+            <span>•</span>
+            <span>5 min read</span>
+          </div>
+          <a href="" class="read-more" style="margin-top: 25px;">Read full story →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CATEGORY FILTERS ===== -->
+  <section>
+    <div class="blog-container">
+      <div class="category-filter">
+        <a href="?category=all" class="category-pill active">all posts</a>
+        <a href="?category=style" class="category-pill">style tips</a>
+        <a href="?category=trends" class="category-pill">trends</a>
+        <a href="?category=sustainable" class="category-pill">sustainable</a>
+        <a href="?category=behind-scenes" class="category-pill">behind the scenes</a>
+        <a href="?category=interviews" class="category-pill">interviews</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BLOG POSTS GRID ===== -->
+  <section style="padding: 20px 0;">
+    <div class="blog-container">
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 35px;">
+        
+        <!-- blog post 1 -->
+        <div class="blog-card">
+          <div class="blog-card-image">
+            <img src="{% static 'images/avatars/blog1.jpg' %}" alt="blog post" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80'">
+          </div>
+          <div class="blog-card-content">
+            <div class="blog-category">style tips</div>
+            <h3 class="blog-title"><a href="{">Capsule Wardrobe Essentials: 10 Pieces, Endless Outfits</a></h3>
+            <p class="blog-excerpt">Streamline your closet with versatile staples that transition from desk to dinner. Our stylist picks the must‑haves.</p>
+            <div class="blog-meta">
+              <img src="{% static 'images/avatars/author2.jpg' %}" alt="author" onerror="this.onerror=null; this.src='https://randomuser.me/api/portraits/men/32.jpg'">
+              <span>Marcus Chen</span>
+              <span>•</span>
+              <span>4 min read</span>
+            </div>
+            <a href="" class="read-more" style="margin-top: 15px;">Read more →</a>
+          </div>
+        </div>
+
+        <!-- blog post 2 -->
+        <div class="blog-card">
+          <div class="blog-card-image">
+            <img src="{% static 'images/avatars/blog2.jpg' %}" alt="blog post" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1539109136881-3be0616acf4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80'">
+          </div>
+          <div class="blog-card-content">
+            <div class="blog-category">trends</div>
+            <h3 class="blog-title"><a href="">Spring/Summer 2025: The Trends We're Loving</a></h3>
+            <p class="blog-excerpt">From bold prints to effortless linen, here's what's heating up this season. Plus how to style them on a budget.</p>
+            <div class="blog-meta">
+              <img src="{% static 'images/avatars/author3.jpg' %}" alt="author" onerror="this.onerror=null; this.src='https://randomuser.me/api/portraits/women/44.jpg'">
+              <span>Sofia Laurent</span>
+              <span>•</span>
+              <span>6 min read</span>
+            </div>
+            <a href="" class="read-more">Read more →</a>
+          </div>
+        </div>
+
+        <!-- blog post 3 -->
+        <div class="blog-card">
+          <div class="blog-card-image">
+            <img src="{% static 'images/avatars/blog3.jpg' %}" alt="blog post" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1558769132-cb1aea458c5e?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80'">
+          </div>
+          <div class="blog-card-content">
+            <div class="blog-category">sustainable</div>
+            <h3 class="blog-title"><a href="">5 Ethical Brands We're Partnering With</a></h3>
+            <p class="blog-excerpt">Meet the artisans and manufacturers behind our most loved collections. Transparency you can wear.</p>
+            <div class="blog-meta">
+              <img src="{% static 'images/avatars/author1.jpg' %}" alt="author" onerror="this.onerror=null; this.src='https://randomuser.me/api/portraits/women/68.jpg'">
+              <span>Elena Rossi</span>
+              <span>•</span>
+              <span>5 min read</span>
+            </div>
+            <a href="" class="read-more">Read more →</a>
+          </div>
+        </div>
+
+        <!-- blog post 4 -->
+        <div class="blog-card">
+          <div class="blog-card-image">
+            <img src="{% static 'images/avatars/blog4.jpg' %}" alt="blog post" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1469334031218-e382a71b716b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80'">
+          </div>
+          <div class="blog-card-content">
+            <div class="blog-category">behind the scenes</div>
+            <h3 class="blog-title"><a href="">A Day in the Life: Our Head Designer</a></h3>
+            <p class="blog-excerpt">Follow James as he sketches, sources fabrics, and brings a collection to life. Exclusive peek into the studio.</p>
+            <div class="blog-meta">
+              <img src="{% static 'images/avatars/team2.jpg' %}" alt="author" onerror="this.onerror=null; this.src='https://randomuser.me/api/portraits/men/46.jpg'">
+              <span>James Okafor</span>
+              <span>•</span>
+              <span>7 min read</span>
+            </div>
+            <a href="" class="read-more">Read more →</a>
+          </div>
+        </div>
+
+        <!-- blog post 5 -->
+        <div class="blog-card">
+          <div class="blog-card-image">
+            <img src="{% static 'images/avatars/blog5.jpg' %}" alt="blog post" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=634&q=80'">
+          </div>
+          <div class="blog-card-content">
+            <div class="blog-category">interviews</div>
+            <h3 class="blog-title"><a href="' %}">In Conversation: Creative Director Mia Chen</a></h3>
+            <p class="blog-excerpt">On finding inspiration, building a brand, and the future of fashion. Plus her personal style tips.</p>
+            <div class="blog-meta">
+              <img src="{% static 'images/avatars/team1.jpg' %}" alt="author" onerror="this.onerror=null; this.src='https://randomuser.me/api/portraits/women/63.jpg'">
+              <span>Mia Chen</span>
+              <span>•</span>
+              <span>8 min read</span>
+            </div>
+            <a href="' %}" class="read-more">Read more →</a>
+          </div>
+        </div>
+
+        <!-- blog post 6 -->
+        <div class="blog-card">
+          <div class="blog-card-image">
+            <img src="{% static 'images/avatars/blog6.jpg' %}" alt="blog post" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&auto=format&fit=crop&w=1351&q=80'">
+          </div>
+          <div class="blog-card-content">
+            <div class="blog-category">style tips</div>
+            <h3 class="blog-title"><a href="">How to Style Blazers for Any Occasion</a></h3>
+            <p class="blog-excerpt">From casual jeans to evening wear — the blazer is the ultimate transformer. Three easy looks.</p>
+            <div class="blog-meta">
+              <img src="{% static 'images/avatars/author2.jpg' %}" alt="author" onerror="this.onerror=null; this.src='https://randomuser.me/api/portraits/men/22.jpg'">
+              <span>Marcus Chen</span>
+              <span>•</span>
+              <span>4 min read</span>
+            </div>
+            <a href="" class="read-more">Read more →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== PAGINATION ===== -->
+      <div class="pagination">
+        <a href="#" class="page-link active">1</a>
+        <a href="#" class="page-link">2</a>
+        <a href="#" class="page-link">3</a>
+        <a href="#" class="page-link">4</a>
+        <a href="#" class="page-link">→</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== NEWSLETTER SECTION ===== -->
+  <section>
+    <div class="blog-container">
+      <div class="newsletter-box">
+        <h3>Stories straight to your inbox</h3>
+        <p>Get weekly style inspiration, new arrivals, and exclusive content.</p>
+        <form class="newsletter-form">
+          <input type="email" class="newsletter-input" placeholder="Your email address" required>
+          <button type="submit" class="btn-ripple" style="background: var(--secondary);">Subscribe</button>
+        </form>
+        <p style="font-size: 0.8rem; margin-top: 20px; opacity: 0.6;">No spam, unsubscribe anytime.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== POPULAR POSTS / SIDEBAR (optional, but integrated as bottom cards) ===== -->
+  <section style="padding: 40px 0 80px;">
+    <div class="blog-container">
+      <h2 class="section-title" style="display: block; text-align: center; margin-bottom: 50px;">Reader favourites</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: center;">
+        <!-- mini card 1 -->
+        <div style="flex: 1 1 250px; display: flex; gap: 15px; background: var(--light); border-radius: 20px; padding: 20px;">
+          <div style="width: 80px; height: 80px; border-radius: 16px; overflow: hidden; flex-shrink: 0;">
+            <img src="{% static 'images/avatars/thumb1.jpg' %}" alt="thumb" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80'">
+          </div>
+          <div>
+            <div class="blog-category" style="margin-bottom: 5px;">trends</div>
+            <h4 style="font-size: 1.1rem; line-height: 1.4;"><a href="#" style="text-decoration: none; color: var(--primary);">Denim on denim: how to nail the look</a></h4>
+          </div>
+        </div>
+        <!-- mini card 2 -->
+        <div style="flex: 1 1 250px; display: flex; gap: 15px; background: var(--light); border-radius: 20px; padding: 20px;">
+          <div style="width: 80px; height: 80px; border-radius: 16px; overflow: hidden; flex-shrink: 0;">
+            <img src="{% static 'images/avatars/thumb2.jpg' %}" alt="thumb" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80'">
+          </div>
+          <div>
+            <div class="blog-category" style="margin-bottom: 5px;">sustainable</div>
+            <h4 style="font-size: 1.1rem; line-height: 1.4;"><a href="#" style="text-decoration: none; color: var(--primary);">Eco‑friendly fabrics explained</a></h4>
+          </div>
+        </div>
+        <!-- mini card 3 -->
+        <div style="flex: 1 1 250px; display: flex; gap: 15px; background: var(--light); border-radius: 20px; padding: 20px;">
+          <div style="width: 80px; height: 80px; border-radius: 16px; overflow: hidden; flex-shrink: 0;">
+            <img src="{% static 'images/avatars/thumb3.jpg' %}" alt="thumb" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1556905055-8f358a7a47b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80'">
+          </div>
+          <div>
+            <div class="blog-category" style="margin-bottom: 5px;">interviews</div>
+            <h4 style="font-size: 1.1rem; line-height: 1.4;"><a href="#" style="text-decoration: none; color: var(--primary);">Meet our pattern cutter</a></h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Intersection Observer for reveal animations -->
+<script>
+  (function() {
+    const sections = document.querySelectorAll('section');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+    
+    sections.forEach(section => observer.observe(section));
+    document.getElementById('blog-hero').classList.add('visible');
+
+    // active category pill (simple simulation based on URL param)
+    const urlParams = new URLSearchParams(window.location.search);
+    const cat = urlParams.get('category') || 'all';
+    const pills = document.querySelectorAll('.category-pill');
+    pills.forEach(pill => {
+      pill.classList.remove('active');
+      if (pill.getAttribute('href').includes(cat)) {
+        pill.classList.add('active');
+      }
+    });
+    if (cat === 'all') {
+      document.querySelector('.category-pill[href*="all"]').classList.add('active');
+    }
+  })();
+</script>
+
+<!-- extra style for active pill -->
+<style>
+  .category-pill.active {
+    background: var(--primary);
+    color: white;
+  }
+  .blog-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+</style>
+
+{% endblock %}
