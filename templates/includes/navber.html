@@ -1,6 +1,9 @@
 {% load static %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 
 <header class="section-header">
+  <!-- Top Bar - Hidden on mobile -->
   <nav
     id="topBar"
     class="navbar p-md-0 navbar-expand-sm navbar-light border-bottom"
@@ -21,7 +24,7 @@
           <img
             id="logoImage"
             src="{% static 'images/logo1-Picsart-BackgroundRemover.png' %}"
-            style="height: 50px; padding: 4px"
+            style="height: 50px; padding: 4px;filter: brightness(0) invert(1);"
             alt="logo"
           />
         </a>
@@ -53,8 +56,8 @@
           </a>
         </div>
 
-        <!-- CENTER: Menu -->
-        <div class="fx-nav-center">
+        <!-- CENTER: Desktop Menu (Hidden on Mobile) -->
+        <div class="fx-nav-center desktop-only">
           <a href="{% url 'home' %}" class="fx-nav-item">Home</a>
 
           <div class="fx-nav-dropdown">
@@ -72,8 +75,8 @@
           <a href="{% url 'store' %}" class="fx-nav-item">Shop</a>
         </div>
 
-        <!-- RIGHT: Search + User + Icons -->
-        <div class="fx-nav-right">
+        <!-- RIGHT: Search + User + Icons (Desktop) -->
+        <div class="fx-nav-right desktop-only">
           <!-- Search -->
           <form
             action="{% url 'search' %}"
@@ -108,7 +111,7 @@
           </div>
 
           <!-- Icons -->
-          <a href="{% url 'cart' %}" class="fx-icon-btn">
+          <a href="" class="fx-icon-btn">
             <i class="fa fa-heart"></i>
           </a>
 
@@ -117,11 +120,168 @@
             <span class="fx-cart-count">{{cart_count}}</span>
           </a>
         </div>
+
+        <!-- Mobile Right Icons + Hamburger -->
+        <div class="fx-mobile-right mobile-only">
+          <a href="{% url 'cart' %}" class="fx-mobile-cart">
+            <i class="fa fa-shopping-cart"></i>
+            <span class="fx-cart-count">{{cart_count}}</span>
+          </a>
+          
+          <button class="fx-hamburger" id="fxHamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
       </div>
     </div>
   </section>
+
+  <!-- Mobile Sidebar Menu -->
+  <div class="fx-sidebar-overlay" id="sidebarOverlay"></div>
+  <div class="fx-sidebar-menu" id="sidebarMenu">
+    <div class="fx-sidebar-header">
+      <div class="fx-sidebar-logo">
+        <img src="{% static 'images/logo1-Picsart-BackgroundRemover.png' %}" alt="QuickCart" />
+        <span>QUICKCART</span>
+      </div>
+      <button class="fx-sidebar-close" id="sidebarClose">&times;</button>
+    </div>
+
+    <!-- Mobile Search -->
+    <div class="fx-sidebar-search">
+      <form action="{% url 'search' %}" method="GET">
+        <i class="fa fa-search"></i>
+        <input type="text" name="keyword" placeholder="Search products..." />
+      </form>
+    </div>
+
+    <!-- Mobile User Info -->
+    <div class="fx-sidebar-user">
+      {% if user.id is None %}
+      <div class="fx-sidebar-user-guest">
+        <i class="fa fa-user-circle"></i>
+        <span>Welcome Guest!</span>
+      </div>
+      <div class="fx-sidebar-auth">
+        <a href="{% url 'login' %}" class="fx-sidebar-login">Login</a>
+        <a href="{% url 'register' %}" class="fx-sidebar-register">Register</a>
+      </div>
+      {% else %}
+      <div class="fx-sidebar-user-logged">
+        <i class="fa fa-user-circle"></i>
+        <div>
+          <span class="fx-sidebar-user-name">Hi, {{user.first_name}}</span>
+          <span class="fx-sidebar-user-email">{{user.email}}</span>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Mobile Navigation Links -->
+    <ul class="fx-sidebar-nav">
+      <li class="fx-sidebar-nav-item">
+        <a href="{% url 'home' %}">
+          <i class="fa fa-home"></i>
+          <span>Home</span>
+        </a>
+      </li>
+      
+      <li class="fx-sidebar-nav-item">
+        <a href="{% url 'store' %}">
+          <i class="fas fa-store"></i>
+          <span>Shop</span>
+        </a>
+      </li>
+
+      <li class="fx-sidebar-nav-item fx-sidebar-dropdown">
+        <button class="fx-sidebar-dropdown-btn">
+          <i class="fa fa-list"></i>
+          <span>Categories</span>
+          <i class="fa fa-chevron-down"></i>
+        </button>
+        <ul class="fx-sidebar-dropdown-menu">
+          <li><a href="{% url 'store' %}">All Products</a></li>
+          {% for category in links %}
+          <li><a href="{{category.get_url}}">{{category.category_name}}</a></li>
+          {% endfor %}
+        </ul>
+      </li>
+
+      {% if user.id is not None %}
+      <li class="fx-sidebar-nav-item">
+        <a href="{% url 'dashboard' %}">
+          <i class="fa fa-dashboard"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      
+      <li class="fx-sidebar-nav-item">
+        <a href="{% url 'my_orders' %}">
+          <i class="fa fa-shopping-bag"></i>
+          <span>My Orders</span>
+        </a>
+      </li>
+
+      <li class="fx-sidebar-nav-item">
+        <a href="">
+          <i class="fa fa-heart"></i>
+          <span>Wishlist</span>
+        </a>
+      </li>
+
+      <li class="fx-sidebar-nav-item">
+        <a href="{% url 'edit_profile' %}">
+          <i class="fa fa-edit"></i>
+          <span>Edit Profile</span>
+        </a>
+      </li>
+
+      <li class="fx-sidebar-nav-item">
+        <a href="{% url 'change_password' %}">
+          <i class="fa fa-lock"></i>
+          <span>Change Password</span>
+        </a>
+      </li>
+      {% endif %}
+
+      <li class="fx-sidebar-nav-item">
+        <a href="{% url 'about' %}">
+          <i class="fa fa-info-circle"></i>
+          <span>About</span>
+        </a>
+      </li>
+
+      <li class="fx-sidebar-nav-item">
+        <a href="{% url 'contact' %}">
+          <i class="fa fa-envelope"></i>
+          <span>Contact</span>
+        </a>
+      </li>
+
+      <li class="fx-sidebar-nav-item">
+        <a href="{% url 'blog' %}">
+          <i class="fas fa-blog"></i>
+          <span>Blog</span>
+        </a>
+      </li>
+    </ul>
+
+    {% if user.id is not None %}
+    <div class="fx-sidebar-logout">
+      <a href="{% url 'logout' %}">
+        <i class="fa fa-sign-out"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+    {% endif %}
+
+    <div class="fx-sidebar-footer">
+      <p>&copy; {% now "Y" %} QuickCart. All rights reserved.</p>
+    </div>
+  </div>
 </header>
-<!-- section-header.// -->
 
 <style>
   /* ===== FINAL MODERN STICKY NAVBAR (SCROLL HIDE/SHOW FIXED) ===== */
@@ -335,6 +495,32 @@
     font-weight: bold;
   }
 
+  /* Mobile Elements - Hidden by Default on Large Screens */
+  .mobile-only {
+    display: none !important;
+  }
+
+  .desktop-only {
+    display: flex !important;
+  }
+
+  .fx-mobile-right {
+    display: none !important;
+  }
+
+  .fx-mobile-cart {
+    display: none !important;
+  }
+
+  .fx-hamburger {
+    display: none !important;
+  }
+
+  .fx-sidebar-overlay,
+  .fx-sidebar-menu {
+    display: none !important;
+  }
+
   /* ===== DUAL NAVBAR CONTROL (TOP + MAIN) ===== */
 
   #topBar,
@@ -370,51 +556,471 @@
     z-index: 9999;
     background: transparent;
   }
+
+  /* ========== RESPONSIVE BREAKPOINTS ========== */
+
+  /* Tablet & Mobile (≤991px) */
+  @media (max-width: 991px) {
+    /* Hide desktop elements */
+    .desktop-only {
+      display: none !important;
+    }
+
+    /* Show mobile elements */
+    .mobile-only {
+      display: flex !important;
+    }
+
+    .fx-mobile-right {
+      gap: 18px !important;
+      display: flex !important;
+    }
+
+    .fx-mobile-cart {
+      display: inline-flex !important;
+      position: relative;
+      color: #333;
+      font-size: 28px;
+      text-decoration: none;
+    }
+
+    .fx-mobile-cart .fx-cart-count {
+      top: -8px;
+      right: -8px;
+    }
+
+    .fx-hamburger {
+      display: flex !important;
+      width: 30px;
+      height: 30px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      flex-direction: column;
+      justify-content: space-around;
+      padding: 0;
+    }
+
+    .fx-hamburger span {
+      width: 100%;
+      height: 2px;
+      background: #333;
+      transition: all 0.3s ease;
+    }
+
+    .fx-hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .fx-hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .fx-hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(7px, -7px);
+    }
+
+    /* Sidebar */
+    .fx-sidebar-overlay {
+      display: block !important;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 10000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .fx-sidebar-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .fx-sidebar-menu {
+      display: block !important;
+      position: fixed;
+      top: 0;
+      left: -320px;
+      width: 300px;
+      height: 100%;
+      background: white;
+      z-index: 10001;
+      overflow-y: auto;
+      transition: left 0.3s ease;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .fx-sidebar-menu.active {
+      left: 0;
+    }
+
+    .fx-sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .fx-sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .fx-sidebar-logo img {
+      height: 35px;
+    }
+
+    .fx-sidebar-logo span {
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+    }
+
+    .fx-sidebar-close {
+      width: 30px;
+      height: 30px;
+      border: none;
+      background: #f5f6fa;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .fx-sidebar-search {
+      padding: 15px 20px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .fx-sidebar-search form {
+      display: flex;
+      align-items: center;
+      background: #f5f6fa;
+      border-radius: 30px;
+      padding: 8px 15px;
+    }
+
+    .fx-sidebar-search i {
+      color: #999;
+      margin-right: 10px;
+    }
+
+    .fx-sidebar-search input {
+      border: none;
+      background: transparent;
+      outline: none;
+      width: 100%;
+      font-size: 14px;
+    }
+
+    .fx-sidebar-user {
+      padding: 20px;
+      border-bottom: 1px solid #f0f0f0;
+      background: #fafafa;
+    }
+
+    .fx-sidebar-user-guest,
+    .fx-sidebar-user-logged {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .fx-sidebar-user-guest i,
+    .fx-sidebar-user-logged i {
+      font-size: 30px;
+      color: #6c5ce7;
+    }
+
+    .fx-sidebar-user-logged div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .fx-sidebar-user-name {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .fx-sidebar-user-email {
+      font-size: 12px;
+      color: #777;
+    }
+
+    .fx-sidebar-auth {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .fx-sidebar-login,
+    .fx-sidebar-register {
+      flex: 1;
+      text-align: center;
+      padding: 8px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .fx-sidebar-login {
+      background: #6c5ce7;
+      color: white;
+    }
+
+    .fx-sidebar-register {
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    .fx-sidebar-nav {
+      list-style: none;
+      padding: 20px 0;
+      margin: 0;
+    }
+
+    .fx-sidebar-nav-item {
+      margin-bottom: 5px;
+    }
+
+    .fx-sidebar-nav-item > a,
+    .fx-sidebar-dropdown-btn {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      color: #333;
+      text-decoration: none;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      width: 100%;
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+
+    .fx-sidebar-nav-item > a i,
+    .fx-sidebar-dropdown-btn i {
+      width: 25px;
+      color: #6c5ce7;
+    }
+
+    .fx-sidebar-nav-item > a:hover,
+    .fx-sidebar-dropdown-btn:hover {
+      background: #f5f6fa;
+    }
+
+    .fx-sidebar-dropdown-btn {
+      justify-content: left;
+      padding-left: 14px;
+      gap: 6px;
+    }
+
+    .fx-sidebar-dropdown-btn i:last-child {
+      width: auto;
+      transition: transform 0.3s ease;
+    }
+
+    .fx-sidebar-dropdown.active .fx-sidebar-dropdown-btn i:last-child {
+      transform: rotate(180deg);
+    }
+
+    .fx-sidebar-dropdown-menu {
+      list-style: none;
+      padding-left: 45px;
+      margin: 0;
+      display: none;
+    }
+
+    .fx-sidebar-dropdown.active .fx-sidebar-dropdown-menu {
+      display: block;
+    }
+
+    .fx-sidebar-dropdown-menu li a {
+      display: block;
+      padding: 8px 0;
+      color: #666;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .fx-sidebar-dropdown-menu li a:hover {
+      color: #6c5ce7;
+    }
+
+    .fx-sidebar-logout {
+      padding: 20px;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    .fx-sidebar-logout a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #dc3545;
+      text-decoration: none;
+      font-size: 15px;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .fx-sidebar-logout a:hover {
+      background: #fff5f5;
+    }
+
+    .fx-sidebar-footer {
+      padding: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    .fx-premium-nav {
+      gap: 15px;
+    }
+
+    .fx-logo-wrap img {
+      height: 25px;
+    }
+
+    #topBar {
+      display: none;
+    }
+
+    .section-header {
+      top: 0;
+    }
+  }
+
+  /* Small Mobile (≤575px) */
+  @media (max-width: 575px) {
+    .fx-sidebar-menu {
+      width: 280px;
+    }
+
+    .fx-logo-wrap img {
+      height: 22px;
+    }
+
+    .fx-mobile-cart {
+      font-size: 28px;
+    }
+
+    .fx-sidebar-logo img {
+      height: 30px;
+    }
+
+    .fx-sidebar-logo span {
+      font-size: 1rem;
+    }
+  }
+
+  /* Extra Small Mobile (≤375px) */
+  @media (max-width: 375px) {
+    .fx-sidebar-menu {
+      width: 260px;
+    }
+
+    .fx-sidebar-nav-item > a,
+    .fx-sidebar-dropdown-btn {
+      font-size: 14px;
+    }
+
+    .fx-sidebar-dropdown-menu {
+      padding-left: 40px;
+    }
+
+    .fx-sidebar-user-email {
+      font-size: 11px;
+    }
+  }
 </style>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    const topBar = document.getElementById("topBar"); // <nav>
-    const mainNav = document.getElementById("mainNav"); // <section>
+    const topBar = document.getElementById("topBar");
+    const mainNav = document.getElementById("mainNav");
+    const hamburger = document.getElementById("fxHamburger");
+    const sidebar = document.getElementById("sidebarMenu");
+    const overlay = document.getElementById("sidebarOverlay");
+    const closeBtn = document.getElementById("sidebarClose");
 
-    if (!topBar || !mainNav) return;
+    // Scroll effect
+    if (topBar && mainNav) {
+      let lastScroll = 0;
 
-    let lastScroll = 0;
+      window.addEventListener("scroll", function () {
+        const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
 
-    window.addEventListener("scroll", function () {
-      const currentScroll =
-        window.pageYOffset || document.documentElement.scrollTop;
-
-      // 🔝 CASE 1: User at TOP of page → Show BOTH nav + section
-      if (currentScroll <= 30) {
-        topBar.style.transform = "translateY(0)";
-        topBar.style.opacity = "1";
-
-        mainNav.style.transform = "translateY(0)";
-        mainNav.style.opacity = "1";
+        if (currentScroll <= 30) {
+          topBar.style.transform = "translateY(0)";
+          topBar.style.opacity = "1";
+          mainNav.style.transform = "translateY(0)";
+          mainNav.style.opacity = "1";
+        } else if (currentScroll > lastScroll) {
+          topBar.style.transform = "translateY(-100%)";
+          topBar.style.opacity = "0";
+          mainNav.style.transform = "translateY(-100%)";
+          mainNav.style.opacity = "0";
+        } else {
+          topBar.style.transform = "translateY(-100%)";
+          topBar.style.opacity = "0";
+          mainNav.style.transform = "translateY(0)";
+          mainNav.style.opacity = "1";
+        }
 
         lastScroll = currentScroll;
-        return;
+      });
+    }
+
+    // Sidebar toggle
+    if (hamburger && sidebar && overlay && closeBtn) {
+      function openSidebar() {
+        hamburger.classList.add("active");
+        sidebar.classList.add("active");
+        overlay.classList.add("active");
+        document.body.style.overflow = "hidden";
       }
 
-      // 🔽 CASE 2: Scrolling DOWN → Hide BOTH
-      if (currentScroll > lastScroll) {
-        topBar.style.transform = "translateY(-100%)";
-        topBar.style.opacity = "0";
-
-        mainNav.style.transform = "translateY(-100%)";
-        mainNav.style.opacity = "0";
-      }
-      // 🔼 CASE 3: Scrolling UP (middle/bottom) → Show ONLY main navbar
-      else {
-        topBar.style.transform = "translateY(-100%)";
-        topBar.style.opacity = "0";
-
-        mainNav.style.transform = "translateY(0)";
-        mainNav.style.opacity = "1";
+      function closeSidebar() {
+        hamburger.classList.remove("active");
+        sidebar.classList.remove("active");
+        overlay.classList.remove("active");
+        document.body.style.overflow = "";
       }
 
-      lastScroll = currentScroll;
+      hamburger.addEventListener("click", openSidebar);
+      closeBtn.addEventListener("click", closeSidebar);
+      overlay.addEventListener("click", closeSidebar);
+    }
+
+    // Sidebar dropdown toggle
+    const dropdownBtns = document.querySelectorAll(".fx-sidebar-dropdown-btn");
+    dropdownBtns.forEach(btn => {
+      btn.addEventListener("click", function(e) {
+        e.preventDefault();
+        const parent = this.closest(".fx-sidebar-dropdown");
+        parent.classList.toggle("active");
+      });
+    });
+
+    // Close sidebar on window resize above tablet
+    window.addEventListener("resize", function() {
+      if (window.innerWidth > 991 && sidebar && sidebar.classList.contains("active")) {
+        hamburger.classList.remove("active");
+        sidebar.classList.remove("active");
+        overlay.classList.remove("active");
+        document.body.style.overflow = "";
+      }
     });
   });
 </script>
