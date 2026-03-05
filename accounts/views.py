@@ -95,9 +95,11 @@ def logout(request):
     return redirect('login')
 
 def activate(request, uidb64, token):
-    success, error = activate_user(uidb64, token)
+    success, error, uid = activate_user(uidb64, token)
     if success:
         messages.success(request, SuccessMessage.S00004.value)
+        user = Account.objects.get(pk=uid)
+        auth.login(request, user)
         return redirect('login')
     else:
         messages.error(request, error or ErrorMessage.E00002.value)
@@ -106,10 +108,22 @@ def activate(request, uidb64, token):
 
 @login_required_custom
 def dashboard(request):
-    order = Order.objects.order_by('-created_at').filter(user_id=request.user.id, is_ordered=True) 
-    order_count = order.count() 
-    context = {'order_count': order_count, 'order': order, 'userprofile': request.user.userprofile} 
-    return render(request, 'accounts/dashboard.html', context)
+    try:
+        # Try to get userprofile, if it doesn't exist, create it
+        userprofile, created = UserProfile.objects.get_or_create(user=request.user)
+        
+        order = Order.objects.order_by('-created_at').filter(user_id=request.user.id, is_ordered=True) 
+        order_count = order.count() 
+        context = {
+            'order_count': order_count, 
+            'order': order, 
+            'userprofile': userprofile
+        } 
+        return render(request, 'accounts/dashboard.html', context)
+    except Exception as e:
+        logger.error(f"Dashboard error: {str(e)}")
+        messages.error(request, "An error occurred loading your dashboard.")
+        return redirect('home')
 
 
 
@@ -264,3 +278,47 @@ def order_detail(request, order_id):
         'subtotal': subtotal,
     }
     return render(request, 'accounts/order_detail.html', context)
+
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+import json
+
+@require_POST
+@csrf_exempt
+def resend_activation(request):
+    """AJAX view to resend activation email"""
+    try:
+        email = request.POST.get('email')
+        if not email:
+            return JsonResponse({'success': False, 'message': 'Email is required'})
+        
+        user = Account.objects.filter(email=email, is_active=False).first()
+        if not user:
+            return JsonResponse({'success': False, 'message': 'User not found or already activated'})
+        
+        # Check if user is locked
+        if user.activation_locked_until and user.activation_locked_until > timezone.now():
+            wait_minutes = (user.activation_locked_until - timezone.now()).seconds // 60
+            return JsonResponse({
+                'success': False, 
+                'message': f'Too many attempts. Please wait {wait_minutes} minutes.'
+            })
+        
+        # Send activation email
+        success, msg = send_activation_email(user, request)
+        
+        if success:
+            attempts_left = 3 - user.activation_attempts
+            return JsonResponse({
+                'success': True, 
+                'message': msg,
+                'attempts_left': attempts_left
+            })
+        else:
+            return JsonResponse({'success': False, 'message': msg})
+            
+    except Exception as e:
+        logger.error(f"Resend activation error: {str(e)}")
+        return JsonResponse({'success': False, 'message': 'An error occurred. Please try again.'})

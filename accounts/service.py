@@ -1,6 +1,6 @@
 from datetime import timedelta
 from django.core.mail import EmailMessage
-from django.contrib.sites.shortcuts import get_current_site
+from django.conf import settings
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.template.loader import render_to_string
@@ -25,7 +25,7 @@ def handle_registration(form_data):
             user, created = Account.objects.get_or_create(
                 email=email,
                 defaults={
-                    'username': email.split('@')[0],
+                    'username': form_data['email'].split('@')[0],
                     'first_name': form_data['first_name'],
                     'last_name': form_data['last_name'],
                     'phone_number': form_data['phone_number'],
@@ -38,8 +38,10 @@ def handle_registration(form_data):
                 user.first_name = form_data['first_name']
                 user.last_name = form_data['last_name']
                 user.phone_number = form_data['phone_number']
-                user.set_password(form_data['password'])
-                user.save()
+            
+            # ALWAYS set the password properly
+            user.set_password(form_data['password'])
+            user.save()
             
             return user, created, None, None
             
@@ -65,18 +67,41 @@ def send_activation_email(user, request):
             user.save()
             return False, "Maximum attempts reached. Please wait 5 minutes."
         
-        # Prepare and send email
-        current_site = get_current_site(request)
-        mail_subject = 'Activate your account'
+        # Use SITE_URL from settings (now dynamically set)
+        site_url = settings.SITE_URL
+        
+        # Remove protocol for domain
+        if site_url.startswith('http://'):
+            domain = site_url[7:]  # Remove http://
+        elif site_url.startswith('https://'):
+            domain = site_url[8:]  # Remove https://
+        else:
+            domain = site_url
+        
+        # Prepare activation link
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        token = account_activation_token.make_token(user)
+        activation_link = f"{site_url}/accounts/activate/{uid}/{token}/"
+        
+        # Prepare email
+        mail_subject = 'Activate your QuickCart Account'
         message = render_to_string('accounts/account_verification_email.html', {
             'user': user,
-            'domain': current_site.domain,
-            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-            'token': account_activation_token.make_token(user),
+            'domain': domain,
+            'protocol': 'http' if not site_url.startswith('https') else 'https',
+            'uid': uid,
+            'token': token,
+            'activation_link': activation_link,  # Full link for easier debugging
         })
         
+        # Send email
         email = EmailMessage(mail_subject, message, to=[user.email])
+        email.content_subtype = "html"  # Send as HTML
         email.send(fail_silently=False)
+        
+        # Log for debugging
+        logger.info(f"Activation email sent to {user.email}")
+        logger.info(f"Activation link: {activation_link}")
         
         # Update tracking
         user.last_activation_sent = timezone.now()
@@ -90,7 +115,7 @@ def send_activation_email(user, request):
         
     except Exception as e:
         logger.error(f"Email error: {str(e)}")
-        return False, "Failed to send activation email."
+        return False, f"Failed to send activation email: {str(e)}"
 
 def activate_user(uidb64, token):
     """Activate user account"""
@@ -100,10 +125,10 @@ def activate_user(uidb64, token):
         
         if account_activation_token.check_token(user, token):
             user.is_active = True
-            user.reset_activation_attempts()  # Reset on successful activation
+            user.reset_activation_attempts()
             user.save()
             return True, None, uid
-        return False, "Invalid token", None
+        return False, "Invalid or expired activation link", None
     except Exception as e:
         logger.error(f"Activation error: {str(e)}")
         return False, "Invalid activation link", None
@@ -114,18 +139,27 @@ def get_user_by_email(email):
 
 def send_password_reset_email(request, user):
     """Send reset password email to the given user."""
-    current_site = get_current_site(request)
-    mail_subject = 'Reset your password'
-    message = render_to_string('accounts/reser_password_email.html', {
+    site_url = settings.SITE_URL
+    
+    if site_url.startswith('http://'):
+        domain = site_url[7:]
+    elif site_url.startswith('https://'):
+        domain = site_url[8:]
+    else:
+        domain = site_url
+    
+    mail_subject = 'Reset your QuickCart Password'
+    message = render_to_string('accounts/reset_password_email.html', {
         'user': user,
-        'domain': current_site.domain,
+        'domain': domain,
+        'protocol': 'http' if not site_url.startswith('https') else 'https',
         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
         'token': account_activation_token.make_token(user),
     })
 
     email = EmailMessage(mail_subject, message, to=[user.email])
+    email.content_subtype = "html"
     email.send(fail_silently=False)
-
 
 def get_user_from_uid(uidb64):
     try:
@@ -135,10 +169,8 @@ def get_user_from_uid(uidb64):
     except (TypeError, ValueError, OverflowError, Account.DoesNotExist):
         return None
 
-
 def is_token_valid(user, token):
     return account_activation_token.check_token(user, token)
-
 
 def reset_user_password(uid, token, new_password):
     try:
@@ -151,6 +183,3 @@ def reset_user_password(uid, token, new_password):
         return True, None
     except Account.DoesNotExist:
         return False, "User does not exist."
-
-
-

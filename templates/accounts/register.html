@@ -187,6 +187,96 @@
                     </button>
                 </form>
 
+                <!-- Add this after the form or in the messages section -->
+{% if messages %}
+    {% for message in messages %}
+        {% if "activation email" in message|lower %}
+        <div class="resend-activation" style="text-align: center; margin-top: 1rem;">
+            <p>Didn't receive the email? 
+                <a href="#" onclick="resendActivation('{{ request.GET.email }}')" 
+                   style="color: #000; font-weight: 600; text-decoration: underline;">
+                    Resend Activation Email
+                </a>
+                <span class="attempts-left" style="display: block; font-size: 0.85rem; color: #666; margin-top: 0.5rem;">
+                    {{ message }}
+                </span>
+            </p>
+        </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<script>
+function resendActivation(email) {
+    if (!email) {
+        // Try to get email from form if not in URL
+        email = document.querySelector('input[name="email"]').value;
+    }
+    
+    if (!email) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Email address not found.'
+        });
+        return;
+    }
+    
+    // Show loading
+    Swal.fire({
+        title: 'Sending...',
+        text: 'Please wait',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+    
+    // Make AJAX request to resend activation
+    fetch('/accounts/resend-activation/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: 'email=' + encodeURIComponent(email)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: data.message,
+                timer: 3000,
+                showConfirmButton: false
+            });
+            
+            // Update attempts left if available
+            if (data.attempts_left !== undefined) {
+                const attemptsSpan = document.querySelector('.attempts-left');
+                if (attemptsSpan) {
+                    attemptsSpan.textContent = `You have ${data.attempts_left} attempt${data.attempts_left > 1 ? 's' : ''} left.`;
+                }
+            }
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: data.message
+            });
+        }
+    })
+    .catch(error => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to resend activation email.'
+        });
+    });
+}
+</script>
+
                 <!-- Login Link -->
                 <div class="qc-signup-section">
                     <p class="qc-signup-text">
