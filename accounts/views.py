@@ -130,27 +130,60 @@ def dashboard(request):
 def forgotPassword(request):
     if request.user.is_authenticated:
         messages.info(request, "You are already logged in.")
-        return redirect('home')  # or some other page
+        return redirect('home')
 
     if request.method == 'POST':
         email = request.POST.get('email')
+        
+        if not email:
+            messages.error(request, "Please enter your email address.")
+            return redirect('forgotPassword')
+        
         user = get_user_by_email(email)
 
-        if user:
-            if request.user.is_active == False:
-                messages.error(request, "Your account is not active yet. Please check your email for activation.")
-                return redirect('login')
-
-            send_password_reset_email(request, user)
-            messages.success(request, SuccessMessage.S00005.value)
-            return redirect('login')
-        else:
+        if not user:
             messages.error(request, ErrorMessage.E00005.value)
+            return redirect('forgotPassword')
+        
+        # Check if account is active
+        if not user.is_active:
+            messages.error(
+                request, 
+                "Your account is not activated yet. Please check your email for the activation link or "
+                f"<a href='/accounts/register/?command=verification&email={user.email}' style='color: #667eea;'>click here</a> to resend."
+            )
+            return redirect('login')
+
+        # Send password reset email with detailed error handling
+        try:
+            send_password_reset_email(request, user)
+            messages.success(request, "Password reset email sent! Please check your inbox.")
+            return redirect('login')
+        except Exception as e:
+            # Log the full error
+            logger.error(f"Password reset email error for {email}: {str(e)}", exc_info=True)
+            # Show the actual error to user (temporarily for debugging)
+            messages.error(request, f"Failed to send email: {str(e)}")
             return redirect('forgotPassword')
 
     return render(request, 'accounts/forgot_password.html')
 
+from django.core.mail import send_mail
+from django.conf import settings
 
+def test_email_direct(request):
+    """Direct test of email functionality"""
+    try:
+        send_mail(
+            'Test Subject',
+            'Test message body.',
+            settings.DEFAULT_FROM_EMAIL,
+            [settings.EMAIL_HOST_USER],  # Send to yourself
+            fail_silently=False,
+        )
+        return HttpResponse("✅ Email sent successfully!")
+    except Exception as e:
+        return HttpResponse(f"❌ Error: {str(e)}")
 
 def resetpassword_validate(request, uidb64, token):
     user = get_user_from_uid(uidb64)
@@ -166,16 +199,12 @@ def resetpassword_validate(request, uidb64, token):
 
 
 def resetPassword(request):
-        # Ensure the user has an active account
-    if not request.user.is_active:
-        messages.error(request, "Your account is not active yet. Please check your email for activation.")
-        return redirect('login')
-    """Reset user password view, for authenticated users."""
-    # Redirect logged-in users from reset password page (if unnecessary)
+    # First, redirect logged-in users
     if request.user.is_authenticated:
         messages.warning(request, "You are already logged in. No need to reset your password.")
-        return redirect('dashboard')  # Redirect to dashboard or home page
-
+        return redirect('dashboard')
+    
+    # Then handle password reset
     if request.method == 'POST':
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
@@ -187,19 +216,23 @@ def resetPassword(request):
         uid = request.session.get('uid')
         token = request.session.get('reset_token')
 
+        if not uid or not token:
+            messages.error(request, "Invalid password reset session. Please request a new reset link.")
+            return redirect('forgotPassword')
+
         success, error = reset_user_password(uid, token, password)
 
         if success:
+            # Clear session data
             request.session.pop('uid', None)
             request.session.pop('reset_token', None)
-            messages.success(request, "Password reset successfully.")
+            messages.success(request, "Password reset successfully. Please login with your new password.")
             return redirect('login')
         else:
             messages.error(request, error)
-            return redirect('resetPassword')
+            return redirect('forgotPassword')
 
     return render(request, 'accounts/reset_password.html')
-
 
 
 @login_required_custom
