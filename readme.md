@@ -46,9 +46,7 @@ QuickCart is a full-featured eCommerce web application built with the **Django F
 - **Security**: Django Honeypot, CSRF protection, strong user auth
   
 ## 📸 Project Preview
-![Home Page](static/images/avatars/home.jpg)
-![Product Page](static/images/avatars/cart.jpg)
-![Cart Page](static/images/avatars/shop.jpg)
+COMMING SOON
 
 ## Project Structure
     QuickCart/                       # 🛒 Root project folder
